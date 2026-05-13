@@ -10,6 +10,10 @@ module.exports = {
     '^react-native-(.*)$': '<rootDir>/__mocks__/react-native-stub.ts',
     '^@nozbe/watermelondb(.*)$': '<rootDir>/__mocks__/watermelondb.ts',
     '^@react-native-community/(.*)$': '<rootDir>/__mocks__/react-native-stub.ts',
+    // 구체적 패키지 매핑 먼저 (와일드카드보다 앞에 위치)
+    '^@react-navigation/stack$': '<rootDir>/__mocks__/@react-navigation/stack.ts',
+    '^@react-navigation/bottom-tabs$': '<rootDir>/__mocks__/@react-navigation/bottom-tabs.ts',
+    '^@react-navigation/native$': '<rootDir>/__mocks__/@react-navigation/native.ts',
     '^@react-navigation/(.*)$': '<rootDir>/__mocks__/@react-navigation/native.ts',
     '^zustand$': '<rootDir>/__mocks__/zustand.ts',
   },
