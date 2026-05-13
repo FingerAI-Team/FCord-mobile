@@ -13,6 +13,5 @@ const mockNavigation = {
 export const useNavigation = jest.fn(() => mockNavigation);
 export { mockNavigation };
 export const useRoute = jest.fn(() => ({ params: {} }));
-export const NavigationContainer = ({ children }: { children: React.ReactNode }): React.ReactElement => (
-  <>{children}</>
-);
+export const NavigationContainer = ({ children }: { children: React.ReactNode }): React.ReactElement =>
+  React.createElement(React.Fragment, null, children);
