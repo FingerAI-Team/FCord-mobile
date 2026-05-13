@@ -10,6 +10,7 @@ module.exports = {
     '^react-native-(.*)$': '<rootDir>/__mocks__/react-native-stub.ts',
     '^@nozbe/watermelondb(.*)$': '<rootDir>/__mocks__/watermelondb.ts',
     '^@react-native-community/(.*)$': '<rootDir>/__mocks__/react-native-stub.ts',
+    '^@react-navigation/(.*)$': '<rootDir>/__mocks__/@react-navigation/native.ts',
     '^zustand$': '<rootDir>/__mocks__/zustand.ts',
   },
   transform: {
