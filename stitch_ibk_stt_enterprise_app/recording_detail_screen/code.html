@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IBK STT - Recording Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-light": "#F9FAFB",
+                        "background-light": "#FFFFFF",
+                        "on-primary-fixed-variant": "#404758",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#dce2f3",
+                        "primary-fixed-dim": "#c0c6db",
+                        "on-background": "#1b1b1d",
+                        "tertiary-fixed": "#f9debf",
+                        "inverse-primary": "#c0c6db",
+                        "surface-elevated-dark": "#1F2937",
+                        "secondary-fixed-dim": "#c0c7d6",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#dcc2a4",
+                        "surface-dim": "#dcd9db",
+                        "on-surface-variant": "#45464c",
+                        "surface": "#fcf8fa",
+                        "accent-blue": "#2563EB",
+                        "on-primary-container": "#7d8497",
+                        "success-green": "#10B981",
+                        "surface-container-highest": "#e5e2e3",
+                        "background": "#fcf8fa",
+                        "on-error-container": "#93000a",
+                        "danger-red": "#DC2626",
+                        "tertiary-container": "#261906",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#f0edee",
+                        "error-container": "#ffdad6",
+                        "recording-red": "#EF4444",
+                        "text-primary-light": "#111827",
+                        "on-secondary-fixed-variant": "#404754",
+                        "on-tertiary-fixed": "#261906",
+                        "surface-dark": "#111827",
+                        "secondary-fixed": "#dce2f3",
+                        "primary-container": "#141b2b",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#55442d",
+                        "on-secondary-fixed": "#151c27",
+                        "tertiary": "#000000",
+                        "surface-container-high": "#eae7e9",
+                        "inverse-surface": "#303031",
+                        "error": "#ba1a1a",
+                        "primary": "#000000",
+                        "surface-variant": "#e5e2e3",
+                        "border-dark": "#1F2937",
+                        "surface-bright": "#fcf8fa",
+                        "on-primary-fixed": "#141b2b",
+                        "on-secondary-container": "#5e6572",
+                        "border-light": "#E5E7EB",
+                        "on-surface": "#1b1b1d",
+                        "background-dark": "#0B0F19",
+                        "outline-variant": "#c6c6cd",
+                        "inverse-on-surface": "#f3f0f1",
+                        "secondary": "#585f6c",
+                        "surface-container-low": "#f6f3f4",
+                        "warning-amber": "#F59E0B",
+                        "outline": "#76777d",
+                        "on-tertiary-container": "#968065",
+                        "text-primary-dark": "#F9FAFB",
+                        "surface-tint": "#575e70",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#dce2f7",
+                        "accent-blue-dark": "#60A5FA"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "14px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "24px",
+                        "lg": "16px",
+                        "md": "12px",
+                        "3xl": "48px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "2xl": "32px"
+                    },
+                    "fontFamily": {
+                        "display": ["Hanken Grotesk"],
+                        "caption": ["Hanken Grotesk"],
+                        "body": ["Hanken Grotesk"],
+                        "heading": ["Hanken Grotesk"],
+                        "label": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "display": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.5px", "fontWeight": "800"}],
+                        "caption": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "body": ["15px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "heading": ["20px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "label": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-ring { ring: 2px solid #2563EB; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen pb-3xl">
+<!-- Top Navigation Bar -->
+<header class="bg-background dark:bg-background-dark flex justify-between items-center w-full px-lg h-[64px] border-b border-border-light dark:border-border-dark sticky top-0 z-50">
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 flex items-center justify-center hover:bg-surface-container dark:hover:bg-surface-elevated-dark rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined text-primary dark:text-text-primary-dark">chevron_left</span>
+</button>
+<h1 class="font-heading text-heading font-bold text-primary dark:text-text-primary-dark">IBK STT</h1>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-high dark:bg-surface-elevated-dark overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional close-up headshot of a person with a friendly expression, captured with shallow depth of field against a minimalist office background. The lighting is soft and corporate, perfectly matching a clean, modern UI aesthetic with high-key whites and subtle grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsM1lFylcSn9x58dgTBlHR7vteJ0unJGYxo_h1PfTDcvgmsrBv1KmzgXam86TYdKSg4iFaYq9tozIsrM356mUIJOwe9DARTVDcqbFxd8fc8uT-eDu4nmelykS9wrBHQqoQ0jwoBLgUnoXySl-SKHNFd6KCx1jJ6LwzElCf8yGT1_ITGmxxsa9kfZJLQsDJu6J6tcDgDIfjfBR1CMGOpIOgnXAUd_CasQzi_1EXu5HocQR4TOwAeALRzP0BxjS-2gm5sXAjnp4fsck"/>
+</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto px-lg pt-xl space-y-xl">
+<!-- Title & Metadata -->
+<section class="space-y-xs">
+<div class="flex items-center justify-between group">
+<h2 class="font-display text-display text-text-primary-light dark:text-text-primary-dark border-b-2 border-transparent hover:border-outline-variant focus:border-accent-blue outline-none transition-all cursor-text" contenteditable="true">주간 경영 전략 회의</h2>
+<span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">edit</span>
+</div>
+<p class="font-body text-body text-secondary dark:text-on-secondary-container">2024.05.20 | 45:12</p>
+</section>
+<!-- Status Card -->
+<section class="bg-surface-container-lowest dark:bg-surface-elevated-dark p-lg rounded-2xl border border-border-light dark:border-border-dark shadow-sm">
+<div class="space-y-lg">
+<!-- Record Status -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-label text-label text-text-primary-light dark:text-text-primary-dark">녹음 상태</span>
+</div>
+<span class="font-label text-label text-success-green bg-success-green/10 px-sm py-xs rounded-full">완료</span>
+</div>
+<!-- Upload Status -->
+<div class="space-y-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-danger-red">error</span>
+<span class="font-label text-label text-text-primary-light dark:text-text-primary-dark">업로드 상태</span>
+</div>
+<span class="font-label text-label text-danger-red">실패</span>
+</div>
+</div>
+<!-- Transcription Status -->
+<div class="space-y-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-accent-blue animate-spin-slow">sync</span>
+<span class="font-label text-label text-text-primary-light dark:text-text-primary-dark">전사 상태</span>
+</div>
+<span class="font-label text-label text-accent-blue">진행 중 70%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container dark:bg-surface-dark rounded-full overflow-hidden">
+<div class="h-full bg-accent-blue w-[70%] rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Group -->
+<section class="flex flex-col gap-md">
+<div class="flex gap-md">
+<button class="flex-1 h-[52px] border-2 border-danger-red text-danger-red font-bold rounded-2xl flex items-center justify-center gap-sm hover:bg-danger-red/5 transition-colors">
+<span class="material-symbols-outlined">refresh</span>
+                    업로드 재시도
+                </button>
+<button class="flex-1 h-[52px] bg-primary dark:bg-primary-container text-on-primary dark:text-text-primary-dark font-bold rounded-2xl flex items-center justify-center gap-sm hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined">description</span>
+                    전사 요청
+                </button>
+</div>
+</section>
+<!-- Audio Player -->
+<section class="bg-surface-light dark:bg-surface-elevated-dark p-md rounded-2xl border border-border-light dark:border-border-dark flex items-center gap-md">
+<button class="w-10 h-10 flex items-center justify-center bg-primary dark:bg-primary-container text-white rounded-full">
+<span class="material-symbols-outlined" data-weight="fill">play_arrow</span>
+</button>
+<div class="flex-1 space-y-xs">
+<div class="w-full h-1 bg-surface-container dark:bg-surface-dark rounded-full relative">
+<div class="absolute h-full w-[26%] bg-primary dark:bg-accent-blue rounded-full"></div>
+<div class="absolute w-3 h-3 bg-primary dark:bg-accent-blue border-2 border-white dark:border-background-dark rounded-full -top-1 left-[26%] shadow-md"></div>
+</div>
+<div class="flex justify-between">
+<span class="font-caption text-caption text-secondary">12:05</span>
+<span class="font-caption text-caption text-secondary">45:12</span>
+</div>
+</div>
+</section>
+<!-- Memo Area -->
+<section class="space-y-sm">
+<label class="font-label text-label text-secondary px-xs">메모</label>
+<textarea class="w-full h-32 bg-surface-light dark:bg-surface-elevated-dark border border-border-light dark:border-border-dark rounded-2xl p-lg font-body text-body text-text-primary-light dark:text-text-primary-dark focus:ring-2 focus:ring-accent-blue focus:border-transparent transition-all placeholder:text-outline" placeholder="메모 추가..."></textarea>
+</section>
+<!-- Share & Export Row -->
+<section class="flex items-center justify-between px-xs py-md border-y border-border-light dark:border-border-dark">
+<div class="flex gap-lg">
+<button class="flex flex-col items-center gap-xs text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">share</span>
+<span class="font-caption text-caption">공유</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">text_snippet</span>
+<span class="font-caption text-caption">TXT 내보내기</span>
+</button>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-secondary hover:bg-surface-container rounded-full">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</section>
+<!-- Primary CTA -->
+<button class="w-full h-[52px] bg-primary dark:bg-primary-container text-on-primary dark:text-text-primary-dark font-bold rounded-2xl flex items-center justify-center shadow-lg hover:scale-[0.98] transition-transform">
+            전사 결과 보기
+        </button>
+<!-- Danger Zone -->
+<section class="flex justify-center pt-xl">
+<button class="text-danger-red font-label text-label opacity-60 hover:opacity-100 transition-opacity flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                삭제
+            </button>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Shell Logic) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-[80px] pb-safe bg-background dark:bg-background-dark border-t border-border-light dark:border-border-dark">
+<a class="flex flex-col items-center justify-center text-primary dark:text-text-primary-dark font-bold scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-weight="fill">mic_none</span>
+<span class="font-label text-caption">Recordings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-text-primary-dark transition-colors" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label text-caption">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-text-primary-dark transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label text-caption">Settings</span>
+</a>
+</nav>
+</body></html>

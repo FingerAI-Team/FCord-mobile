@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#dce2f7",
+                      "on-primary-fixed-variant": "#404758",
+                      "inverse-on-surface": "#f3f0f1",
+                      "on-error-container": "#93000a",
+                      "text-primary-dark": "#F9FAFB",
+                      "on-secondary": "#ffffff",
+                      "warning-amber": "#F59E0B",
+                      "on-primary-fixed": "#141b2b",
+                      "surface": "#fcf8fa",
+                      "error": "#ba1a1a",
+                      "surface-dim": "#dcd9db",
+                      "on-error": "#ffffff",
+                      "surface-variant": "#e5e2e3",
+                      "surface-tint": "#575e70",
+                      "on-secondary-fixed-variant": "#404754",
+                      "on-primary": "#ffffff",
+                      "surface-elevated-dark": "#1F2937",
+                      "on-tertiary-fixed": "#261906",
+                      "secondary-container": "#dce2f3",
+                      "background-dark": "#0B0F19",
+                      "on-surface": "#1b1b1d",
+                      "on-surface-variant": "#45464c",
+                      "on-background": "#1b1b1d",
+                      "secondary-fixed-dim": "#c0c7d6",
+                      "primary": "#000000",
+                      "secondary": "#585f6c",
+                      "outline-variant": "#c6c6cd",
+                      "tertiary": "#000000",
+                      "accent-blue-dark": "#60A5FA",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#dce2f3",
+                      "surface-container": "#f0edee",
+                      "surface-bright": "#fcf8fa",
+                      "on-secondary-container": "#5e6572",
+                      "outline": "#76777d",
+                      "danger-red": "#DC2626",
+                      "on-secondary-fixed": "#151c27",
+                      "on-tertiary-container": "#968065",
+                      "tertiary-container": "#261906",
+                      "border-light": "#E5E7EB",
+                      "surface-container-high": "#eae7e9",
+                      "surface-light": "#F9FAFB",
+                      "accent-blue": "#2563EB",
+                      "on-tertiary-fixed-variant": "#55442d",
+                      "surface-dark": "#111827",
+                      "inverse-primary": "#c0c6db",
+                      "surface-container-low": "#f6f3f4",
+                      "recording-red": "#EF4444",
+                      "tertiary-fixed": "#f9debf",
+                      "text-primary-light": "#111827",
+                      "background-light": "#FFFFFF",
+                      "primary-fixed-dim": "#c0c6db",
+                      "inverse-surface": "#303031",
+                      "success-green": "#10B981",
+                      "surface-container-highest": "#e5e2e3",
+                      "border-dark": "#1F2937",
+                      "tertiary-fixed-dim": "#dcc2a4",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#141b2b",
+                      "background": "#fcf8fa",
+                      "on-primary-container": "#7d8497"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "24px",
+                      "xs": "4px",
+                      "2xl": "32px",
+                      "lg": "16px",
+                      "3xl": "48px",
+                      "sm": "8px",
+                      "md": "12px"
+              },
+              "fontFamily": {
+                      "label": ["Hanken Grotesk"],
+                      "body": ["Hanken Grotesk"],
+                      "caption": ["Hanken Grotesk"],
+                      "heading": ["Hanken Grotesk"],
+                      "display": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "label": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "body": ["15px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "caption": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "heading": ["20px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                      "display": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.5px", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col">
+<!-- Top Action Area (Suppressed Shared Nav because this is Onboarding) -->
+<header class="w-full flex justify-end px-xl pt-xl pb-md">
+<button class="font-label text-label text-secondary dark:text-secondary hover:opacity-80 transition-opacity active:scale-95 duration-200">
+            건너뛰기
+        </button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-xl text-center">
+<!-- Illustration Container -->
+<div class="w-full max-w-sm aspect-square mb-3xl flex items-center justify-center relative">
+<div class="absolute inset-0 bg-surface-container-low dark:bg-surface-elevated-dark rounded-[32px] opacity-40 blur-3xl"></div>
+<img alt="Automatic Transcription Illustration" class="relative z-10 w-full h-auto object-contain" data-alt="A clean, professional monochrome line-art illustration of a digital document on a tablet screen. The document shows text blocks organized into a dialogue format with distinct speaker avatars represented by simple circles. Specific text segments are highlighted with a soft subtle glow to represent AI processing. The background is a minimalist, airy studio setting with soft high-key lighting, maintaining a premium enterprise software aesthetic in a light-mode palette of whites and cool grays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY8hkyCApWYCeuudq8HiVYR0QitPD0m80Z6nIJYpKMxq7irHMLsfFEMb_tmAz1K2s8EkXWH8KdMosxx16dxaqgaVsiRscTF3S1JT3fc2lHQYNv5revPFkIxC6PoKrtJHcpKpjwd4ysF8t81BvQgCxWiqvRzHFFBqo6-KLfjcALl8-7VuIteFR56xNT7pUFRqR6hrAf_sUW71JIo9kd6akGT1Rp-iJwOfqposlHv_1RFpyLquM3CTNH9ffavkqcUrhkhu6gkh3Sv4I"/>
+</div>
+<!-- Typography Section -->
+<div class="space-y-md max-w-xs">
+<h1 class="font-display text-display text-primary dark:text-text-primary-dark">
+                자동으로 완성되는 전사
+            </h1>
+<p class="font-body text-body text-secondary dark:text-secondary">
+                녹음이 끝나면 AI가 화자를 구분하여 텍스트로 변환해 드립니다.
+            </p>
+</div>
+<!-- Page Indicator -->
+<div class="mt-2xl flex items-center justify-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-outline-variant dark:bg-outline"></div>
+<div class="w-6 h-2 rounded-full bg-primary dark:bg-accent-blue-dark"></div>
+<div class="w-2 h-2 rounded-full bg-outline-variant dark:bg-outline"></div>
+</div>
+</main>
+<!-- Bottom Action Footer -->
+<footer class="px-xl pb-3xl pt-lg">
+<button class="w-full h-[52px] bg-primary dark:bg-text-primary-dark text-background-light dark:text-background-dark font-heading text-heading rounded-[14px] shadow-sm active:scale-95 transition-transform duration-200">
+            다음
+        </button>
+</footer>
+</body></html>

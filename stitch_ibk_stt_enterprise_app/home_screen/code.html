@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IBK STT - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#151c27",
+                    "on-primary-fixed": "#141b2b",
+                    "border-dark": "#1F2937",
+                    "tertiary-fixed-dim": "#dcc2a4",
+                    "primary-fixed-dim": "#c0c6db",
+                    "on-primary": "#ffffff",
+                    "text-primary-dark": "#F9FAFB",
+                    "on-error": "#ffffff",
+                    "text-primary-light": "#111827",
+                    "primary-container": "#141b2b",
+                    "accent-blue-dark": "#60A5FA",
+                    "on-tertiary-fixed-variant": "#55442d",
+                    "accent-blue": "#2563EB",
+                    "surface-dim": "#dcd9db",
+                    "secondary": "#585f6c",
+                    "surface-container-high": "#eae7e9",
+                    "on-surface-variant": "#45464c",
+                    "on-background": "#1b1b1d",
+                    "on-error-container": "#93000a",
+                    "outline": "#76777d",
+                    "surface-container-highest": "#e5e2e3",
+                    "surface-variant": "#e5e2e3",
+                    "inverse-on-surface": "#f3f0f1",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#575e70",
+                    "primary": "#000000",
+                    "tertiary-fixed": "#f9debf",
+                    "on-tertiary-fixed": "#261906",
+                    "surface-container-low": "#f6f3f4",
+                    "on-secondary-container": "#5e6572",
+                    "recording-red": "#EF4444",
+                    "background-dark": "#0B0F19",
+                    "surface-light": "#F9FAFB",
+                    "border-light": "#E5E7EB",
+                    "outline-variant": "#c6c6cd",
+                    "warning-amber": "#F59E0B",
+                    "background-light": "#FFFFFF",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#7d8497",
+                    "secondary-fixed": "#dce2f3",
+                    "surface-dark": "#111827",
+                    "surface-elevated-dark": "#1F2937",
+                    "background": "#fcf8fa",
+                    "primary-fixed": "#dce2f7",
+                    "secondary-fixed-dim": "#c0c7d6",
+                    "tertiary-container": "#261906",
+                    "inverse-surface": "#303031",
+                    "inverse-primary": "#c0c6db",
+                    "surface-bright": "#fcf8fa",
+                    "danger-red": "#DC2626",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#fcf8fa",
+                    "on-primary-fixed-variant": "#404758",
+                    "on-secondary-fixed-variant": "#404754",
+                    "on-surface": "#1b1b1d",
+                    "error": "#ba1a1a",
+                    "success-green": "#10B981",
+                    "on-tertiary-container": "#968065",
+                    "surface-container": "#f0edee",
+                    "tertiary": "#000000",
+                    "secondary-container": "#dce2f3"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "3xl": "48px",
+                    "xl": "24px",
+                    "2xl": "32px",
+                    "md": "12px",
+                    "sm": "8px",
+                    "lg": "16px"
+            },
+            "fontFamily": {
+                    "heading": ["Hanken Grotesk"],
+                    "caption": ["Hanken Grotesk"],
+                    "display": ["Hanken Grotesk"],
+                    "label": ["Hanken Grotesk"],
+                    "body": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "heading": ["20px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "caption": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "display": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.5px", "fontWeight": "800"}],
+                    "label": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body": ["15px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-on-background dark:text-text-primary-dark min-h-screen">
+<!-- Top AppBar (from JSON) -->
+<header class="w-full top-0 sticky z-40 bg-background-light dark:bg-background-dark border-b border-border-light dark:border-border-dark">
+<div class="flex items-center justify-between px-lg h-16 w-full max-w-screen-xl mx-auto">
+<button class="hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary dark:text-text-primary-dark">menu</span>
+</button>
+<h1 class="font-display text-heading font-extrabold text-primary dark:text-text-primary-dark">IBK STT</h1>
+<button class="hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary dark:text-text-primary-dark">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-screen-xl mx-auto px-lg pt-xl pb-32">
+<!-- Header Section -->
+<section class="mb-2xl">
+<p class="font-label text-label text-secondary dark:text-secondary mb-xs">오늘 회의 3건</p>
+<h2 class="font-display text-display text-primary dark:text-text-primary-dark">김철수 님</h2>
+</section>
+<!-- Filter & Sort Section -->
+<section class="flex items-center justify-between mb-xl overflow-x-auto">
+<div class="flex bg-surface-container-low dark:bg-surface-elevated-dark p-xs rounded-xl">
+<button class="px-lg py-sm rounded-lg font-label text-label bg-primary dark:bg-primary-fixed text-on-primary dark:text-on-primary-fixed">전체</button>
+<button class="px-lg py-sm rounded-lg font-label text-label text-secondary dark:text-secondary hover:bg-surface-container-high dark:hover:bg-surface-dark transition-colors">업로드중</button>
+<button class="px-lg py-sm rounded-lg font-label text-label text-secondary dark:text-secondary hover:bg-surface-container-high dark:hover:bg-surface-dark transition-colors">완료</button>
+<button class="px-lg py-sm rounded-lg font-label text-label text-secondary dark:text-secondary hover:bg-surface-container-high dark:hover:bg-surface-dark transition-colors">실패</button>
+</div>
+<button class="flex items-center gap-xs font-label text-label text-secondary dark:text-secondary bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark px-md py-sm rounded-lg">
+                최신순 <span class="material-symbols-outlined text-[16px]">swap_vert</span>
+</button>
+</section>
+<!-- Main List: Vertical Recording Cards -->
+<div class="space-y-md">
+<!-- Card 1 -->
+<div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl p-lg flex flex-col gap-md shadow-sm transition-transform active:scale-[0.98]">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-heading text-heading text-primary dark:text-text-primary-dark mb-xs">주간 경영 전략 회의</h3>
+<p class="font-body text-body text-secondary dark:text-secondary opacity-70">2024.05.20 | 45:12</p>
+</div>
+<button class="text-secondary dark:text-secondary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Status Badges -->
+<div class="flex flex-wrap gap-sm">
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-success-green/10 text-success-green border border-success-green/20 font-label text-label">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        녹음 완료
+                    </span>
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-success-green/10 text-success-green border border-success-green/20 font-label text-label">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        업로드 완료
+                    </span>
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-accent-blue/10 text-accent-blue border border-accent-blue/20 font-label text-label">
+<span class="material-symbols-outlined text-[14px]">sync</span>
+                        전사 진행 70%
+                    </span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl p-lg flex flex-col gap-md shadow-sm transition-transform active:scale-[0.98]">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-heading text-heading text-primary dark:text-text-primary-dark mb-xs">신규 프로젝트 킥오프</h3>
+<p class="font-body text-body text-secondary dark:text-secondary opacity-70">2024.05.20 | 12:45</p>
+</div>
+<button class="text-secondary dark:text-secondary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-sm">
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-success-green/10 text-success-green border border-success-green/20 font-label text-label">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        녹음 완료
+                    </span>
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-accent-blue/10 text-accent-blue border border-accent-blue/20 font-label text-label">
+<span class="material-symbols-outlined text-[14px]">upload</span>
+                        업로드 진행 30%
+                    </span>
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-surface-container-high dark:bg-surface-elevated-dark text-secondary dark:text-secondary border border-border-light dark:border-border-dark font-label text-label">
+<span class="material-symbols-outlined text-[14px]">hourglass_empty</span>
+                        전사 대기
+                    </span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl p-lg flex flex-col gap-md shadow-sm transition-transform active:scale-[0.98]">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-heading text-heading text-primary dark:text-text-primary-dark mb-xs">IT 보안 점검 인터뷰</h3>
+<p class="font-body text-body text-secondary dark:text-secondary opacity-70">2024.05.19 | 58:20</p>
+</div>
+<button class="text-secondary dark:text-secondary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-sm">
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-success-green/10 text-success-green border border-success-green/20 font-label text-label">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        녹음 완료
+                    </span>
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-success-green/10 text-success-green border border-success-green/20 font-label text-label">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        업로드 완료
+                    </span>
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-success-green/10 text-success-green border border-success-green/20 font-label text-label">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        전사 완료
+                    </span>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[60] w-[60px] h-[60px] bg-recording-red text-on-primary rounded-full shadow-lg active:scale-90 transition-transform duration-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+<!-- Bottom Navigation Bar (from JSON) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-light dark:bg-surface-dark border-t border-border-light dark:border-border-dark shadow-md">
+<div class="flex justify-around items-center h-20 px-md pb-safe w-full">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-accent-blue-dark font-bold hover:bg-surface-container-low dark:hover:bg-surface-elevated-dark active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label text-label">Home</span>
+</a>
+<!-- Search -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary hover:bg-surface-container-low dark:hover:bg-surface-elevated-dark active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label text-label">Search</span>
+</a>
+<!-- Spacer for FAB -->
+<div class="w-16"></div>
+<!-- Library -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary hover:bg-surface-container-low dark:hover:bg-surface-elevated-dark active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label text-label">Library</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary hover:bg-surface-container-low dark:hover:bg-surface-elevated-dark active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-label">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Visual Polish: Pull-to-refresh Hint (Hidden by default, used for interaction implication) -->
+<div class="absolute top-20 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-opacity">
+<span class="material-symbols-outlined text-secondary animate-spin">refresh</span>
+</div>
+</body></html>

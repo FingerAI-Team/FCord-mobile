@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>IBK STT — 인터랙티브 데모</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0a0f1e;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/* ── 상단 툴바 ── */
+.toolbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 24px;
+  background: rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  flex-wrap: wrap;
+}
+.toolbar-title {
+  font-size: 15px; font-weight: 700; color: #fff; margin-right: 12px;
+  letter-spacing: -.3px;
+}
+.device-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 16px; border-radius: 999px;
+  border: 1.5px solid rgba(255,255,255,.15);
+  background: transparent; color: #94a3b8;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all .18s;
+}
+.device-btn:hover { border-color: rgba(255,255,255,.3); color: #e2e8f0; }
+.device-btn.active { background: #fff; color: #0a0f1e; border-color: #fff; }
+.device-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+.toolbar-sep { width: 1px; height: 24px; background: rgba(255,255,255,.1); }
+
+.flow-nav { display: flex; gap: 6px; align-items: center; }
+.fnav-btn {
+  padding: 6px 12px; border-radius: 8px; border: none;
+  background: rgba(255,255,255,.06); color: #64748b;
+  font-size: 12px; cursor: pointer; transition: all .15s;
+}
+.fnav-btn:hover { background: rgba(255,255,255,.12); color: #94a3b8; }
+.fnav-btn.active { background: rgba(239,68,68,.15); color: #f87171; }
+.fnav-arrow {
+  padding: 6px 10px; border-radius: 8px; border: none;
+  background: rgba(255,255,255,.06); color: #94a3b8;
+  font-size: 14px; cursor: pointer; transition: background .15s;
+}
+.fnav-arrow:hover { background: rgba(255,255,255,.12); }
+.speech-indicator {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #64748b;
+}
+.speech-dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; }
+.speech-dot.on { background: #ef4444; animation: blink 1s infinite; }
+
+/* ── 메인 영역 ── */
+.stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  gap: 40px;
+}
+
+/* ── 폰 컨테이너 ── */
+.phone-outer {
+  position: relative;
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+}
+
+/* iPhone 17 Pro */
+.phone-outer.iphone {
+  width: 393px;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,.8));
+}
+.phone-outer.iphone .phone-shell {
+  width: 393px; height: 852px;
+  background: linear-gradient(160deg, #2a2a2e, #1a1a1e);
+  border-radius: 54px;
+  padding: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+}
+.phone-outer.iphone .phone-screen-wrap {
+  width: 100%; height: 100%;
+  background: #fff;
+  border-radius: 44px;
+  overflow: hidden;
+  position: relative;
+}
+.phone-outer.iphone .dynamic-island {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 35px;
+  background: #000; border-radius: 20px; z-index: 100;
+}
+.phone-outer.iphone .status-bar {
+  height: 59px; padding: 18px 28px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  background: #fff; position: relative; z-index: 10; flex-shrink: 0;
+}
+
+/* Galaxy S25 Ultra */
+.phone-outer.android {
+  width: 380px;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,.8));
+}
+.phone-outer.android .phone-shell {
+  width: 380px; height: 820px;
+  background: linear-gradient(160deg, #1c1c1e, #111113);
+  border-radius: 44px;
+  padding: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.phone-outer.android .phone-screen-wrap {
+  width: 100%; height: 100%;
+  background: #fff;
+  border-radius: 36px;
+  overflow: hidden;
+  position: relative;
+}
+.phone-outer.android .punch-hole {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  width: 14px; height: 14px;
+  background: #000; border-radius: 50%; z-index: 100;
+}
+.phone-outer.android .status-bar {
+  height: 48px; padding: 14px 20px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  background: #fff; position: relative; z-index: 10; flex-shrink: 0;
+}
+.android-home-bar {
+  display: none; height: 34px;
+  align-items: center; justify-content: center; gap: 20px;
+  background: #fff; flex-shrink: 0;
+}
+.phone-outer.android .android-home-bar { display: flex; }
+.home-icon { width: 22px; height: 22px; border-radius: 4px; border: 2px solid #9ca3af; }
+.home-icon.circle { border-radius: 50%; }
+.home-icon.triangle {
+  border: none; width: 0; height: 0;
+  border-left: 8px solid transparent; border-right: 8px solid transparent;
+  border-top: 14px solid #9ca3af; border-radius: 0; width: auto;
+}
+
+.status-time { font-size: 14px; font-weight: 700; color: #111; }
+.status-icons { display: flex; gap: 5px; align-items: center; }
+.status-icons svg { width: 15px; height: 11px; fill: #111; }
+
+/* ── 화면 공통 ── */
+.phone-content {
+  flex: 1; display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+.screen.active { display: flex; animation: fadein .2s ease; }
+@keyframes fadein { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── 스플래시 ── */
+#s-splash {
+  background: #fff;
+  align-items: center; justify-content: space-between;
+  padding: 160px 0 100px;
+}
+.brand-name { font-size: 38px; font-weight: 800; color: #111; letter-spacing: -1px; }
+.brand-tag { font-size: 15px; color: #9ca3af; margin-top: 8px; text-align: center; }
+.spinner { width: 24px; height: 24px; border: 2px solid #e5e7eb; border-top-color: #6b7280; border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── 로그인 ── */
+#s-login { background: #fff; overflow-y: auto; }
+.top-bar { height: 56px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+.wordmark { font-size: 18px; font-weight: 800; color: #000; }
+.profile-chip { width: 30px; height: 30px; border-radius: 50%; background: #f0edee; }
+.login-body { padding: 28px 24px 40px; }
+.login-label { font-size: 12px; font-weight: 700; color: #9ca3af; letter-spacing: .5px; text-align: center; margin-bottom: 6px; }
+.login-title { font-size: 32px; font-weight: 800; color: #111; text-align: center; margin-bottom: 6px; letter-spacing: -.5px; }
+.login-sub { font-size: 14px; color: #9ca3af; text-align: center; margin-bottom: 28px; }
+.sso-btn { height: 52px; border-radius: 9999px; background: #000; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; width: 100%; border: none; transition: opacity .15s; margin-bottom: 10px; }
+.sso-btn:active { opacity: .8; }
+.sso-btn span { color: #fff; font-size: 15px; font-weight: 700; }
+.provider-note { font-size: 11px; color: #9ca3af; text-align: center; padding: 0 12px; margin-bottom: 24px; line-height: 1.5; }
+.divider { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.divider-line { flex: 1; height: 1px; background: #e5e7eb; }
+.divider-text { font-size: 11px; color: #9ca3af; white-space: nowrap; }
+.input-wrap { position: relative; background: #f6f3f4; border-radius: 12px; height: 56px; margin-bottom: 10px; }
+.input-label { position: absolute; left: 16px; top: 17px; font-size: 15px; color: #9ca3af; transition: all .15s; pointer-events: none; }
+.input-label.up { top: 8px; font-size: 11px; font-weight: 600; }
+.input-field { position: absolute; bottom: 6px; left: 16px; right: 16px; background: none; border: none; outline: none; font-size: 15px; color: #111; width: calc(100% - 32px); }
+.sec-btn { height: 52px; border-radius: 12px; background: #dce2f3; display: flex; align-items: center; justify-content: center; cursor: pointer; width: 100%; border: none; margin-top: 4px; }
+.sec-btn span { color: #5e6572; font-size: 15px; font-weight: 700; }
+.dev-hint { margin-top: 18px; padding: 12px; background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; }
+.dev-hint b { font-size: 11px; font-weight: 700; color: #92400e; display: block; margin-bottom: 4px; }
+.dev-hint p { font-size: 11px; color: #92400e; line-height: 1.5; }
+
+/* ── 목록 ── */
+#s-list { background: #f9fafb; }
+.list-header { background: #fff; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; flex-shrink: 0; }
+.filter-tabs { display: flex; flex: 1; }
+.tab { flex: 1; padding: 11px 2px; text-align: center; font-size: 12px; color: #9ca3af; cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; }
+.tab.active { color: #2563eb; border-bottom-color: #2563eb; font-weight: 700; }
+.sort-btn { padding: 11px 12px; font-size: 11px; color: #6b7280; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.list-body { flex: 1; overflow-y: auto; padding: 10px; }
+.empty-state { height: 200px; display: flex; align-items: center; justify-content: center; }
+.empty-text { font-size: 14px; color: #9ca3af; }
+.rec-card { background: #fff; border-radius: 12px; padding: 13px 14px; margin-bottom: 8px; border: 1px solid #f3f4f6; cursor: pointer; transition: transform .1s, box-shadow .1s; }
+.rec-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.07); }
+.rec-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2px; }
+.rec-title { font-size: 14px; font-weight: 700; color: #111; flex: 1; margin-right: 8px; }
+.rec-dur { font-size: 12px; color: #9ca3af; white-space: nowrap; }
+.rec-date { font-size: 11px; color: #9ca3af; margin-bottom: 7px; }
+.badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px; }
+.b-queued { background: #f3f4f6; color: #6b7280; }
+.b-uploading { background: #eff6ff; color: #2563eb; }
+.b-done { background: #ecfdf5; color: #10b981; }
+.b-failed { background: #fef2f2; color: #ef4444; }
+.b-stt { background: #f5f3ff; color: #7c3aed; }
+.b-stt-done { background: #ecfdf5; color: #10b981; }
+.fab { position: absolute; bottom: 60px; right: 18px; width: 56px; height: 56px; border-radius: 50%; background: #ef4444; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 16px rgba(239,68,68,.4); transition: transform .15s; z-index: 10; }
+.phone-outer.android .fab { bottom: 44px; }
+.fab:hover { transform: scale(1.08); }
+.fab svg { width: 20px; height: 20px; fill: #fff; }
+
+/* ── 녹음 화면 ── */
+#s-recording { background: #fff; align-items: center; justify-content: center; padding: 0 24px; }
+.rec-back { position: absolute; top: 64px; left: 18px; font-size: 13px; color: #9ca3af; cursor: pointer; padding: 8px; }
+.rec-status-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.rec-dot { width: 10px; height: 10px; border-radius: 50%; background: #e5e7eb; transition: background .3s; }
+.rec-dot.on { background: #ef4444; animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+.rec-status { font-size: 12px; font-weight: 700; color: #9ca3af; letter-spacing: .4px; }
+.rec-timer { font-size: 68px; font-weight: 200; color: #111; letter-spacing: -2px; margin-bottom: 48px; font-variant-numeric: tabular-nums; }
+.rec-btn { width: 96px; height: 96px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.rec-start { background: #ef4444; box-shadow: 0 6px 24px rgba(239,68,68,.4); }
+.rec-stop { background: #f6f3f4; border: 3px solid #ef4444; animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.1)} }
+.rec-btn svg { width: 28px; height: 28px; }
+
+/* 실시간 전사 미리보기 */
+.live-transcript {
+  position: absolute; bottom: 80px; left: 20px; right: 20px;
+  background: #f9fafb; border-radius: 12px; padding: 12px 14px;
+  font-size: 13px; color: #374151; line-height: 1.5; max-height: 80px;
+  overflow-y: auto; display: none;
+}
+.live-transcript.show { display: block; }
+.interim { color: #9ca3af; }
+
+/* ── 저장 모달 ── */
+.modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 50; display: none; align-items: flex-end; }
+.modal-overlay.show { display: flex; }
+.modal-card { width: 100%; background: #fff; border-radius: 20px 20px 0 0; padding: 24px 22px 40px; animation: slideup .28s ease; }
+@keyframes slideup { from{transform:translateY(100%)}to{transform:translateY(0)} }
+.modal-title { font-size: 17px; font-weight: 700; color: #111; margin-bottom: 3px; }
+.modal-sub { font-size: 11px; color: #9ca3af; margin-bottom: 14px; }
+.title-input { width: 100%; background: #f6f3f4; border: none; border-radius: 12px; padding: 13px 14px; font-size: 15px; color: #111; outline: none; margin-bottom: 16px; }
+.modal-btns { display: flex; gap: 10px; }
+.btn-cancel { flex: 1; height: 46px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; font-size: 14px; color: #9ca3af; cursor: pointer; }
+.btn-save { flex: 2; height: 46px; border-radius: 12px; background: #000; border: none; font-size: 14px; font-weight: 700; color: #fff; cursor: pointer; }
+
+/* ── 상세 ── */
+#s-detail { background: #fff; }
+.detail-hdr { padding: 12px 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f3f4f6; flex-shrink: 0; }
+.back-arrow { font-size: 22px; color: #111; cursor: pointer; line-height: 1; padding: 4px; }
+.detail-hdr-title { font-size: 16px; font-weight: 700; color: #111; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.detail-body { flex: 1; overflow-y: auto; padding: 18px; }
+.sec-label { font-size: 10px; font-weight: 700; color: #9ca3af; letter-spacing: .5px; margin-bottom: 7px; }
+.status-block { background: #f9fafb; border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+.prog-block { margin-bottom: 14px; }
+.prog-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.prog-label { font-size: 12px; color: #374151; }
+.prog-pct { font-size: 12px; color: #2563eb; font-weight: 600; }
+.prog-track { height: 5px; background: #e5e7eb; border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 5px; background: #2563eb; border-radius: 3px; transition: width .4s; }
+.detail-title-text { font-size: 19px; font-weight: 700; color: #111; margin-bottom: 14px; }
+.meta-row { display: flex; gap: 20px; margin-bottom: 18px; }
+.meta-val { font-size: 14px; font-weight: 600; color: #111; }
+.meta-key { font-size: 10px; color: #9ca3af; margin-top: 2px; }
+.view-transcript-btn { width: 100%; height: 50px; border-radius: 12px; background: #2563eb; border: none; font-size: 14px; font-weight: 700; color: #fff; cursor: pointer; margin-bottom: 10px; }
+.del-btn { width: 100%; height: 50px; border-radius: 12px; background: #fff; border: 1.5px solid #ef4444; font-size: 14px; font-weight: 700; color: #ef4444; cursor: pointer; }
+.del-btn:hover { background: #fef2f2; }
+
+/* ── 전사 ── */
+#s-transcript { background: #fff; }
+.trans-hdr { display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-bottom: 1px solid #f3f4f6; flex-shrink: 0; }
+.trans-title { font-size: 16px; font-weight: 700; color: #111; flex: 1; }
+.copy-btn { padding: 5px 11px; background: #f0edee; border: none; border-radius: 7px; font-size: 11px; font-weight: 700; color: #6b7280; cursor: pointer; }
+.trans-body { flex: 1; overflow-y: auto; padding: 18px; }
+.seg { margin-bottom: 18px; padding-left: 10px; border-left: 2px solid #e5e7eb; }
+.seg-meta { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+.seg-time { font-size: 10px; color: #9ca3af; font-variant-numeric: tabular-nums; }
+.seg-spk { font-size: 10px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 1px 6px; border-radius: 4px; }
+.seg-text { font-size: 13px; color: #111; line-height: 21px; }
+
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+
+/* ── 설명 패널 ── */
+.desc-panel {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: fadein .25s ease;
+}
+.desc-screen-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+.desc-num {
+  font-size: 10px;
+  font-weight: 800;
+  color: #ef4444;
+  letter-spacing: 1.5px;
+  background: rgba(239,68,68,.1);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.desc-step-label {
+  font-size: 10px;
+  color: #475569;
+  letter-spacing: .5px;
+}
+.desc-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #f1f5f9;
+  letter-spacing: -.5px;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.desc-summary {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.desc-features {
+  list-style: none;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.desc-features li {
+  font-size: 12px;
+  color: #cbd5e1;
+  padding: 7px 0 7px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  position: relative;
+  line-height: 1.5;
+}
+.desc-features li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #334155;
+  font-size: 10px;
+}
+.desc-note {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 10px;
+  padding: 13px 15px;
+}
+.desc-note-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.desc-note-text {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.65;
+}
+.desc-divider {
+  width: 32px;
+  height: 2px;
+  background: rgba(239,68,68,.4);
+  border-radius: 1px;
+  margin-bottom: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- 툴바 -->
+<div class="toolbar">
+  <span class="toolbar-title">IBK STT</span>
+
+  <button class="device-btn active" id="btn-iphone" onclick="switchDevice('iphone')">
+    <svg viewBox="0 0 24 24"><path d="M16 2H8C6.3 2 5 3.3 5 5v14c0 1.7 1.3 3 3 3h8c1.7 0 3-1.3 3-3V5c0-1.7-1.3-3-3-3zm-4 18c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm4-3H8V5h8v12z"/></svg>
+    iPhone 17 Pro
+  </button>
+  <button class="device-btn" id="btn-android" onclick="switchDevice('android')">
+    <svg viewBox="0 0 24 24"><path d="M17.5 3.5L16 5c-1.1-.6-2.4-1-3.9-1C8.8 4 6.1 6.2 5.3 9.2L3.7 8.5C4.8 4.7 8 2 12 2c2 0 3.9.7 5.5 1.5zM6.5 20.5L8 19c1.1.6 2.4 1 3.9 1 3.3 0 6-2.2 6.8-5.2l1.6.7C19.2 19.3 16 22 12 22c-2 0-3.9-.7-5.5-1.5zM3 10h18v4H3v-4z"/><path d="M15 10H9V8c0-1.7 1.3-3 3-3s3 1.3 3 3v2zM6 16v-4h12v4c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2z"/></svg>
+    Galaxy S25 Ultra
+  </button>
+
+  <div class="toolbar-sep"></div>
+
+  <div class="flow-nav">
+    <button class="fnav-arrow" onclick="prevStep()">←</button>
+    <button class="fnav-btn" id="fn-0" onclick="goStep(0)">스플래시</button>
+    <button class="fnav-btn" id="fn-1" onclick="goStep(1)">로그인</button>
+    <button class="fnav-btn" id="fn-2" onclick="goStep(2)">목록</button>
+    <button class="fnav-btn" id="fn-3" onclick="goStep(3)">녹음</button>
+    <button class="fnav-btn" id="fn-4" onclick="goStep(4)">상세</button>
+    <button class="fnav-btn" id="fn-5" onclick="goStep(5)">전사결과</button>
+    <button class="fnav-arrow" onclick="nextStep()">→</button>
+  </div>
+
+  <div class="toolbar-sep"></div>
+
+  <div class="speech-indicator">
+    <div class="speech-dot" id="speech-dot"></div>
+    <span id="speech-label">음성인식 대기</span>
+  </div>
+</div>
+
+<!-- 스테이지 -->
+<div class="stage">
+<div class="phone-outer iphone" id="phone">
+
+  <!-- iPhone 17 Pro -->
+  <div class="phone-shell">
+  <div class="phone-screen-wrap">
+    <div class="dynamic-island" id="camera-notch"></div>
+
+    <div class="status-bar" id="status-bar">
+      <span class="status-time" id="status-time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/></svg>
+        <svg viewBox="0 0 16 12"><path d="M8 2C5.2 2 2.7 3.2 1 5.1l1.5 1.5C3.8 5 5.8 4 8 4s4.2 1 5.5 2.6L15 5.1C13.3 3.2 10.8 2 8 2zm0 4c-1.7 0-3.2.7-4.3 1.8L5.2 9.3C6 8.5 6.9 8 8 8s2 .5 2.8 1.3l1.5-1.5C11.2 6.7 9.7 6 8 6zm0 4c-.8 0-1.5.3-2 .8L8 13l2-2.2c-.5-.5-1.2-.8-2-.8z"/></svg>
+        <svg viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1.5" y="2.5" width="14" height="7" rx="2"/></svg>
+      </div>
+    </div>
+
+    <div class="phone-content">
+      <!-- 스플래시 -->
+      <div class="screen active" id="s-splash">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:140px 0 90px">
+          <div style="text-align:center">
+            <div class="brand-name">IBK STT</div>
+            <div class="brand-tag">회의를 텍스트로</div>
+          </div>
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+      <!-- 로그인 -->
+      <div class="screen" id="s-login">
+        <div class="top-bar"><div class="wordmark">IBK STT</div><div class="profile-chip"></div></div>
+        <div class="login-body" style="overflow-y:auto">
+          <div class="login-label">IBK STT</div>
+          <div class="login-title">로그인</div>
+          <div class="login-sub">사내 SSO 계정으로 시작하세요</div>
+          <button class="sso-btn" onclick="doSSOLogin()">
+            <span style="font-size:16px">🔒</span>
+            <span>IBK SSO로 로그인</span>
+          </button>
+          <div class="provider-note">현재 가상 SSO로 동작합니다. IBK투자증권 SSO 사양 수령 후 자동 전환됩니다.</div>
+          <div class="divider"><div class="divider-line"></div><span class="divider-text">또는 사번으로 로그인</span><div class="divider-line"></div></div>
+          <div class="input-wrap" onclick="this.querySelector('input').focus()">
+            <div class="input-label" id="lbl-id">사번</div>
+            <input class="input-field" id="inp-id" type="text" oninput="liftLabel('lbl-id',this.value)" onfocus="liftLabel('lbl-id','x')" onblur="liftLabel('lbl-id',this.value)">
+          </div>
+          <div class="input-wrap" onclick="this.querySelector('input').focus()" style="margin-bottom:14px">
+            <div class="input-label" id="lbl-pw">비밀번호</div>
+            <input class="input-field" id="inp-pw" type="password" oninput="liftLabel('lbl-pw',this.value)" onfocus="liftLabel('lbl-pw','x')" onblur="liftLabel('lbl-pw',this.value)">
+          </div>
+          <button class="sec-btn" onclick="doLogin()"><span>로그인</span></button>
+          <div class="dev-hint">
+            <b>개발 모드 힌트</b>
+            <p>사번: 00001 / 비번: test1234<br>IBK SSO 연동 전 가상 로그인 사용</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 녹음 목록 -->
+      <div class="screen" id="s-list">
+        <div class="list-header">
+          <div class="filter-tabs">
+            <div class="tab active" onclick="setTab(this,'all')">전체</div>
+            <div class="tab" onclick="setTab(this,'uploading')">업로드 중</div>
+            <div class="tab" onclick="setTab(this,'done')">완료</div>
+            <div class="tab" onclick="setTab(this,'failed')">실패</div>
+          </div>
+          <div class="sort-btn">최신순 ↕</div>
+        </div>
+        <div class="list-body" id="list-body"></div>
+        <button class="fab" onclick="goToRecording()">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></svg>
+        </button>
+      </div>
+
+      <!-- 녹음 화면 -->
+      <div class="screen" id="s-recording">
+        <div class="rec-back" onclick="showScreen('s-list')">← 목록으로</div>
+        <div class="rec-status-row">
+          <div class="rec-dot" id="rec-dot"></div>
+          <div class="rec-status" id="rec-status">녹음 대기</div>
+        </div>
+        <div class="rec-timer" id="rec-timer">00:00</div>
+        <button class="rec-btn rec-start" id="rec-btn" onclick="toggleRec()">
+          <svg viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="7"/></svg>
+        </button>
+        <div class="live-transcript" id="live-tx"></div>
+        <!-- 저장 모달 -->
+        <div class="modal-overlay" id="save-modal">
+          <div class="modal-card">
+            <div class="modal-title">녹음 제목</div>
+            <div class="modal-sub">저장 후 언제든지 변경할 수 있습니다</div>
+            <input class="title-input" id="title-input" placeholder="제목 입력">
+            <div class="modal-btns">
+              <button class="btn-cancel" onclick="discardRec()">취소</button>
+              <button class="btn-save" onclick="saveRec()">저장</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 상세 -->
+      <div class="screen" id="s-detail">
+        <div class="detail-hdr">
+          <div class="back-arrow" onclick="showScreen('s-list')">←</div>
+          <div class="detail-hdr-title" id="d-title">녹음 상세</div>
+        </div>
+        <div class="detail-body" id="d-body"></div>
+      </div>
+
+      <!-- 전사 -->
+      <div class="screen" id="s-transcript">
+        <div class="trans-hdr">
+          <div class="back-arrow" onclick="showScreen('s-detail')">←</div>
+          <div class="trans-title">전사 결과</div>
+          <button class="copy-btn" onclick="copyTranscript()">복사</button>
+        </div>
+        <div class="trans-body" id="trans-body"></div>
+      </div>
+    </div><!-- /phone-content -->
+
+    <div class="android-home-bar">
+      <div class="home-icon triangle"></div>
+      <div class="home-icon circle"></div>
+      <div class="home-icon" style="border-radius:3px"></div>
+    </div>
+
+  </div><!-- /screen-wrap -->
+  </div><!-- /shell -->
+
+</div><!-- /phone-outer -->
+
+<!-- 설명 패널 -->
+<div class="desc-panel" id="desc-panel">
+  <div class="desc-screen-badge">
+    <span class="desc-num" id="desc-num">00</span>
+    <span class="desc-step-label">SCREEN</span>
+  </div>
+  <div class="desc-divider"></div>
+  <div class="desc-title" id="desc-title">스플래시</div>
+  <div class="desc-summary" id="desc-summary"></div>
+  <ul class="desc-features" id="desc-features"></ul>
+  <div class="desc-note" id="desc-note">
+    <div class="desc-note-label" id="desc-note-label"></div>
+    <div class="desc-note-text" id="desc-note-text"></div>
+  </div>
+</div>
+
+</div><!-- /stage -->
+
+<script>
+// ── DB (localStorage CRUD) ──
+const DB_KEY = 'ibk_stt_recordings';
+function dbLoad() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch { return []; }
+}
+function dbSave(arr) { localStorage.setItem(DB_KEY, JSON.stringify(arr)); }
+function dbCreate(rec) { const arr = dbLoad(); arr.unshift(rec); dbSave(arr); return rec; }
+function dbDelete(id) { dbSave(dbLoad().filter(r => r.id !== id)); }
+function dbUpdate(id, patch) { dbSave(dbLoad().map(r => r.id === id ? {...r, ...patch} : r)); }
+
+// 초기 샘플 데이터 (최초 1회)
+if (!localStorage.getItem(DB_KEY)) {
+  dbCreate({ id: 'demo3', title: '기획 브레인스토밍', date: '2026-05-06 오전 10:05', dur: '8:14', durMs: 494000, upload: 'uploaded', stt: 'completed', transcript: sampleTranscript() });
+  dbCreate({ id: 'demo2', title: '고객사 미팅 — A사', date: '2026-05-07 오후 3:22', dur: '12:41', durMs: 761000, upload: 'uploading', stt: 'not_requested', transcript: [] });
+  dbCreate({ id: 'demo1', title: '팀 주간 회의', date: '2026-05-08 오후 3:15', dur: '4:32', durMs: 272000, upload: 'queued', stt: 'not_requested', transcript: [] });
+}
+
+function sampleTranscript() {
+  return [
+    { ms: 0, speaker: '화자 1', text: '안녕하세요, 오늘 팀 주간 회의를 시작하겠습니다.' },
+    { ms: 3500, speaker: '화자 2', text: '네, 먼저 지난 주 업무 현황부터 공유드리겠습니다.' },
+    { ms: 7200, speaker: '화자 1', text: 'IBK STT를 활용하면 회의 내용이 자동으로 텍스트로 변환되어 업무 효율이 크게 향상됩니다.' },
+    { ms: 13300, speaker: '화자 2', text: '전사 결과를 기반으로 회의록 자동 생성 기능도 검토 중입니다. 화자 분리와 타임스탬프가 지원됩니다.' },
+    { ms: 18800, speaker: '화자 1', text: '모든 음성 데이터는 사내 서버에서 처리되며 외부 유출 없이 안전하게 관리됩니다.' },
+  ];
+}
+
+// ── 화면별 설명 데이터 ──
+const SCREEN_DESCS = {
+  's-splash': {
+    num: '00', title: '스플래시',
+    summary: '앱 최초 진입 시 표시되는 브랜딩 화면입니다. 1.8초 후 로그인 화면으로 자동 전환됩니다.',
+    features: [
+      'IBK STT 브랜드 첫 노출',
+      '1.8초 후 로그인 화면 자동 전환',
+      '기존 세션 있을 시 목록으로 바로 이동 (예정)',
+    ],
+    note: { label: '설계 포인트', text: '앱 초기화 중 인증 상태를 백그라운드에서 확인합니다. 세션이 유효하면 로그인 화면을 건너뜁니다.' }
+  },
+  's-login': {
+    num: '01', title: '로그인',
+    summary: 'IBK SSO 원터치 로그인을 기본으로 제공합니다. SSO 사양 수령 전까지는 가상 로그인으로 동작합니다.',
+    features: [
+      'IBK SSO 원터치 로그인 (현재: 가상 동작)',
+      '사번 + 비밀번호 폴백 지원',
+      '어댑터 패턴: SSO 제공자 교체 가능',
+      '테스트 계정: 사번 00001 / 비번 test1234',
+    ],
+    note: { label: '미정 사항', text: 'IBK투자증권 SSO 정확한 사양(OIDC/SAML, 콜백 URL, 클라이언트 ID) 수령 후 실제 연동으로 교체됩니다.' }
+  },
+  's-list': {
+    num: '02', title: '녹음 목록',
+    summary: '전체 녹음을 3-track 상태 배지로 시각화합니다. 업로드·전사 진행 상태를 한눈에 파악할 수 있습니다.',
+    features: [
+      '전체 / 업로드 중 / 완료 / 실패 필터 탭',
+      '업로드 상태 + STT 상태 배지 분리 표시',
+      '최신순 / 길이순 정렬 토글',
+      '우하단 FAB으로 새 녹음 시작',
+      '오프라인 녹음도 즉시 목록에 표시',
+    ],
+    note: { label: '3-track 설계', text: '녹음 상태 / 업로드 상태 / 전사 상태를 각각 독립적으로 관리합니다. 하나의 상태 변화가 다른 상태에 영향을 주지 않습니다.' }
+  },
+  's-recording': {
+    num: '03', title: '녹음',
+    summary: '마이크 권한 확인 후 즉시 녹음을 시작합니다. 실시간 타이머와 음성 미리보기를 제공합니다.',
+    features: [
+      '마이크 권한 없을 시 온보딩 화면으로 유도',
+      '실시간 타이머 표시',
+      'Web Speech API 실시간 음성 미리보기',
+      '중지 후 제목 입력 → 저장',
+      '로컬 DB 저장 후 업로드 큐 자동 등록',
+    ],
+    note: { label: '오프라인 우선', text: '네트워크가 없어도 녹음과 로컬 저장은 항상 가능합니다. 업로드는 네트워크 복구 시 자동으로 재시도합니다.' }
+  },
+  's-detail': {
+    num: '04', title: '녹음 상세',
+    summary: '개별 녹음의 업로드·전사 진행 상태를 실시간으로 확인합니다. 전사 완료 시 결과 보기가 활성화됩니다.',
+    features: [
+      '업로드 진행률 바 실시간 표시',
+      '녹음 완료 / 업로드 / STT 상태 배지',
+      '전사 완료 시 결과 보기 버튼 활성화',
+      '삭제 (Soft Delete, 서버와 동기화)',
+    ],
+    note: { label: '재전송 vs 재처리', text: '업로드 재전송과 STT 재처리는 별도 액션입니다. 서로 다른 버튼으로 구분되며 절대 하나로 묶지 않습니다.' }
+  },
+  's-transcript': {
+    num: '05', title: '전사 결과',
+    summary: 'STT 처리가 완료된 텍스트를 화자 분리와 타임스탬프와 함께 표시합니다.',
+    features: [
+      '화자 분리 (다중 화자 지원)',
+      '타임스탬프 기반 세그먼트 뷰',
+      '전체 텍스트 클립보드 복사',
+      '실제 녹음 시 Web Speech 결과도 표시',
+    ],
+    note: { label: '벤더 독립 스키마', text: 'STT 모델이 교체되어도 앱은 동일한 결과 스키마만 사용합니다. 서버 어댑터가 모델별 출력을 공통 포맷으로 변환합니다.' }
+  },
+};
+
+function updateDesc(screenId) {
+  const d = SCREEN_DESCS[screenId];
+  if (!d) return;
+  document.getElementById('desc-num').textContent = d.num;
+  document.getElementById('desc-title').textContent = d.title;
+  document.getElementById('desc-summary').textContent = d.summary;
+  document.getElementById('desc-features').innerHTML = d.features.map(f => `<li>${f}</li>`).join('');
+  document.getElementById('desc-note-label').textContent = d.note.label;
+  document.getElementById('desc-note-text').textContent = d.note.text;
+  // 패널 재애니메이션
+  const p = document.getElementById('desc-panel');
+  p.style.animation = 'none';
+  p.offsetHeight; // reflow
+  p.style.animation = '';
+}
+
+// ── 상태 ──
+let currentDevice = 'iphone';
+let currentStep = 0;
+let isRecording = false;
+let recSec = 0, recInterval = null;
+let recognition = null, recTranscript = [];
+let currentDetailId = null;
+
+const STEPS = ['s-splash','s-login','s-list','s-recording','s-detail','s-transcript'];
+const STEP_LABELS = ['스플래시','로그인','목록','녹음','상세','전사결과'];
+
+// ── 시각 ──
+function tick() {
+  const d = new Date();
+  document.getElementById('status-time').textContent = `${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+tick(); setInterval(tick, 15000);
+
+// ── 기기 전환 ──
+function switchDevice(type) {
+  currentDevice = type;
+  const phone = document.getElementById('phone');
+  phone.className = `phone-outer ${type}`;
+  document.getElementById('btn-iphone').classList.toggle('active', type==='iphone');
+  document.getElementById('btn-android').classList.toggle('active', type==='android');
+  // 카메라 홀 모양 전환
+  const notch = document.getElementById('camera-notch');
+  if (type === 'android') {
+    notch.style.cssText = 'position:absolute;top:14px;left:50%;transform:translateX(-50%);width:14px;height:14px;background:#000;border-radius:50%;z-index:100;';
+  } else {
+    notch.style.cssText = 'position:absolute;top:12px;left:50%;transform:translateX(-50%);width:120px;height:35px;background:#000;border-radius:20px;z-index:100;';
+  }
+}
+
+// ── 화면 전환 ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+  currentStep = STEPS.indexOf(id);
+  updateStepUI();
+  updateDesc(id);
+  // 모달 닫기
+  const m = document.getElementById('save-modal');
+  if (m) m.classList.remove('show');
+}
+
+function updateStepUI() {
+  document.querySelectorAll('.fnav-btn').forEach((b,i) => b.classList.toggle('active', i===currentStep));
+}
+
+function goStep(n) {
+  const screen = STEPS[n];
+  if (!screen) return;
+  showScreen(screen);
+  if (screen === 's-list') renderList();
+  if (screen === 's-splash') { /* 자동 전환 없음 — 수동으로 다음 화면 이동 */ }
+  if (screen === 's-recording') resetRec();
+  if (screen === 's-detail') { currentDetailId = currentDetailId || 'demo3'; renderDetail(currentDetailId); }
+  if (screen === 's-transcript') renderTranscript(currentDetailId || 'demo3');
+}
+
+function prevStep() { if (currentStep > 0) goStep(currentStep - 1); }
+function nextStep() { if (currentStep < STEPS.length - 1) goStep(currentStep + 1); }
+
+document.addEventListener('keydown', e => {
+  if (document.activeElement.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight') nextStep();
+  if (e.key === 'ArrowLeft') prevStep();
+});
+
+// ── 로그인 ──
+function liftLabel(id, v) { document.getElementById(id).classList.toggle('up', v.length > 0); }
+function doSSOLogin() {
+  const btn = document.querySelector('.sso-btn');
+  btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;border-color:#ffffff44;border-top-color:#fff"></div>';
+  setTimeout(() => { showScreen('s-list'); renderList(); }, 1000);
+}
+function doLogin() {
+  const id = document.getElementById('inp-id').value;
+  const pw = document.getElementById('inp-pw').value;
+  if (!id || !pw) return;
+  showScreen('s-list'); renderList();
+}
+
+// ── 목록 ──
+let currentFilter = 'all';
+function setTab(el, f) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = f;
+  renderList();
+}
+function renderList() {
+  let items = dbLoad();
+  if (currentFilter === 'uploading') items = items.filter(r => r.upload === 'uploading');
+  else if (currentFilter === 'done') items = items.filter(r => r.stt === 'completed');
+  else if (currentFilter === 'failed') items = items.filter(r => r.upload === 'failed' || r.stt === 'failed');
+  const body = document.getElementById('list-body');
+  if (!items.length) { body.innerHTML = '<div class="empty-state"><div class="empty-text">녹음을 시작해보세요</div></div>'; return; }
+  body.innerHTML = items.map(r => {
+    const ub = { queued:'<span class="badge b-queued">업로드 예정</span>', uploading:'<span class="badge b-uploading">업로드 중</span>', uploaded:'<span class="badge b-done">업로드 완료</span>', failed:'<span class="badge b-failed">업로드 실패</span>' }[r.upload] || '';
+    const sb = { not_requested:'<span class="badge b-stt">STT 대기</span>', queued:'<span class="badge b-stt">처리 중</span>', completed:'<span class="badge b-stt-done">전사 완료</span>', failed:'<span class="badge b-failed">STT 실패</span>' }[r.stt] || '';
+    return `<div class="rec-card" onclick="openDetail('${r.id}')">
+      <div class="rec-top"><div class="rec-title">${r.title}</div><div class="rec-dur">${r.dur}</div></div>
+      <div class="rec-date">${r.date}</div>
+      <div class="badges">${ub}${sb}</div>
+    </div>`;
+  }).join('');
+}
+
+function goToRecording() { showScreen('s-recording'); resetRec(); }
+
+// ── 녹음 + Web Speech API ──
+function resetRec() {
+  stopRec();
+  isRecording = false;
+  recSec = 0;
+  recTranscript = [];
+  document.getElementById('rec-timer').textContent = '00:00';
+  document.getElementById('rec-dot').classList.remove('on');
+  document.getElementById('rec-status').textContent = '녹음 대기';
+  const btn = document.getElementById('rec-btn');
+  btn.className = 'rec-btn rec-start';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="7"/></svg>';
+  document.getElementById('live-tx').className = 'live-transcript';
+  document.getElementById('live-tx').innerHTML = '';
+}
+
+function toggleRec() {
+  if (!isRecording) startRec();
+  else stopAndShowModal();
+}
+
+function startRec() {
+  isRecording = true;
+  document.getElementById('rec-dot').classList.add('on');
+  document.getElementById('rec-status').textContent = '녹음 중';
+  const btn = document.getElementById('rec-btn');
+  btn.className = 'rec-btn rec-stop';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="#ef4444"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
+
+  recInterval = setInterval(() => {
+    recSec++;
+    const m = String(Math.floor(recSec/60)).padStart(2,'0');
+    const s = String(recSec%60).padStart(2,'0');
+    document.getElementById('rec-timer').textContent = `${m}:${s}`;
+  }, 1000);
+
+  // Web Speech API 시도
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SR) {
+    recognition = new SR();
+    recognition.lang = 'ko-KR';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.onstart = () => {
+      document.getElementById('speech-dot').classList.add('on');
+      document.getElementById('speech-label').textContent = '음성인식 중';
+    };
+    recognition.onresult = (e) => {
+      let interim = '', final = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) { final += t; recTranscript.push({ ms: recSec*1000, speaker: '화자', text: t.trim() }); }
+        else interim += t;
+      }
+      const box = document.getElementById('live-tx');
+      box.className = 'live-transcript show';
+      const finalText = recTranscript.map(r=>r.text).join(' ');
+      box.innerHTML = `<span>${finalText}</span><span class="interim"> ${interim}</span>`;
+      box.scrollTop = box.scrollHeight;
+    };
+    recognition.onerror = () => {};
+    recognition.onend = () => {
+      if (isRecording) { try { recognition.start(); } catch{} }
+      else {
+        document.getElementById('speech-dot').classList.remove('on');
+        document.getElementById('speech-label').textContent = '음성인식 대기';
+      }
+    };
+    try { recognition.start(); } catch(e) {
+      document.getElementById('speech-label').textContent = '브라우저 미지원';
+    }
+  } else {
+    document.getElementById('speech-label').textContent = 'Chrome 권장';
+  }
+}
+
+function stopRec() {
+  if (recInterval) { clearInterval(recInterval); recInterval = null; }
+  if (recognition) { try { recognition.stop(); } catch{} recognition = null; }
+  isRecording = false;
+}
+
+function stopAndShowModal() {
+  stopRec();
+  document.getElementById('rec-dot').classList.remove('on');
+  document.getElementById('rec-status').textContent = '저장 대기';
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('title-input').value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())} 녹음`;
+  document.getElementById('save-modal').classList.add('show');
+}
+
+function discardRec() { document.getElementById('save-modal').classList.remove('show'); showScreen('s-list'); renderList(); }
+function saveRec() {
+  const title = document.getElementById('title-input').value.trim() || '새 녹음';
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const m = Math.floor(recSec/60), s = recSec%60;
+  const newRec = {
+    id: 'r_' + Date.now(),
+    title,
+    date: `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} 오후 ${pad(now.getHours())}:${pad(now.getMinutes())}`,
+    dur: `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`,
+    durMs: recSec * 1000,
+    upload: 'queued',
+    stt: recTranscript.length > 0 ? 'completed' : 'not_requested',
+    transcript: recTranscript.length > 0 ? recTranscript : [],
+  };
+  dbCreate(newRec);
+  document.getElementById('save-modal').classList.remove('show');
+  currentDetailId = newRec.id;
+  showScreen('s-list');
+  renderList();
+}
+
+// ── 상세 ──
+function openDetail(id) {
+  currentDetailId = id;
+  renderDetail(id);
+  showScreen('s-detail');
+}
+function renderDetail(id) {
+  const rec = dbLoad().find(r => r.id === id);
+  if (!rec) return;
+  document.getElementById('d-title').textContent = rec.title;
+  const uLabel = { queued:'업로드 예정', uploading:'업로드 중', uploaded:'업로드 완료', failed:'업로드 실패' };
+  const sLabel = { not_requested:'STT 대기', queued:'처리 중', completed:'전사 완료', failed:'실패' };
+  const uClass = { queued:'b-queued', uploading:'b-uploading', uploaded:'b-done', failed:'b-failed' };
+  const sClass = { not_requested:'b-stt', queued:'b-stt', completed:'b-stt-done', failed:'b-failed' };
+  const mins = Math.floor((rec.durMs||0)/60000), secs = Math.floor(((rec.durMs||0)%60000)/1000);
+  const showUpload = rec.upload === 'uploading';
+  const showTranscript = rec.stt === 'completed';
+  document.getElementById('d-body').innerHTML = `
+    <div class="status-block">
+      <div class="sec-label">상태</div>
+      <div class="badges" style="gap:7px">
+        <span class="badge b-done">녹음 완료</span>
+        <span class="badge ${uClass[rec.upload]}">${uLabel[rec.upload]}</span>
+        <span class="badge ${sClass[rec.stt]}">${sLabel[rec.stt]}</span>
+      </div>
+    </div>
+    ${showUpload ? `<div class="prog-block">
+      <div class="prog-row"><span class="prog-label">업로드 진행률</span><span class="prog-pct" id="pct">0%</span></div>
+      <div class="prog-track"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+    </div>` : ''}
+    <div class="sec-label" style="margin-top:14px">제목</div>
+    <div class="detail-title-text">${rec.title}</div>
+    <div class="meta-row">
+      <div><div class="meta-val">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</div><div class="meta-key">길이</div></div>
+      <div><div class="meta-val">${rec.date.split(' ')[0]}</div><div class="meta-key">날짜</div></div>
+    </div>
+    ${showTranscript ? `<button class="view-transcript-btn" onclick="viewTranscript('${id}')">전사 결과 보기</button>` : ''}
+    <button class="del-btn" onclick="deleteRec('${id}')">삭제</button>`;
+
+  if (showUpload) {
+    let p = 0;
+    const t = setInterval(() => {
+      p = Math.min(p + Math.random()*7, 100);
+      const el = document.getElementById('pfill'), et = document.getElementById('pct');
+      if (el) el.style.width = p + '%';
+      if (et) et.textContent = Math.round(p) + '%';
+      if (p >= 100) clearInterval(t);
+    }, 200);
+  }
+}
+function deleteRec(id) {
+  dbDelete(id);
+  showScreen('s-list');
+  renderList();
+}
+
+// ── 전사 ──
+function viewTranscript(id) {
+  currentDetailId = id;
+  renderTranscript(id);
+  showScreen('s-transcript');
+}
+function renderTranscript(id) {
+  const rec = dbLoad().find(r => r.id === id);
+  const segs = rec?.transcript || sampleTranscript();
+  document.getElementById('trans-body').innerHTML = segs.map(s => {
+    const total = Math.floor((s.ms||0)/1000);
+    const mm = String(Math.floor(total/60)).padStart(2,'0');
+    const ss = String(total%60).padStart(2,'0');
+    return `<div class="seg">
+      <div class="seg-meta">
+        <span class="seg-time">${mm}:${ss}</span>
+        ${s.speaker ? `<span class="seg-spk">${s.speaker}</span>` : ''}
+      </div>
+      <div class="seg-text">${s.text}</div>
+    </div>`;
+  }).join('');
+}
+function copyTranscript() {
+  const rec = dbLoad().find(r => r.id === currentDetailId);
+  const segs = rec?.transcript || sampleTranscript();
+  const text = segs.map(s => `[${s.speaker||''}] ${s.text}`).join('\n');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => alert('클립보드에 복사됐습니다.'));
+  } else {
+    alert(text.slice(0, 150) + '…');
+  }
+}
+
+// ── 초기 실행 ──
+goStep(0);
+</script>
+</body>
+</html>

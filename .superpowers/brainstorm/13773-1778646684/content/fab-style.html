@@ -1,0 +1,122 @@
+<h2>Center FAB 스타일 선택</h2>
+<p class="subtitle">BottomTabs 가운데 녹음 버튼(FAB)의 디자인 방향을 고르세요</p>
+
+<div class="cards">
+
+  <!-- Option A: Cutout FAB -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;border-radius:12px;padding:24px 16px;position:relative;">
+        <!-- Tab bar mockup -->
+        <div style="display:flex;justify-content:space-around;align-items:flex-end;background:#0f0f1a;border-radius:28px;padding:12px 8px 8px;position:relative;">
+          <!-- Tab items -->
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">🏠</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">홈</div>
+          </div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">🔍</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">검색</div>
+          </div>
+          <!-- Cutout space -->
+          <div style="width:64px;height:64px;"></div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">📚</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">보관함</div>
+          </div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">👤</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">프로필</div>
+          </div>
+          <!-- Floating FAB in center -->
+          <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);width:60px;height:60px;background:linear-gradient(135deg,#e63946,#c1121f);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(230,57,70,0.5);border:3px solid #0f0f1a;">
+            <div style="font-size:26px;">🎙</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 컷아웃 + 플로팅 FAB</h3>
+      <p>탭바에 구멍을 뚫고 FAB가 위로 튀어나옴. iOS/안드로이드 앱에서 가장 보편적인 패턴. 눈에 확 들어오는 주목도.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Simple Raised FAB -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;border-radius:12px;padding:24px 16px;position:relative;">
+        <div style="display:flex;justify-content:space-around;align-items:center;background:#0f0f1a;border-radius:28px;padding:10px 8px;">
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">🏠</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">홈</div>
+          </div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">🔍</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">검색</div>
+          </div>
+          <!-- Large center tab button -->
+          <div style="text-align:center;">
+            <div style="width:50px;height:50px;background:linear-gradient(135deg,#e63946,#c1121f);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 2px 12px rgba(230,57,70,0.4);">
+              <div style="font-size:22px;">🎙</div>
+            </div>
+          </div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">📚</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">보관함</div>
+          </div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">👤</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">프로필</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 인셋 라운드 FAB</h3>
+      <p>탭바 내부에 크고 둥근 버튼. 돌출 없이 깔끔. 기업용 앱(B2B internal)에 어울리는 절제된 느낌.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Floating FAB above tabbar -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;border-radius:12px;padding:24px 16px 0;position:relative;min-height:120px;">
+        <!-- Floating FAB above -->
+        <div style="position:absolute;bottom:52px;left:50%;transform:translateX(-50%);z-index:10;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#e63946,#c1121f);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(230,57,70,0.5);">
+            <div style="font-size:26px;">🎙</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-around;align-items:center;background:#0f0f1a;border-radius:20px 20px 12px 12px;padding:10px 8px;margin-top:24px;">
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">🏠</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">홈</div>
+          </div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">🔍</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">검색</div>
+          </div>
+          <div style="width:50px;"></div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">📚</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">보관함</div>
+          </div>
+          <div style="text-align:center;opacity:0.5;">
+            <div style="font-size:18px;">👤</div>
+            <div style="font-size:10px;color:#aaa;margin-top:2px;">프로필</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 완전 분리 플로팅 FAB</h3>
+      <p>탭바와 분리된 독립 FAB. 탭바는 4개 탭만. 가장 자유로운 레이아웃이지만 탭과 FAB가 독립적으로 존재.</p>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:24px;padding:16px;background:#1e1e2e;border-radius:12px;border-left:3px solid #e63946;">
+  <div class="label">참고</div>
+  <p style="margin:8px 0 0;color:#ccc;font-size:14px;">B2B 사내 앱 특성상 <strong>A 또는 B 추천</strong>. A는 시각적 임팩트, B는 절제된 기업 느낌.</p>
+</div>

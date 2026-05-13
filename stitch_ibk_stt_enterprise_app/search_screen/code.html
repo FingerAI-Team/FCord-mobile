@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "border-dark": "#1F2937",
+                        "primary-fixed": "#dce2f7",
+                        "on-tertiary-container": "#968065",
+                        "tertiary-container": "#261906",
+                        "outline": "#76777d",
+                        "background-dark": "#0B0F19",
+                        "surface-container": "#f0edee",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "success-green": "#10B981",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e5e2e3",
+                        "on-tertiary-fixed": "#261906",
+                        "error-container": "#ffdad6",
+                        "border-light": "#E5E7EB",
+                        "accent-blue-dark": "#60A5FA",
+                        "secondary-fixed": "#dce2f3",
+                        "tertiary-fixed": "#f9debf",
+                        "tertiary": "#000000",
+                        "surface-variant": "#e5e2e3",
+                        "surface-light": "#F9FAFB",
+                        "background-light": "#FFFFFF",
+                        "on-background": "#1b1b1d",
+                        "background": "#fcf8fa",
+                        "secondary": "#585f6c",
+                        "surface-dark": "#111827",
+                        "primary": "#000000",
+                        "warning-amber": "#F59E0B",
+                        "on-primary-fixed-variant": "#404758",
+                        "primary-container": "#141b2b",
+                        "on-tertiary-fixed-variant": "#55442d",
+                        "surface-elevated-dark": "#1F2937",
+                        "surface-tint": "#575e70",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f6f3f4",
+                        "on-secondary-fixed-variant": "#404754",
+                        "secondary-fixed-dim": "#c0c7d6",
+                        "text-primary-dark": "#F9FAFB",
+                        "inverse-surface": "#303031",
+                        "on-surface": "#1b1b1d",
+                        "on-surface-variant": "#45464c",
+                        "accent-blue": "#2563EB",
+                        "surface-dim": "#dcd9db",
+                        "danger-red": "#DC2626",
+                        "recording-red": "#EF4444",
+                        "tertiary-fixed-dim": "#dcc2a4",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f3f0f1",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#dce2f3",
+                        "surface-container-high": "#eae7e9",
+                        "surface-bright": "#fcf8fa",
+                        "on-secondary-fixed": "#151c27",
+                        "on-primary-fixed": "#141b2b",
+                        "surface": "#fcf8fa",
+                        "primary-fixed-dim": "#c0c6db",
+                        "outline-variant": "#c6c6cd",
+                        "text-primary-light": "#111827",
+                        "inverse-primary": "#c0c6db",
+                        "on-secondary-container": "#5e6572",
+                        "on-primary-container": "#7d8497"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "3xl": "48px",
+                        "2xl": "32px",
+                        "xl": "24px",
+                        "md": "12px",
+                        "lg": "16px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "caption": ["Hanken Grotesk"],
+                        "label": ["Hanken Grotesk"],
+                        "heading": ["Hanken Grotesk"],
+                        "body": ["Hanken Grotesk"],
+                        "display": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "caption": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "label": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "heading": ["20px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body": ["15px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "display": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.5px", "fontWeight": "800"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .highlight {
+            background-color: #FDE047;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E7EB;
+            border-radius: 3px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light font-body text-text-primary-light">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background-light border-b border-border-light h-[64px] flex justify-between items-center px-lg">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="menu">menu</span>
+<span class="font-heading text-heading font-bold text-primary">IBK STT</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A professional close-up portrait of a corporate professional in a modern office environment. The individual has a friendly expression and is wearing a dark, minimal business suit. The background is softly blurred with cool blue tones and sleek office architecture, maintaining a high-contrast and minimalist aesthetic consistent with an enterprise application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY6D3jXOqLkajdwJ9IUGDbu2iJkHMTGIbBCOTnQChNYUGLU2fvPVLk4MJb0mgzkKqlIGIE3bg7bGFmu_K38hbgzVEDeS8V2LCgPTLaBvOQCJ0luJH9Fh94Azg1WxgIwzYer207jwxreRYmy4hlU7lqzhVzttBN-u_iyzhe25kkdgJDQkLZ28QFPnJRb3TM54Rr_g4dsnGJqLT0gfjagizmRbsVpwoD61TkEeYSSyAoVepzhEaOMSTTY89OeDgpOr6MdJifpM47YuM"/>
+</div>
+</header>
+<!-- Search Sticky Bar Section -->
+<div class="fixed top-[64px] left-0 w-full z-40 bg-background-light px-lg pt-md pb-md flex items-center gap-md">
+<div class="flex-1 flex items-center bg-surface-light border border-border-light rounded-xl px-md h-[52px]">
+<span class="material-symbols-outlined text-secondary mr-sm" data-icon="search">search</span>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body outline-none placeholder:text-secondary" placeholder="녹음, 본문, 메모 검색..." type="text"/>
+<span class="material-symbols-outlined text-recording-red ml-sm cursor-pointer" data-icon="mic_none">mic_none</span>
+</div>
+<button class="font-label text-label text-secondary px-sm h-[52px]">취소</button>
+</div>
+<!-- Main Content Area -->
+<main class="mt-[140px] pb-[100px] px-lg">
+<!-- Results State Segmented Control -->
+<div class="flex gap-xs mb-xl bg-surface-container-low p-1 rounded-xl">
+<button class="flex-1 py-sm px-md rounded-lg text-label bg-white shadow-sm text-primary">전체 (12)</button>
+<button class="flex-1 py-sm px-md rounded-lg text-label text-secondary hover:bg-surface-container">제목 (3)</button>
+<button class="flex-1 py-sm px-md rounded-lg text-label text-secondary hover:bg-surface-container">본문 (9)</button>
+</div>
+<!-- Search Results List -->
+<div class="space-y-lg">
+<!-- Result Card 1 -->
+<div class="bg-white border border-border-light p-lg rounded-xl shadow-sm hover:border-accent-blue transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-heading text-body font-bold text-primary truncate pr-xl">2023 4분기 경영 전략 회의</h3>
+<span class="font-caption text-caption text-secondary">2023.10.15</span>
+</div>
+<p class="text-body text-secondary line-clamp-2 leading-relaxed mb-md">
+                    올해 4분기에는 <span class="highlight">디지털</span> 전환 가속화를 위해 신규 STT 시스템 도입을 최우선 과제로 선정하였습니다...
+                </p>
+<div class="flex items-center gap-sm">
+<div class="inline-flex items-center bg-surface-container px-sm py-1 rounded-full gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span class="font-caption text-caption text-primary">02:45</span>
+</div>
+</div>
+</div>
+<!-- Result Card 2 -->
+<div class="bg-white border border-border-light p-lg rounded-xl shadow-sm hover:border-accent-blue transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-heading text-body font-bold text-primary truncate pr-xl">신기술 협력 방안 논의</h3>
+<span class="font-caption text-caption text-secondary">2023.10.12</span>
+</div>
+<p class="text-body text-secondary line-clamp-2 leading-relaxed mb-md">
+                    파트너사와의 협력을 통한 인공지능 기반 <span class="highlight">디지털</span> 금융 플랫폼 구축 시나리오를 점검하고...
+                </p>
+<div class="flex items-center gap-sm">
+<div class="inline-flex items-center bg-surface-container px-sm py-1 rounded-full gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span class="font-caption text-caption text-primary">15:10</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Horizontal Spacing -->
+<div class="h-xl"></div>
+<!-- Empty State Sections (Below Results for demo purposes) -->
+<section class="space-y-2xl mt-3xl border-t border-border-light pt-3xl">
+<!-- Recent Searches -->
+<div>
+<h4 class="font-heading text-label text-primary mb-md">최근 검색</h4>
+<div class="flex flex-wrap gap-sm">
+<div class="flex items-center gap-xs bg-surface-container-low border border-border-light px-md py-sm rounded-full">
+<span class="font-body text-caption text-primary">분기 보고</span>
+<span class="material-symbols-outlined text-[16px] text-secondary cursor-pointer" data-icon="close">close</span>
+</div>
+<div class="flex items-center gap-xs bg-surface-container-low border border-border-light px-md py-sm rounded-full">
+<span class="font-body text-caption text-primary">디지털 전환</span>
+<span class="material-symbols-outlined text-[16px] text-secondary cursor-pointer" data-icon="close">close</span>
+</div>
+<div class="flex items-center gap-xs bg-surface-container-low border border-border-light px-md py-sm rounded-full">
+<span class="font-body text-caption text-primary">인사 팀장님</span>
+<span class="material-symbols-outlined text-[16px] text-secondary cursor-pointer" data-icon="close">close</span>
+</div>
+</div>
+</div>
+<!-- Recommendations -->
+<div>
+<h4 class="font-heading text-label text-primary mb-md">추천</h4>
+<div class="flex flex-wrap gap-sm">
+<div class="bg-surface-container-low px-md py-sm rounded-full cursor-pointer hover:bg-surface-container transition-colors">
+<span class="font-body text-caption text-secondary">어제</span>
+</div>
+<div class="bg-surface-container-low px-md py-sm rounded-full cursor-pointer hover:bg-surface-container transition-colors">
+<span class="font-body text-caption text-secondary">이번 주 회의</span>
+</div>
+<div class="bg-surface-container-low px-md py-sm rounded-full cursor-pointer hover:bg-surface-container transition-colors">
+<span class="font-body text-caption text-secondary">투자전략 회의</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Empty Results Placeholder (Hidden usually, but shown for UI demonstration) -->
+<section class="flex flex-col items-center justify-center py-3xl text-center space-y-md">
+<div class="w-32 h-32 bg-surface-container rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="search_off">search_off</span>
+</div>
+<h5 class="font-heading text-heading text-primary">검색 결과가 없어요</h5>
+<p class="font-body text-body text-secondary">다른 키워드로 검색해 보세요</p>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-background-light border-t border-border-light h-[80px] pb-safe flex justify-around items-center">
+<div class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined mb-xs" data-icon="mic_none">mic_none</span>
+<span class="font-label text-caption">Recordings</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold scale-95 transition-transform duration-150 cursor-pointer">
+<span class="material-symbols-outlined mb-xs" data-icon="search" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-label text-caption">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined mb-xs" data-icon="settings">settings</span>
+<span class="font-label text-caption">Settings</span>
+</div>
+</nav>
+</body></html>
