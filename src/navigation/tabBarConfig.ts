@@ -13,9 +13,18 @@ const TAB_CONFIGS: TabConfig[] = [
   { label: '프로필', icon: '👤' },
 ];
 
-// 탭 인덱스 → TabConfig
+// 탭 인덱스 → TabConfig (범위 초과 시 에러)
 export function getTabConfig(index: number): TabConfig {
-  return TAB_CONFIGS[index];
+  const config = TAB_CONFIGS[index];
+  if (!config) {
+    throw new Error(`유효하지 않은 탭 인덱스: ${index} (허용 범위: 0~${TAB_CONFIGS.length - 1})`);
+  }
+  return config;
+}
+
+// 렌더 인덱스 → 라우트 인덱스 변환 (FAB 슬롯이 가운데를 차지하므로 오프셋 적용)
+export function renderIndexToRouteIndex(renderIndex: number): number {
+  return renderIndex < 2 ? renderIndex : renderIndex - 1;
 }
 
 // 렌더 순서에서 인덱스 2는 FAB 슬롯 (탭바 가운데)

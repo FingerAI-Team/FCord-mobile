@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { type BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { colors, spacing, typography } from '../theme/tokens';
-import { getTabConfig, isFabSlot, FAB_SIZE, FAB_OFFSET, TAB_BAR_HEIGHT } from './tabBarConfig';
+import { getTabConfig, isFabSlot, renderIndexToRouteIndex, FAB_SIZE, FAB_OFFSET, TAB_BAR_HEIGHT } from './tabBarConfig';
 
 // 컷아웃 FAB 커스텀 탭바 — react-navigation tabBar prop에 주입
 export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps): React.ReactElement {
@@ -17,7 +17,7 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
     navigation.navigate('RecordingModal' as never);
   };
 
-  const renderTabCell = (routeIndex: number) => {
+  const renderTabCell = (routeIndex: number, renderIndex: number) => {
     const route = state.routes[routeIndex];
     const { options } = descriptors[route.key];
     const isFocused = state.index === routeIndex;
@@ -32,7 +32,7 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
 
     return (
       <TouchableOpacity
-        key={route.key}
+        key={`tab-${renderIndex}`}
         accessibilityRole="button"
         accessibilityState={isFocused ? { selected: true } : {}}
         accessibilityLabel={options.tabBarAccessibilityLabel ?? config.label}
@@ -57,13 +57,15 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
         <Text style={styles.fabIcon}>🎙</Text>
       </TouchableOpacity>
 
-      {/* 탭바 본체: 왼쪽 2탭 + FAB 빈 슬롯 + 오른쪽 2탭 */}
+      {/* 탭바 본체: isFabSlot으로 렌더 위치 결정 */}
       <View style={styles.tabBar}>
-        {renderTabCell(0)}
-        {renderTabCell(1)}
-        <View style={styles.fabPlaceholder} />
-        {renderTabCell(2)}
-        {renderTabCell(3)}
+        {[0, 1, 2, 3, 4].map((renderIndex) =>
+          isFabSlot(renderIndex) ? (
+            <View key="fab-placeholder" style={styles.fabPlaceholder} />
+          ) : (
+            renderTabCell(renderIndexToRouteIndex(renderIndex), renderIndex)
+          )
+        )}
       </View>
     </View>
   );
@@ -73,6 +75,7 @@ const styles = StyleSheet.create({
   wrapper: {
     position: 'relative',
     backgroundColor: 'transparent',
+    alignItems: 'center',
   },
   tabBar: {
     flexDirection: 'row',
@@ -96,8 +99,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -FAB_OFFSET,
     alignSelf: 'center',
-    left: '50%',
-    marginLeft: -(FAB_SIZE / 2),
     width: FAB_SIZE,
     height: FAB_SIZE,
     borderRadius: FAB_SIZE / 2,
