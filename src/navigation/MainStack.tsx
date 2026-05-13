@@ -14,6 +14,9 @@ import { colors } from '../theme/tokens';
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 const Stack = createStackNavigator<MainStackParamList>();
 
+// TranscriptScreen placeholder — Task 후속에서 실 구현 예정
+function TranscriptPlaceholder(): React.ReactElement | null { return null; }
+
 // BottomTabs: 4개 탭 (FAB는 CustomTabBar에서 주입)
 function BottomTabs(): React.ReactElement {
   return (
@@ -41,7 +44,7 @@ export function MainStack(): React.ReactElement {
       />
       <Stack.Screen
         name="Transcript"
-        component={() => null}
+        component={TranscriptPlaceholder}
       />
       <Stack.Screen
         name="RecordingModal"

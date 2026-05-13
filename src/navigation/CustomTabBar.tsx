@@ -7,14 +7,18 @@ import {
   Platform,
 } from 'react-native';
 import { type BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { colors, spacing, typography } from '../theme/tokens';
+import type { MainStackParamList } from './types';
 import { getTabConfig, isFabSlot, renderIndexToRouteIndex, FAB_SIZE, FAB_OFFSET, TAB_BAR_HEIGHT } from './tabBarConfig';
 
 // 컷아웃 FAB 커스텀 탭바 — react-navigation tabBar prop에 주입
 export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps): React.ReactElement {
-  // FAB 탭 → RecordingModal (Modal Stack, 탭 활성 상태 변경 없음)
+  // MainStack 네비게이터에 접근해 RecordingModal로 이동 (타입 안전)
+  const parentNavigation = useNavigation<StackNavigationProp<MainStackParamList>>();
   const onFabPress = () => {
-    navigation.navigate('RecordingModal' as never);
+    parentNavigation.navigate('RecordingModal');
   };
 
   const renderTabCell = (routeIndex: number, renderIndex: number) => {
