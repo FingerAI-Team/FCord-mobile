@@ -6,27 +6,20 @@ import {
   TouchableOpacity,
   Text,
   Alert,
-  Platform,
-  PermissionsAndroid,
 } from 'react-native';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { useRecordingListStore } from '../../stores/recordingListStore';
 import { getRecordingList, softDeleteRecording } from '../../api/recordings';
-import { ServerRecordingCache, FilterType, SortType } from '../../types';
+import { ServerRecordingCache, SortType } from '../../types';
 import { RecordingCard } from './recordingCard';
 import { FilterTabs } from './filterTabs';
 import { DeleteConfirmModal } from './deleteConfirmModal';
+import { EMPTY_MESSAGES } from './recordingListConfig';
+
+export { EMPTY_MESSAGES };
 
 interface Props {
   navigation: any;
 }
-
-const EMPTY_MESSAGES: Record<FilterType, string> = {
-  all: '녹음을 시작해보세요',
-  uploading: '업로드 중인 파일이 없습니다',
-  done: '완료된 파일이 없습니다',
-  failed: '실패한 파일이 없습니다',
-};
 
 export function RecordingListScreen({ navigation }: Props): React.ReactElement {
   const {
@@ -71,35 +64,6 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 
   const onEndReached = () => {
     if (hasMore && !isLoading && nextCursor) loadList(nextCursor);
-  };
-
-  // U3: FAB 탭 시 마이크 권한 체크 후 녹음 화면 이동 (가드레일 준수)
-  const onFabPress = async () => {
-    let granted = false;
-    if (Platform.OS === 'ios') {
-      const current = await check(PERMISSIONS.IOS.MICROPHONE);
-      if (current === RESULTS.GRANTED) {
-        granted = true;
-      } else {
-        const result = await request(PERMISSIONS.IOS.MICROPHONE);
-        granted = result === RESULTS.GRANTED;
-      }
-    } else {
-      const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, {
-        title: '마이크 권한 필요',
-        message: '녹음을 위해 마이크 접근 권한이 필요합니다.',
-        buttonPositive: '허용',
-        buttonNegative: '거부',
-      });
-      granted = result === PermissionsAndroid.RESULTS.GRANTED;
-    }
-
-    if (!granted) {
-      // 권한 거부 시 온보딩 화면으로 이동 (가드레일: 권한 없이 녹음 화면 진입 금지)
-      navigation.navigate('PermissionOnboarding');
-      return;
-    }
-    navigation.navigate('Recording');
   };
 
   // U1: 삭제 실패 시 롤백 + 토스트
@@ -147,7 +111,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
       </View>
       <FlatList
         data={items}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: ServerRecordingCache) => item.id}
         renderItem={renderItem}
         onRefresh={onRefresh}
         refreshing={isRefreshing}
@@ -156,16 +120,6 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
         ListEmptyComponent={!isLoading ? renderEmpty : null}
         contentContainerStyle={items.length === 0 ? styles.emptyList : undefined}
       />
-
-      {/* FAB: 녹음 시작 */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={onFabPress}
-        accessibilityLabel="새 녹음 시작"
-        accessibilityRole="button"
-      >
-        <Text style={styles.fabIcon}>⏺</Text>
-      </TouchableOpacity>
 
       <DeleteConfirmModal
         visible={deleteTarget != null}
@@ -185,21 +139,4 @@ const styles = StyleSheet.create({
   emptyContainer: { alignItems: 'center', paddingTop: 100 },
   emptyText: { fontSize: 15, color: '#9CA3AF' },
   emptyList: { flexGrow: 1 },
-  fab: {
-    position: 'absolute',
-    bottom: 32,
-    right: 24,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#EF4444',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 6,
-  },
-  fabIcon: { fontSize: 22, color: '#FFFFFF' },
 });

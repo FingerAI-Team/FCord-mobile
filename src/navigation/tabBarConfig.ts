@@ -35,3 +35,11 @@ export function isFabSlot(renderIndex: number): boolean {
 export const FAB_SIZE = 60;
 export const FAB_OFFSET = 28; // 탭바 위로 튀어나오는 높이 (px)
 export const TAB_BAR_HEIGHT = 64;
+
+// 마이크 권한 결과 → FAB 이동 경로 결정
+// 'permission_denied'인 경우 호출부에서 Alert.alert 표시
+export type FabNavRoute = 'RecordingModal' | 'permission_denied';
+
+export function resolveFabNavRoute(granted: boolean): FabNavRoute {
+  return granted ? 'RecordingModal' : 'permission_denied';
+}

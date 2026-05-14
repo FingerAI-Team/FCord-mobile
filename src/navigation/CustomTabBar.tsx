@@ -5,20 +5,49 @@ import {
   Text,
   StyleSheet,
   Platform,
+  Alert,
+  PermissionsAndroid,
 } from 'react-native';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { type BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { colors, spacing, typography } from '../theme/tokens';
 import type { MainStackParamList } from './types';
-import { getTabConfig, isFabSlot, renderIndexToRouteIndex, FAB_SIZE, FAB_OFFSET, TAB_BAR_HEIGHT } from './tabBarConfig';
+import { getTabConfig, isFabSlot, renderIndexToRouteIndex, FAB_SIZE, FAB_OFFSET, TAB_BAR_HEIGHT, resolveFabNavRoute } from './tabBarConfig';
 
 // 컷아웃 FAB 커스텀 탭바 — react-navigation tabBar prop에 주입
 export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps): React.ReactElement {
   // MainStack 네비게이터에 접근해 RecordingModal로 이동 (타입 안전)
   const parentNavigation = useNavigation<StackNavigationProp<MainStackParamList>>();
-  const onFabPress = () => {
-    parentNavigation.navigate('RecordingModal');
+
+  // U3: 마이크 권한 체크 후 RecordingModal 이동 (가드레일: 사용자 명시 액션 없이 녹음 시작 금지)
+  const onFabPress = async () => {
+    let granted = false;
+    if (Platform.OS === 'ios') {
+      const current = await check(PERMISSIONS.IOS.MICROPHONE);
+      if (current === RESULTS.GRANTED) {
+        granted = true;
+      } else {
+        const result = await request(PERMISSIONS.IOS.MICROPHONE);
+        granted = result === RESULTS.GRANTED;
+      }
+    } else {
+      const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, {
+        title: '마이크 권한 필요',
+        message: '녹음을 위해 마이크 접근 권한이 필요합니다.',
+        buttonPositive: '허용',
+        buttonNegative: '거부',
+      });
+      granted = result === PermissionsAndroid.RESULTS.GRANTED;
+    }
+
+    const route = resolveFabNavRoute(granted);
+    if (route === 'permission_denied') {
+      Alert.alert('권한 필요', '마이크 권한이 필요합니다. 설정에서 허용해주세요.');
+      return;
+    }
+    parentNavigation.navigate(route);
   };
 
   const renderTabCell = (routeIndex: number, renderIndex: number) => {
