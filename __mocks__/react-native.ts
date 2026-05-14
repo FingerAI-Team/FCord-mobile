@@ -6,6 +6,14 @@ export type ViewStyle = Record<string, unknown>;
 export type ImageStyle = Record<string, unknown>;
 
 export const Platform = { OS: 'ios' };
+export const Dimensions = {
+  get: (_dim: string) => ({ width: 375, height: 812 }),
+  addEventListener: jest.fn(),
+  removeEventListener: jest.fn(),
+};
+
+// ListRenderItem 타입 export
+export type ListRenderItem<T> = (info: { item: T; index: number }) => React.ReactElement | null;
 export const PermissionsAndroid = {
   check: jest.fn(),
   request: jest.fn(),
@@ -52,6 +60,7 @@ export const Animated = {
 
 export default {
   Platform,
+  Dimensions,
   PermissionsAndroid,
   View,
   ActivityIndicator,
