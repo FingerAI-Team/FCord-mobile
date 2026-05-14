@@ -1879,13 +1879,13 @@ SPEC CHECKSUMS:
   RNAudioRecorderPlayer: 5208e7a883cb8cdd5e7d26eb5110f6eb74ebe2d6
   RNGestureHandler: fa71fa99055f43e1ed0529c9b91d9888146e9fdf
   RNKeychain: bbe2f6d5cc008920324acb49ef86ccc03d3b38e4
-  RNPermissions: 4f7b81b0d457c8ec4e892cc36ef2376734a4b22c
+  RNPermissions: e5470e5e96b3340a6eede7a39e75a4ce4739e2d9
   RNScreens: 28fbd73104cc9719371da9d9aaa3c70d876a8c6b
   simdjson: e6bfae9ce4bcdc80452d388d593816f1ca2106f3
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   WatermelonDB: 358332faedb8dd4aa699a178e308586e4e3a8b23
   Yoga: 4ef80d96a5534f0e01b3055f17d1e19a9fc61b63
 
-PODFILE CHECKSUM: 32c55ffd7302f37af494d7fa3a400bacb393f5ea
+PODFILE CHECKSUM: 46b61882e1c9ffcbd009c0c74417cfb1932f8d93
 
 COCOAPODS: 1.16.2
