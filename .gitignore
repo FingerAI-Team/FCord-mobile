@@ -1,3 +1,16 @@
 node_modules/
 .DS_Store
 .superpowers/
+
+# Android build artifacts
+android/.gradle/
+android/build/
+android/app/build/
+android/app/debug.keystore
+
+# iOS build
+ios/build/
+*.xcworkspace/xcuserdata/
+
+# React Native
+*.jsbundle

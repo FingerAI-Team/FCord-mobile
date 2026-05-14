@@ -172,7 +172,7 @@ border-dark: #1F2937 / text-primary-dark: #F9FAFB
 - 인라인 편집 (TextInput으로 전환)
 - 저장 버튼 (편집 모드)
 
-스토어: `recordingDetailStore` 또는 별도 `transcriptStore` (TBD)
+스토어: `src/stores/transcriptStore.ts` 신규 생성 (recordingId 키, segments 배열, editMode, pendingEdits 관리)
 
 ### 5-2. OnboardingScreen (`onboarding_slide_1/2/3`)
 **파일:** `src/features/onboarding/OnboardingScreen.tsx` (신규)
@@ -182,7 +182,7 @@ border-dark: #1F2937 / text-primary-dark: #F9FAFB
 - 각 슬라이드: 일러스트 + 타이틀 + 설명
 - 하단 dot indicator
 - "다음" / "시작하기" 버튼
-- 최초 실행 여부 플래그 (`AsyncStorage` `@ibk_stt:onboarded`)
+- 최초 실행 여부 플래그 (`@react-native-async-storage/async-storage` 패키지, 키: `@ibk_stt:onboarded`)
 
 ### 5-3. PermissionPrimerScreen (`permission_primer_screen`)
 **파일:** `src/features/onboarding/PermissionPrimerScreen.tsx` (신규)
