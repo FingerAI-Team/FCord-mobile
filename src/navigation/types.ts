@@ -1,6 +1,11 @@
+// src/navigation/types.ts
 import { NavigatorScreenParams } from '@react-navigation/native';
 
 export type AuthStackParamList = {
+  Landing: undefined;
+  Onboarding: undefined;
+  PermissionPrimer: undefined;
+  BiometricEnrollment: undefined;
   Login: undefined;
 };
 
@@ -11,7 +16,6 @@ export type BottomTabParamList = {
   Profile: undefined;
 };
 
-// RecordingModal은 MainStack 내부 modal로 처리
 export type MainStackParamList = {
   Tabs: NavigatorScreenParams<BottomTabParamList>;
   RecordingDetail: { id: string };

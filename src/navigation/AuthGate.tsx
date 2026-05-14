@@ -1,7 +1,7 @@
+// src/navigation/AuthGate.tsx
 import React from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useAuthStore } from '../stores/authStore';
-import { colors } from '../theme/tokens';
+import { SplashScreen } from '../features/auth/splashScreen';
 import { resolveAuthRoute } from './resolveAuthRoute';
 
 // 외부에서 import 가능하도록 re-export
@@ -12,7 +12,7 @@ interface Props {
   mainStack: React.ReactNode;
 }
 
-// AuthGate: status 구독 → 자동 스택 전환
+// AuthGate: status 구독 → booting 시 SplashScreen, 이후 자동 스택 전환
 export function AuthGate({ authStack, mainStack }: Props): React.ReactElement {
   const status = useAuthStore((s) => s.status) as 'booting' | 'anonymous' | 'authed';
   const bootstrap = useAuthStore((s) => s.bootstrap) as () => Promise<void>;
@@ -24,16 +24,8 @@ export function AuthGate({ authStack, mainStack }: Props): React.ReactElement {
   const route = resolveAuthRoute(status);
 
   if (route === 'loading') {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={colors.accentBlue} />
-      </View>
-    );
+    return <SplashScreen />;
   }
 
   return <>{route === 'auth' ? authStack : mainStack}</>;
 }
-
-const styles = StyleSheet.create({
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },
-});

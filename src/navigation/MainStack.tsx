@@ -9,13 +9,11 @@ import { SearchScreen } from '../features/search/SearchScreen';
 import { LibraryScreen } from '../features/library/LibraryScreen';
 import { ProfileScreen } from '../features/profile/ProfileScreen';
 import { RecordingScreen } from '../features/recording-session/RecordingScreen';
+import { TranscriptScreen } from '../features/transcript/TranscriptScreen';
 import { colors } from '../theme/tokens';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 const Stack = createStackNavigator<MainStackParamList>();
-
-// TranscriptScreen placeholder — Task 후속에서 실 구현 예정
-function TranscriptPlaceholder(): React.ReactElement | null { return null; }
 
 // BottomTabs: 4개 탭 (FAB는 CustomTabBar에서 주입)
 function BottomTabs(): React.ReactElement {
@@ -44,7 +42,7 @@ export function MainStack(): React.ReactElement {
       />
       <Stack.Screen
         name="Transcript"
-        component={TranscriptPlaceholder}
+        component={TranscriptScreen}
       />
       <Stack.Screen
         name="RecordingModal"
