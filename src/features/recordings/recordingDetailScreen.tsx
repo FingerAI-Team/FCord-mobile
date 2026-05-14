@@ -111,8 +111,12 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
 
   // FR-10: 재처리 (transcription 실패 전용)
   const onRetryTranscription = async () => {
+    if (!recording.transcriptionId) {
+      Alert.alert('오류', '재처리 식별자가 없어 STT 재처리를 요청할 수 없습니다.');
+      return;
+    }
     try {
-      await retryTranscription(id);
+      await retryTranscription(recording.transcriptionId);
       updateItem(id, { transcriptionState: 'queued' });
     } catch {
       Alert.alert('오류', 'STT 재처리 요청에 실패했습니다.');
@@ -142,55 +146,19 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
     }
   };
 
+  // 날짜·시간 포맷 헬퍼
+  const createdDate = new Date(recording.createdAt);
+  const dateStr = createdDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+  const timeStr = createdDate.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+  const durationStr = recording.durationMs
+    ? `${Math.floor(recording.durationMs / 60000)}분 ${Math.floor((recording.durationMs % 60000) / 1000)}초`
+    : null;
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      {/* 3-track 배지 블록 (상단 고정) */}
-      <View style={styles.statusBlock}>
-        <Text style={styles.sectionLabel}>상태</Text>
-        <View style={styles.badgeRow}>
-          <StatusBadge track="recording" state={recording.recordingState} />
-          <StatusBadge track="upload" state={recording.uploadState} />
-          <StatusBadge track="transcription" state={recording.transcriptionState} />
-        </View>
-      </View>
 
-      {/* 업로드 진행률 */}
-      {recording.uploadState === 'uploading' && (
-        <UploadProgressSection recordingId={id} />
-      )}
-
-      {/* 재전송 버튼 — upload 실패 시만 */}
-      {actions.showRetryUpload && (
-        <View style={styles.actionRow}>
-          <RetryUploadButton onPress={onRetryUpload} disabled={!resolvedQueueId} />
-        </View>
-      )}
-
-      {/* 재처리 버튼 — STT 실패 시만 */}
-      {actions.showRetryTranscription && (
-        <View style={styles.actionRow}>
-          <RetryTranscriptionButton onPress={onRetryTranscription} />
-        </View>
-      )}
-
-      {/* C2: 업로드 완료 + STT 미요청 상태 — 동의 후 수동 전사 시작 경로 */}
-      {actions.showRequestTranscription && (
-        <View style={styles.actionRow}>
-          <TouchableOpacity
-            style={styles.sttRequestBtn}
-            onPress={onRequestTranscription}
-            accessibilityLabel="음성 전사 시작"
-            accessibilityRole="button"
-            accessibilityHint="음성 인식 처리를 요청합니다"
-          >
-            <Text style={styles.sttRequestText}>전사 시작</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* 메타 정보 */}
-      <View style={styles.metaBlock}>
-        <Text style={styles.sectionLabel}>제목</Text>
+      {/* ── 제목 섹션 ── */}
+      <View style={styles.titleSection}>
         {isEditingTitle ? (
           <View style={styles.editRow}>
             <TextInput
@@ -207,45 +175,123 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
             </TouchableOpacity>
           </View>
         ) : (
-          <TouchableOpacity onPress={() => setIsEditingTitle(true)} accessibilityLabel={`제목: ${recording.title}. 탭하여 편집`}>
-            <Text style={styles.title}>{recording.title}</Text>
+          <TouchableOpacity
+            style={styles.titleRow}
+            onPress={() => setIsEditingTitle(true)}
+            accessibilityLabel={`제목: ${recording.title}. 탭하여 편집`}
+          >
+            <Text style={styles.titleText}>{recording.title}</Text>
+            <Text style={styles.editIcon}>✏️</Text>
           </TouchableOpacity>
         )}
-
-        {recording.note != null && (
-          <>
-            <Text style={[styles.sectionLabel, { marginTop: 16 }]}>메모</Text>
-            <Text style={styles.note}>{recording.note}</Text>
-          </>
-        )}
-
-        {recording.tags.length > 0 && (
-          <>
-            <Text style={[styles.sectionLabel, { marginTop: 16 }]}>태그</Text>
-            <View style={styles.tagRow}>
-              {recording.tags.map((tag) => (
-                <View key={tag} style={styles.tag}>
-                  <Text style={styles.tagText}>{tag}</Text>
-                </View>
-              ))}
-            </View>
-          </>
-        )}
+        <Text style={styles.metaText}>
+          {dateStr} {timeStr}{durationStr ? `  ·  ${durationStr}` : ''}
+        </Text>
       </View>
 
-      {/* 전사 결과 이동 */}
-      {actions.showViewTranscript && (
+      {/* ── 3-track 상태 카드 ── */}
+      <View style={styles.statusCard}>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>녹음</Text>
+          <StatusBadge track="recording" state={recording.recordingState} />
+        </View>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>업로드</Text>
+          <StatusBadge track="upload" state={recording.uploadState} />
+        </View>
+        <View style={styles.statusRow}>
+          <Text style={styles.statusLabel}>전사</Text>
+          <StatusBadge track="transcription" state={recording.transcriptionState} />
+        </View>
+      </View>
+
+      {/* ── 업로드 진행률 ── */}
+      {recording.uploadState === 'uploading' && (
+        <UploadProgressSection recordingId={id} />
+      )}
+
+      {/* ── 액션 버튼 행 (재전송 / 재처리 / 전사 시작) ── */}
+      {(actions.showRetryUpload || actions.showRetryTranscription || actions.showRequestTranscription) && (
+        <View style={styles.actionRow}>
+          {/* FR-10: 재전송 — upload 실패 시만 */}
+          {actions.showRetryUpload && (
+            <TouchableOpacity
+              style={styles.actionBtnOutline}
+              onPress={onRetryUpload}
+              disabled={!resolvedQueueId}
+              accessibilityLabel="업로드 재전송"
+              accessibilityRole="button"
+              accessibilityHint="업로드에 실패한 파일을 다시 전송합니다"
+            >
+              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-SemiBold', color: '#DC2626' }}>↑ 재전송</Text>
+            </TouchableOpacity>
+          )}
+
+          {/* FR-10: 재처리 — STT 실패 시만 */}
+          {actions.showRetryTranscription && (
+            <TouchableOpacity
+              style={styles.actionBtnFilled}
+              onPress={onRetryTranscription}
+              accessibilityLabel="STT 재처리"
+              accessibilityRole="button"
+              accessibilityHint="음성 인식 처리를 다시 요청합니다"
+            >
+              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-SemiBold', color: '#ffffff' }}>↻ 재처리</Text>
+            </TouchableOpacity>
+          )}
+
+          {/* C2: 업로드 완료 + STT 미요청 — 동의 후 수동 전사 경로 */}
+          {actions.showRequestTranscription && (
+            <TouchableOpacity
+              style={styles.actionBtnFilled}
+              onPress={onRequestTranscription}
+              accessibilityLabel="음성 전사 시작"
+              accessibilityRole="button"
+              accessibilityHint="음성 인식 처리를 요청합니다"
+            >
+              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-SemiBold', color: '#ffffff' }}>전사 시작</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+
+      {/* ── 전사 결과 보기 CTA ── */}
+      {recording.transcriptionState === 'completed' && (
         <TouchableOpacity
-          style={styles.viewTranscriptBtn}
-          onPress={() => navigation.navigate('Transcript', { id })}
+          style={styles.transcriptBtn}
+          onPress={() => navigation.navigate('Transcript', { id: recording.id })}
           accessibilityLabel="전사 결과 보기"
           accessibilityRole="button"
         >
-          <Text style={styles.viewTranscriptText}>전사 결과 보기</Text>
+          <Text style={styles.transcriptBtnText}>전사 결과 보기</Text>
         </TouchableOpacity>
       )}
 
-      {/* 삭제 */}
+      {/* ── 메모 / 태그 ── */}
+      {(recording.note != null || recording.tags.length > 0) && (
+        <View style={styles.metaBlock}>
+          {recording.note != null && (
+            <>
+              <Text style={styles.sectionLabel}>메모</Text>
+              <Text style={styles.note}>{recording.note}</Text>
+            </>
+          )}
+          {recording.tags.length > 0 && (
+            <>
+              <Text style={[styles.sectionLabel, { marginTop: 16 }]}>태그</Text>
+              <View style={styles.tagRow}>
+                {recording.tags.map((tag) => (
+                  <View key={tag} style={styles.tag}>
+                    <Text style={styles.tagText}>{tag}</Text>
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
+        </View>
+      )}
+
+      {/* ── 삭제 버튼 ── */}
       <TouchableOpacity
         style={styles.deleteBtn}
         onPress={() => setShowDeleteModal(true)}
@@ -266,65 +312,101 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
 }
 
 const styles = StyleSheet.create({
+  // ── 레이아웃 기본 ──
   container: { flex: 1, backgroundColor: '#FFFFFF' },
-  content: { padding: 20, paddingBottom: 60 },
+  content: { paddingTop: 24, paddingBottom: 60 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   notFound: { fontSize: 15, color: '#9CA3AF' },
-  statusBlock: { backgroundColor: '#F9FAFB', borderRadius: 12, padding: 16, marginBottom: 16 },
-  sectionLabel: { fontSize: 11, color: '#9CA3AF', fontWeight: '700', letterSpacing: 0.5, marginBottom: 8 },
-  badgeRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
-  progressSection: { marginBottom: 16 },
+
+  // ── 제목 섹션 ──
+  titleSection: { marginBottom: 24, paddingHorizontal: 16 },
+  titleRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
+  titleText: { fontSize: 24, fontFamily: 'HankenGrotesk-ExtraBold', color: '#111827', flex: 1, lineHeight: 30 },
+  titleInput: { fontSize: 20, fontFamily: 'HankenGrotesk-Bold', color: '#111827', borderBottomWidth: 2, borderBottomColor: '#2563EB', paddingBottom: 4, flex: 1 },
+  editIcon: { fontSize: 16, color: '#585f6c', marginLeft: 8 },
+  metaText: { fontSize: 15, fontFamily: 'HankenGrotesk-Regular', color: '#585f6c', lineHeight: 22 },
+  editRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
+  saveBtn: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#2563EB', borderRadius: 6 },
+  saveBtnText: { color: '#FFFFFF', fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold' },
+
+  // ── 3-track 상태 카드 ──
+  statusCard: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    backgroundColor: '#ffffff',
+    gap: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  statusRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  statusLabel: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#111827' },
+
+  // ── 업로드 진행률 ──
+  progressSection: { marginHorizontal: 16, marginBottom: 16 },
   progressRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
   progressLabel: { fontSize: 13, color: '#374151' },
   progressPct: { fontSize: 13, color: '#2563EB', fontWeight: '600' },
   progressTrack: { height: 6, backgroundColor: '#E5E7EB', borderRadius: 3, overflow: 'hidden' },
   progressFill: { height: 6, backgroundColor: '#2563EB', borderRadius: 3 },
-  actionRow: { marginBottom: 12 },
-  metaBlock: { marginBottom: 28 },
-  title: { fontSize: 20, fontWeight: '700', color: '#111827' },
-  editRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  titleInput: {
+
+  // ── 액션 버튼 행 ──
+  actionRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginHorizontal: 16,
+    marginBottom: 24,
+  },
+  actionBtnOutline: {
     flex: 1,
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#111827',
-    borderBottomWidth: 1,
-    borderBottomColor: '#2563EB',
-    paddingVertical: 4,
+    height: 52,
+    borderWidth: 2,
+    borderColor: '#DC2626',
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  saveBtn: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: '#2563EB',
-    borderRadius: 6,
+  actionBtnFilled: {
+    flex: 1,
+    height: 52,
+    backgroundColor: '#000000',
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  saveBtnText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
+
+  // ── 전사 결과 CTA ──
+  transcriptBtn: {
+    marginHorizontal: 16,
+    height: 52,
+    backgroundColor: '#000000',
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  transcriptBtnText: { fontSize: 20, fontFamily: 'HankenGrotesk-Bold', color: '#ffffff', lineHeight: 26 },
+
+  // ── 메모 / 태그 ──
+  metaBlock: { marginHorizontal: 16, marginBottom: 28 },
+  sectionLabel: { fontSize: 11, color: '#9CA3AF', fontWeight: '700', letterSpacing: 0.5, marginBottom: 8 },
   note: { fontSize: 14, color: '#6B7280', lineHeight: 22 },
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   tag: { backgroundColor: '#EFF6FF', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
   tagText: { fontSize: 12, color: '#2563EB', fontWeight: '500' },
-  viewTranscriptBtn: {
-    backgroundColor: '#2563EB',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  viewTranscriptText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700' },
-  sttRequestBtn: {
-    backgroundColor: '#7C3AED',
-    borderRadius: 8,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    alignSelf: 'flex-start',
-  },
-  sttRequestText: { color: '#FFFFFF', fontSize: 14, fontWeight: '600' },
-  deleteBtn: {
-    borderWidth: 1.5,
-    borderColor: '#EF4444',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  deleteBtnText: { color: '#EF4444', fontSize: 15, fontWeight: '700' },
+
+  // ── 삭제 버튼 ──
+  deleteBtn: { alignSelf: 'center', paddingVertical: 16, paddingHorizontal: 24 },
+  deleteBtnText: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#DC2626', opacity: 0.7 },
 });
