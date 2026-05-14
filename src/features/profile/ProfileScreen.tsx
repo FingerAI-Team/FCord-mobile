@@ -4,12 +4,12 @@ import {
   Text,
   SectionList,
   TouchableOpacity,
-  Switch,
   StyleSheet,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../stores/authStore';
-import { colors, spacing, radius, typography } from '../../theme/tokens';
+import { colors } from '../../theme/tokens';
 
 interface SettingRow {
   id: string;
@@ -95,110 +95,58 @@ export function ProfileScreen(): React.ReactElement {
   ];
 
   return (
-    <View style={styles.container}>
-      {/* 사용자 헤더 — 아바타 이니셜 + 이름/부서 */}
-      <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{session?.user.name?.[0] ?? '?'}</Text>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* 아바타 헤더 */}
+      <View style={{ alignItems: 'center', paddingTop: 32, paddingBottom: 32, paddingHorizontal: 24 }}>
+        <View style={{ width: 72, height: 72, borderRadius: 9999, backgroundColor: '#141b2b', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+          <Text style={{ fontSize: 28, fontFamily: 'HankenGrotesk-Bold', color: '#7d8497' }}>
+            {(session?.user?.name ?? 'U').charAt(0).toUpperCase()}
+          </Text>
         </View>
-        <View>
-          <Text style={styles.userName}>{session?.user.name ?? '사용자'}</Text>
-          <Text style={styles.userSub}>{session?.user.department ?? ''}</Text>
-        </View>
+        <Text style={{ fontSize: 20, fontFamily: 'HankenGrotesk-Bold', color: '#111827', lineHeight: 26, marginBottom: 4 }}>
+          {session?.user?.name ?? '-'}
+        </Text>
+        <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-Regular', color: '#585f6c', lineHeight: 22 }}>
+          {session?.user?.id ?? '-'}
+        </Text>
       </View>
 
-      {/* 설정 목록 — SectionList로 그룹 렌더링 */}
+      {/* 설정 리스트 */}
       <SectionList
         sections={sections}
         keyExtractor={(item: SettingRow) => item.id}
+        stickySectionHeadersEnabled={false}
         renderSectionHeader={({ section }: { section: SettingSection }) => (
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
+          <View style={{ paddingHorizontal: 16, paddingTop: 24, paddingBottom: 8 }}>
+            <Text style={{ fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#585f6c', textTransform: 'uppercase', letterSpacing: 0.8, lineHeight: 14 }}>
+              {section.title}
+            </Text>
           </View>
         )}
         renderItem={({ item }: { item: SettingRow }) => (
           <TouchableOpacity
-            style={styles.row}
-            onPress={item.onPress}
-            disabled={!item.onPress && !item.toggle}
-            accessibilityRole={item.toggle === true ? 'switch' : 'button'}
+            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16, backgroundColor: '#fcf8fa', borderBottomWidth: 1, borderBottomColor: '#E5E7EB' }}
+            onPress={item.onPress ?? (() => {})}
+            accessibilityRole="button"
+            accessibilityLabel={item.label}
+            disabled={!item.onPress}
           >
-            {/* 위험 행(로그아웃)은 빨간색 라벨 */}
-            <Text style={[styles.rowLabel, item.danger === true && styles.rowLabelDanger]}>
+            <Text style={[{ fontSize: 15, fontFamily: 'HankenGrotesk-Regular', color: '#1b1b1d', lineHeight: 22 }, item.danger === true && { color: '#DC2626' }]}>
               {item.label}
             </Text>
-            {item.toggle === true ? (
-              // 토글 스위치 — 현재는 uncontrolled(MVP), 추후 상태 연결
-              <Switch
-                value={false}
-                onValueChange={() => {}}
-                trackColor={{ true: colors.accentBlue }}
-              />
-            ) : item.value !== undefined ? (
-              <Text style={styles.rowValue}>{item.value}</Text>
-            ) : (
-              <Text style={styles.rowArrow}>›</Text>
-            )}
+            {item.value !== undefined ? (
+              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-Regular', color: '#585f6c' }}>{item.value}</Text>
+            ) : item.onPress ? (
+              <Text style={{ fontSize: 20, color: '#585f6c' }}>›</Text>
+            ) : null}
           </TouchableOpacity>
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        contentContainerStyle={styles.listContent}
-        stickySectionHeadersEnabled={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-
-  // 상단 사용자 헤더
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.lg,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing['2xl'],
-    paddingBottom: spacing.xl,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderLight,
-  },
-  avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: radius.full,
-    backgroundColor: colors.accentBlue,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: { color: '#fff', fontSize: 24, fontWeight: '700' },
-  userName: { ...typography.heading, color: colors.textPrimary },
-  userSub: { ...typography.body, color: colors.textSecondary },
-
-  // 섹션 헤더
-  sectionHeader: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
-    paddingBottom: spacing.sm,
-    backgroundColor: colors.background,
-  },
-  sectionTitle: { ...typography.label, color: colors.textSecondary },
-
-  // 설정 행
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: colors.background,
-    minHeight: 52,
-  },
-  rowLabel: { ...typography.body, color: colors.textPrimary },
-  rowLabelDanger: { color: colors.dangerRed },
-  rowValue: { ...typography.body, color: colors.textSecondary },
-  rowArrow: { fontSize: 20, color: colors.textSecondary },
-
-  separator: { height: 1, backgroundColor: colors.borderLight, marginLeft: spacing.lg },
-  listContent: { paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: '#fcf8fa' },
 });

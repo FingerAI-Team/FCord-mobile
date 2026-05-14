@@ -2,198 +2,117 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  SectionList,
+  FlatList,
+  ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Modal,
-  TextInput,
 } from 'react-native';
-import { colors, spacing, radius, typography } from '../../theme/tokens';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../../theme/tokens';
+import { ServerRecordingCache } from '../../types';
 import { useRecordingListStore } from '../../stores/recordingListStore';
 import { filterStarred, filterArchived, collectAllTags } from './libraryUtils';
 
-type LibrarySection = 'starred' | 'archived' | 'tags';
+const TABS = [
+  { key: 'starred' as const, label: '즐겨찾기' },
+  { key: 'archived' as const, label: '보관함' },
+  { key: 'tags' as const, label: '태그' },
+];
 
-interface Section {
-  key: LibrarySection;
-  title: string;
-  icon: string;
-  data: string[];
-}
-
-// 보관함 화면: 즐겨찾기 / 보관함 / 태그별 섹션 + 태그 편집 모달
+// 라이브러리 화면: 즐겨찾기 / 보관함 / 태그별 세그먼트 탭 + 카드 리스트
 export function LibraryScreen(): React.ReactElement {
   const items = useRecordingListStore((s) => s.items);
-  const [tagModalVisible, setTagModalVisible] = useState(false);
-  const [editingTag, setEditingTag] = useState('');
+  const [activeTab, setActiveTab] = useState<'starred' | 'archived' | 'tags'>('starred');
 
   const starred = filterStarred(items);
   const archived = filterArchived(items);
   const allTags = collectAllTags(items);
 
-  const sections: Section[] = [
-    {
-      key: 'starred',
-      title: '즐겨찾기',
-      icon: '⭐',
-      data: starred.map((r) => r.title),
-    },
-    {
-      key: 'archived',
-      title: '보관함',
-      icon: '📦',
-      data: archived.map((r) => r.title),
-    },
-    {
-      key: 'tags',
-      title: '태그별',
-      icon: '🏷',
-      data: allTags,
-    },
-  ];
-
-  const renderSectionHeader = ({ section }: { section: Section }) => (
-    <View style={styles.sectionHeader}>
-      <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionIcon}>{section.icon}</Text>
-        <Text style={styles.sectionTitle}>{section.title}</Text>
-      </View>
-      {section.key === 'tags' && (
-        <TouchableOpacity
-          onPress={() => setTagModalVisible(true)}
-          accessibilityLabel="태그 편집"
-        >
-          <Text style={styles.editLink}>편집</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
-
-  const renderEmptyForSection = (section: Section) => (
-    <View style={styles.sectionEmpty}>
-      <Text style={styles.sectionEmptyText}>
-        {section.key === 'starred' && '즐겨찾기한 녹음이 없습니다'}
-        {section.key === 'archived' && '보관함이 비어있습니다'}
-        {section.key === 'tags' && '태그가 없습니다'}
-      </Text>
-    </View>
-  );
-
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>보관함</Text>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* 헤더 */}
+      <View style={{ paddingHorizontal: 16, paddingTop: 24, paddingBottom: 16 }}>
+        <Text style={{ fontSize: 32, fontFamily: 'HankenGrotesk-ExtraBold', color: '#111827', lineHeight: 38, letterSpacing: -0.5 }}>라이브러리</Text>
       </View>
 
-      <SectionList
-        sections={sections}
-        keyExtractor={(item: string, index: number) => `${item}-${index}`}
-        renderSectionHeader={renderSectionHeader}
-        renderItem={({ item }: { item: string }) => (
-          <View style={styles.item}>
-            <Text style={styles.itemText}>{item}</Text>
-          </View>
-        )}
-        renderSectionFooter={({ section }: { section: Section }) =>
-          section.data.length === 0 ? renderEmptyForSection(section) : null
-        }
-        stickySectionHeadersEnabled={false}
-        contentContainerStyle={styles.listContent}
-      />
-
-      {/* 태그 편집 Bottom Sheet 모달 */}
-      <Modal
-        visible={tagModalVisible}
-        animationType="slide"
-        transparent
-        onRequestClose={() => setTagModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalSheet}>
-            <Text style={styles.modalTitle}>태그 편집</Text>
-            <TextInput
-              style={styles.tagInput}
-              value={editingTag}
-              onChangeText={setEditingTag}
-              placeholder="새 태그 입력"
-              placeholderTextColor={colors.textSecondary}
-            />
+      {/* 세그먼트 탭 */}
+      <View style={{ paddingHorizontal: 16, marginBottom: 32 }}>
+        <View style={{ flexDirection: 'row', backgroundColor: '#f6f3f4', borderRadius: 24, padding: 4, borderWidth: 1, borderColor: '#E5E7EB' }}>
+          {TABS.map((tab) => (
             <TouchableOpacity
-              style={styles.modalClose}
-              onPress={() => setTagModalVisible(false)}
+              key={tab.key}
+              style={[
+                { flex: 1, paddingVertical: 12, borderRadius: 16, alignItems: 'center' },
+                activeTab === tab.key && { backgroundColor: '#000000', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2 },
+              ]}
+              onPress={() => setActiveTab(tab.key)}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: activeTab === tab.key }}
             >
-              <Text style={styles.modalCloseText}>닫기</Text>
+              <Text style={[
+                { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#45464c' },
+                activeTab === tab.key && { color: '#ffffff' },
+              ]}>
+                {tab.label}
+              </Text>
             </TouchableOpacity>
-          </View>
+          ))}
         </View>
-      </Modal>
-    </View>
+      </View>
+
+      {/* 콘텐츠 */}
+      {activeTab === 'tags' ? (
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 120 }}>
+          {allTags.length === 0 ? (
+            <View style={{ alignItems: 'center', paddingTop: 80 }}>
+              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-Regular', color: '#9CA3AF' }}>태그가 없습니다</Text>
+            </View>
+          ) : allTags.map((tag) => (
+            <View key={tag} style={{ marginBottom: 48 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 12, marginBottom: 16 }}>
+                <View style={{ width: 8, height: 8, borderRadius: 9999, backgroundColor: '#2563EB' }} />
+                <Text style={{ fontSize: 20, fontFamily: 'HankenGrotesk-Bold', color: '#1b1b1d', lineHeight: 26 }}>{tag}</Text>
+              </View>
+              {items.filter((r) => r.tags?.includes(tag)).map((r) => (
+                <View key={r.id} style={{ backgroundColor: '#ffffff', borderWidth: 1, borderColor: '#E5E7EB', borderRadius: 16, padding: 16, marginBottom: 12 }}>
+                  <Text style={{ fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#45464c', lineHeight: 14, marginBottom: 12 }}>{new Date(r.createdAt).toLocaleDateString('ko-KR')}</Text>
+                  <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-Bold', color: '#1b1b1d', lineHeight: 22, marginBottom: 8 }}>{r.title}</Text>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+                    {r.tags?.map((t: string) => (
+                      <View key={t} style={{ backgroundColor: '#f0edee', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 9999 }}>
+                        <Text style={{ fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#45464c' }}>#{t}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ))}
+            </View>
+          ))}
+        </ScrollView>
+      ) : (
+        <FlatList
+          data={activeTab === 'starred' ? starred : archived}
+          keyExtractor={(item: ServerRecordingCache) => item.id}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 120 }}
+          renderItem={({ item }: { item: ServerRecordingCache }) => (
+            <View style={{ backgroundColor: '#ffffff', borderWidth: 1, borderColor: '#E5E7EB', borderRadius: 16, padding: 16, marginBottom: 12 }}>
+              <Text style={{ fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#45464c', marginBottom: 12 }}>{new Date(item.createdAt).toLocaleDateString('ko-KR')}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-Bold', color: '#1b1b1d', lineHeight: 22 }}>{item.title}</Text>
+            </View>
+          )}
+          ListEmptyComponent={
+            <View style={{ alignItems: 'center', paddingTop: 80 }}>
+              <Text style={{ fontSize: 15, color: '#9CA3AF', fontFamily: 'HankenGrotesk-Regular' }}>
+                {activeTab === 'starred' ? '즐겨찾기한 녹음이 없습니다' : '보관된 녹음이 없습니다'}
+              </Text>
+            </View>
+          }
+        />
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-
-  header: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing['2xl'],
-    paddingBottom: spacing.lg,
-  },
-  headerTitle: { ...typography.heading, color: colors.textPrimary, fontSize: 24, fontWeight: '800' },
-
-  listContent: { paddingBottom: spacing['3xl'] },
-
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
-    paddingBottom: spacing.sm,
-  },
-  sectionTitleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  sectionIcon: { fontSize: 16 },
-  sectionTitle: { ...typography.label, color: colors.textSecondary },
-  editLink: { ...typography.caption, color: colors.accentBlue },
-
-  sectionEmpty: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  sectionEmptyText: { ...typography.body, color: colors.textSecondary },
-
-  item: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderLight,
-  },
-  itemText: { ...typography.body, color: colors.textPrimary },
-
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'flex-end',
-  },
-  modalSheet: {
-    backgroundColor: colors.background,
-    borderTopLeftRadius: radius.xl,
-    borderTopRightRadius: radius.xl,
-    padding: spacing.xl,
-    paddingBottom: 40,
-  },
-  modalTitle: { ...typography.heading, color: colors.textPrimary, marginBottom: spacing.lg },
-  tagInput: {
-    backgroundColor: colors.surfaceContainer,
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    ...typography.body,
-    color: colors.textPrimary,
-    marginBottom: spacing.lg,
-  },
-  modalClose: {
-    alignItems: 'center',
-    padding: spacing.md,
-  },
-  modalCloseText: { ...typography.label, color: colors.accentBlue },
+  container: { flex: 1, backgroundColor: '#fcf8fa' },
 });

@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSearchStore } from '../../stores/searchStore';
 import { searchRecordings } from '../../api/recordings';
 import { colors, spacing, radius, typography } from '../../theme/tokens';
@@ -20,6 +21,9 @@ const tabs: { key: SearchTab; label: string }[] = [
   { key: 'body', label: '본문' },
   { key: 'memo', label: '메모' },
 ];
+
+// 추천 검색어 고정 목록
+const RECOMMENDED = ['어제', '이번 주 회의', '투자전략'];
 
 // 녹음 검색 화면 — 검색바, 최근 검색어, 결과 탭(제목/본문/메모)
 export function SearchScreen(): React.ReactElement {
@@ -74,19 +78,37 @@ export function SearchScreen(): React.ReactElement {
     if (query.trim()) runSearch(query, tab);
   };
 
+  // 칩 onPress — 쿼리 설정 후 바로 검색 실행
+  const onChipPress = (text: string) => {
+    setQuery(text);
+    commitQuery();
+    runSearch(text, activeTab);
+  };
+
   const view = resolveSearchView(query, isSearching, results.length);
 
+  // 결과 카드 렌더러 — 카드 스타일 적용
   const renderResult = ({ item }: { item: ServerRecordingCache }) => (
-    <View style={styles.resultItem}>
-      <Text style={styles.resultTitle} numberOfLines={1}>{item.title}</Text>
+    <TouchableOpacity
+      style={styles.resultCard}
+      onPress={() => { /* navigation.navigate('RecordingDetail', { id: item.id }) */ }}
+      accessibilityRole="button"
+      accessibilityLabel={item.title}
+    >
+      <View style={styles.resultCardHeader}>
+        <Text style={styles.resultTitle} numberOfLines={1}>{item.title}</Text>
+        <Text style={styles.resultDate}>
+          {new Date(item.createdAt).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })}
+        </Text>
+      </View>
       {item.transcriptPreview ? (
         <Text style={styles.resultPreview} numberOfLines={2}>{item.transcriptPreview}</Text>
       ) : null}
-    </View>
+    </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       {/* 검색바 */}
       <View style={styles.searchBarWrap}>
         <Text style={styles.searchIcon}>🔍</Text>
@@ -126,34 +148,48 @@ export function SearchScreen(): React.ReactElement {
         ))}
       </View>
 
-      {/* 최근 검색어 — 쿼리 없을 때만 */}
-      {view === 'initial' && recentQueries.length > 0 && (
-        <ScrollView style={styles.body} keyboardShouldPersistTaps="handled">
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>최근 검색어</Text>
-            <View style={styles.chipRow}>
-              {recentQueries.map((q) => (
-                <View key={q} style={styles.chip}>
-                  <TouchableOpacity onPress={() => onRecentPress(q)}>
-                    <Text style={styles.chipText}>{q}</Text>
+      {/* 초기 상태 — 검색어 없음: 최근 검색어 칩 + 추천 칩 */}
+      {view === 'initial' && (
+        <ScrollView style={{ flex: 1, paddingHorizontal: 16 }} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+          {/* 최근 검색어 */}
+          {recentQueries && recentQueries.length > 0 && (
+            <View style={{ marginTop: 32 }}>
+              <Text style={{ fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#000000', marginBottom: 12 }}>최근 검색</Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                {recentQueries.map((q: string) => (
+                  <TouchableOpacity
+                    key={q}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#f6f3f4', borderWidth: 1, borderColor: '#E5E7EB', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 9999 }}
+                    onPress={() => onRecentPress(q)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`최근 검색어: ${q}`}
+                  >
+                    <Text style={{ fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#000000' }}>{q}</Text>
+                    <TouchableOpacity onPress={() => removeRecentQuery(q)} accessibilityLabel={`${q} 삭제`}>
+                      <Text style={{ fontSize: 11, color: '#585f6c', marginLeft: 2 }}>✕</Text>
+                    </TouchableOpacity>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => removeRecentQuery(q)} accessibilityLabel={`${q} 삭제`}>
-                    <Text style={styles.chipRemove}>✕</Text>
-                  </TouchableOpacity>
-                </View>
+                ))}
+              </View>
+            </View>
+          )}
+          {/* 추천 검색 */}
+          <View style={{ marginTop: 32 }}>
+            <Text style={{ fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#000000', marginBottom: 12 }}>추천</Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+              {RECOMMENDED.map((rec) => (
+                <TouchableOpacity
+                  key={rec}
+                  style={{ backgroundColor: '#f6f3f4', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 9999 }}
+                  onPress={() => onChipPress(rec)}
+                  accessibilityRole="button"
+                >
+                  <Text style={{ fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#585f6c' }}>{rec}</Text>
+                </TouchableOpacity>
               ))}
             </View>
           </View>
         </ScrollView>
-      )}
-
-      {/* 초기 상태 — 검색어·최근 검색어 모두 없음 */}
-      {view === 'initial' && recentQueries.length === 0 && (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyIcon}>🎙</Text>
-          <Text style={styles.emptyText}>녹음을 검색하세요</Text>
-          <Text style={styles.emptySubtext}>제목, 전사 본문, 메모로 검색할 수 있습니다</Text>
-        </View>
       )}
 
       {/* 로딩 */}
@@ -182,7 +218,7 @@ export function SearchScreen(): React.ReactElement {
           <Text style={styles.emptySubtext}>다른 검색어를 입력해보세요</Text>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -222,32 +258,45 @@ const styles = StyleSheet.create({
   tabLabel: { ...typography.label, color: colors.textSecondary },
   tabLabelActive: { color: colors.textPrimary },
 
-  body: { flex: 1 },
-  listContent: { paddingBottom: spacing['3xl'] },
+  listContent: { paddingHorizontal: 16, paddingBottom: spacing['3xl'] },
 
-  section: { paddingHorizontal: spacing.lg, marginBottom: spacing.xl },
-  sectionTitle: { ...typography.label, color: colors.textSecondary, marginBottom: spacing.md },
-  chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  chip: {
+  // 결과 카드 스타일
+  resultCard: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  resultCardHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surfaceContainer,
-    borderRadius: radius.full,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.md,
-    gap: spacing.xs,
+    justifyContent: 'space-between',
+    marginBottom: 8,
   },
-  chipText: { ...typography.body, color: colors.textPrimary, fontSize: 13 },
-  chipRemove: { color: colors.textSecondary, fontSize: 12 },
-
-  resultItem: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderLight,
+  resultTitle: {
+    fontSize: 15,
+    fontFamily: 'HankenGrotesk-Bold',
+    color: '#000000',
+    flex: 1,
+    marginRight: 16,
   },
-  resultTitle: { ...typography.label, color: colors.textPrimary, marginBottom: spacing.xs },
-  resultPreview: { ...typography.caption, color: colors.textSecondary },
+  resultDate: {
+    fontSize: 12,
+    fontFamily: 'HankenGrotesk-Medium',
+    color: '#585f6c',
+  },
+  resultPreview: {
+    fontSize: 15,
+    fontFamily: 'HankenGrotesk-Regular',
+    color: '#585f6c',
+    lineHeight: 22,
+  },
 
   emptyState: { flex: 1, alignItems: 'center', paddingTop: 80, paddingHorizontal: spacing.xl },
   emptyIcon: { fontSize: 48, marginBottom: spacing.lg },
