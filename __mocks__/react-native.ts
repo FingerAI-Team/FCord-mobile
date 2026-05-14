@@ -1,5 +1,10 @@
 import React from 'react';
 
+// 타입 alias — tokens.ts 등에서 import해 사용
+export type TextStyle = Record<string, unknown>;
+export type ViewStyle = Record<string, unknown>;
+export type ImageStyle = Record<string, unknown>;
+
 export const Platform = { OS: 'ios' };
 export const PermissionsAndroid = {
   check: jest.fn(),
@@ -22,6 +27,26 @@ export const StyleSheet = {
   flatten: (style: unknown) => style,
 };
 export const Alert = { alert: jest.fn() };
+export const Switch = (props: Record<string, unknown>) =>
+  React.createElement('Switch', props);
+export const TextInput = (props: Record<string, unknown>) =>
+  React.createElement('TextInput', props);
+export const FlatList = (props: Record<string, unknown>) =>
+  React.createElement('FlatList', props);
+export const SectionList = (props: Record<string, unknown>) =>
+  React.createElement('SectionList', props);
+export const ScrollView = (props: React.PropsWithChildren<Record<string, unknown>>) =>
+  React.createElement('ScrollView', props);
+export const Modal = (props: React.PropsWithChildren<Record<string, unknown>>) =>
+  React.createElement('Modal', props);
+export const Animated = {
+  View: (props: React.PropsWithChildren<Record<string, unknown>>) =>
+    React.createElement('Animated.View', props),
+  Value: jest.fn().mockImplementation((v: number) => ({ _value: v, setValue: jest.fn() })),
+  timing: jest.fn((_value: unknown, _config: unknown) => ({ start: jest.fn(), stop: jest.fn() })),
+  sequence: jest.fn((_anims: unknown) => ({ start: jest.fn(), stop: jest.fn() })),
+  loop: jest.fn((_anim: unknown) => ({ start: jest.fn(), stop: jest.fn() })),
+};
 
 export default {
   Platform,
@@ -32,4 +57,11 @@ export default {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Switch,
+  TextInput,
+  FlatList,
+  SectionList,
+  ScrollView,
+  Modal,
+  Animated,
 };

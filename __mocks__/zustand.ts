@@ -15,7 +15,11 @@ export function create<T extends AnyState>(fn: StateCreator<T>) {
 
   state = fn(set, get);
 
-  const useStore = (selector?: (s: T) => unknown) => (selector ? selector(state) : state);
+  function useStore<U>(selector: (s: T) => U): U;
+  function useStore(): T;
+  function useStore<U>(selector?: (s: T) => U): U | T {
+    return selector ? selector(state) : state;
+  }
   useStore.getState = get;
   useStore.setState = (partial: Partial<T> | ((s: T) => Partial<T>)) => set(partial);
   return useStore as typeof useStore & { getState: GetFn<T>; setState: SetFn<T> };

@@ -14,7 +14,7 @@ type SearchTab = 'title' | 'body' | 'memo';
 
 // 녹음 검색 화면 — 검색바, 최근 검색어, 결과 탭(제목/본문/메모)
 export function SearchScreen(): React.ReactElement {
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<typeof TextInput | null>(null);
   const { query, recentQueries, setQuery, commitQuery, removeRecentQuery } = useSearchStore();
   const [activeTab, setActiveTab] = useState<SearchTab>('title');
 
