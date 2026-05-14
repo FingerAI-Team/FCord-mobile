@@ -7,15 +7,21 @@ import {
   Text,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRecordingListStore } from '../../stores/recordingListStore';
+import { useAuthStore } from '../../stores/authStore';
 import { getRecordingList, softDeleteRecording } from '../../api/recordings';
-import { ServerRecordingCache, SortType } from '../../types';
+import { ServerRecordingCache, SortType, FilterType } from '../../types';
 import { RecordingCard } from './recordingCard';
-import { FilterTabs } from './filterTabs';
 import { DeleteConfirmModal } from './deleteConfirmModal';
 import { EMPTY_MESSAGES } from './recordingListConfig';
 
 export { EMPTY_MESSAGES };
+
+// 필터 탭 레이블 맵
+const FILTER_LABELS: Record<string, string> = {
+  all: '전체', uploading: '업로드중', done: '완료', failed: '실패',
+};
 
 interface Props {
   navigation: any;
@@ -28,6 +34,9 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
     setFilter, setSort, setLoading, setRefreshing,
   } = useRecordingListStore();
 
+  // 인사말 헤더에 표시할 사용자 이름
+  const session = useAuthStore((s) => s.session);
+
   const SORT_LABELS: Record<SortType, string> = { recent: '최신순', duration: '길이순' };
   const onToggleSort = () => setSort(sort === 'recent' ? 'duration' : 'recent');
 
@@ -35,6 +44,9 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 
   const loadList = useCallback(
     async (cursor?: string) => {
+      if (cursor) {
+        setLoading(true);
+      }
       try {
         const res = await getRecordingList({ filter, sort, cursor, limit: 20 });
         if (cursor) {
@@ -58,12 +70,15 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
   }, [filter, sort, loadList, setLoading]);
 
   const onRefresh = () => {
+    if (isRefreshing) return;
     setRefreshing(true);
     loadList();
   };
 
   const onEndReached = () => {
-    if (hasMore && !isLoading && nextCursor) loadList(nextCursor);
+    if (hasMore && !isLoading && !isRefreshing && nextCursor) {
+      loadList(nextCursor);
+    }
   };
 
   // U1: 삭제 실패 시 롤백 + 토스트
@@ -96,10 +111,30 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
   );
 
   return (
-    <View style={styles.container}>
-      {/* W3: 필터 탭 + 정렬 토글을 한 행에 배치 */}
-      <View style={styles.controlRow}>
-        <FilterTabs active={filter} onChange={(f) => setFilter(f)} style={{ flex: 1, borderBottomWidth: 0 }} />
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* 인사말 헤더 */}
+      <View style={styles.homeHeader}>
+        <Text style={styles.greetingMeta}>오늘 회의 {items.length}건</Text>
+        <Text style={styles.greetingName}>{session?.user?.name ?? '안녕하세요'} 님</Text>
+      </View>
+
+      {/* 필터 row */}
+      <View style={styles.filterRow}>
+        <View style={styles.filterPills}>
+          {(['all', 'uploading', 'done', 'failed'] as FilterType[]).map((f) => (
+            <TouchableOpacity
+              key={f}
+              style={[styles.pill, filter === f && styles.pillActive]}
+              onPress={() => setFilter(f)}
+              accessibilityRole="button"
+              accessibilityState={{ selected: filter === f }}
+            >
+              <Text style={[styles.pillText, filter === f && styles.pillTextActive]}>
+                {FILTER_LABELS[f]}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
         <TouchableOpacity
           style={styles.sortBtn}
           onPress={onToggleSort}
@@ -109,6 +144,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
           <Text style={styles.sortBtnText}>{SORT_LABELS[sort]} ↕</Text>
         </TouchableOpacity>
       </View>
+
       <FlatList
         data={items}
         keyExtractor={(item: ServerRecordingCache) => item.id}
@@ -127,15 +163,59 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
         onConfirm={onDeleteConfirm}
         onCancel={() => setDeleteTarget(null)}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F9FAFB' },
-  controlRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E5E7EB' },
-  sortBtn: { paddingHorizontal: 14, paddingVertical: 12 },
-  sortBtnText: { fontSize: 12, color: '#6B7280', fontWeight: '600' },
+  homeHeader: {
+    paddingHorizontal: 16,
+    paddingTop: 24,
+    paddingBottom: 16,
+    backgroundColor: '#fcf8fa',
+  },
+  greetingMeta: {
+    fontSize: 13,
+    fontFamily: 'HankenGrotesk-SemiBold',
+    color: '#585f6c',
+    marginBottom: 4,
+  },
+  greetingName: {
+    fontSize: 32,
+    fontFamily: 'HankenGrotesk-ExtraBold',
+    color: '#000000',
+    lineHeight: 38,
+    letterSpacing: -0.5,
+  },
+  filterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: '#fcf8fa',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  filterPills: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#f6f3f4',
+    borderRadius: 16,
+    padding: 4,
+    gap: 4,
+  },
+  pill: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  pillActive: { backgroundColor: '#000000' },
+  pillText: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#585f6c' },
+  pillTextActive: { color: '#ffffff' },
+  sortBtn: { paddingHorizontal: 12, paddingVertical: 8 },
+  sortBtnText: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#585f6c' },
   emptyContainer: { alignItems: 'center', paddingTop: 100 },
   emptyText: { fontSize: 15, color: '#9CA3AF' },
   emptyList: { flexGrow: 1 },

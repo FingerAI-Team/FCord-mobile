@@ -1,3 +1,4 @@
+// src/features/recordings/statusBadge.tsx
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
@@ -5,40 +6,35 @@ type Track = 'recording' | 'upload' | 'transcription';
 
 interface BadgeConfig {
   label: string;
-  backgroundColor: string;
-  textColor: string;
+  icon: string;
+  bg: string;
+  text: string;
+  border: string;
 }
 
-// 색 + 텍스트 라벨 병기 필수 (가드레일: 색만으로 상태 구분 금지)
 const BADGE_MAP: Record<Track, Record<string, BadgeConfig>> = {
   recording: {
-    saved_local: { label: '저장됨', backgroundColor: '#E5E7EB', textColor: '#374151' },
-    recording:   { label: '녹음 중', backgroundColor: '#FEE2E2', textColor: '#991B1B' },
-    paused:      { label: '일시정지', backgroundColor: '#FEF3C7', textColor: '#92400E' },
-    draft:       { label: '초안', backgroundColor: '#F3F4F6', textColor: '#6B7280' },
+    saved_local: { label: '녹음 완료', icon: '✓', bg: '#ECFDF5', text: '#059669', border: '#A7F3D0' },
+    recording:   { label: '녹음 중',   icon: '●', bg: '#FEE2E2', text: '#DC2626', border: '#FECACA' },
+    paused:      { label: '일시정지',  icon: '⏸', bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' },
+    draft:       { label: '초안',      icon: '○', bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
   },
   upload: {
-    not_started: { label: '업로드 대기', backgroundColor: '#F3F4F6', textColor: '#6B7280' },
-    queued:      { label: '업로드 예정', backgroundColor: '#EFF6FF', textColor: '#1D4ED8' },
-    uploading:   { label: '업로드 중',   backgroundColor: '#DBEAFE', textColor: '#1D4ED8' },
-    uploaded:    { label: '업로드 완료', backgroundColor: '#D1FAE5', textColor: '#065F46' },
-    failed:      { label: '업로드 실패', backgroundColor: '#FEE2E2', textColor: '#991B1B' },
-    retrying:    { label: '재시도 중',   backgroundColor: '#FEF3C7', textColor: '#92400E' },
+    not_started: { label: '업로드 대기', icon: '⏳', bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
+    queued:      { label: '업로드 예정', icon: '↑',  bg: '#EFF6FF', text: '#2563EB', border: '#BFDBFE' },
+    uploading:   { label: '업로드 중',   icon: '↑',  bg: '#DBEAFE', text: '#1D4ED8', border: '#93C5FD' },
+    uploaded:    { label: '업로드 완료', icon: '✓',  bg: '#ECFDF5', text: '#059669', border: '#A7F3D0' },
+    failed:      { label: '업로드 실패', icon: '✕',  bg: '#FEE2E2', text: '#DC2626', border: '#FECACA' },
+    retrying:    { label: '재시도 중',   icon: '↻',  bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' },
   },
   transcription: {
-    not_requested: { label: 'STT 대기',   backgroundColor: '#F3F4F6', textColor: '#6B7280' },
-    queued:        { label: 'STT 예정',   backgroundColor: '#EDE9FE', textColor: '#5B21B6' },
-    processing:    { label: 'STT 처리 중', backgroundColor: '#EDE9FE', textColor: '#5B21B6' },
-    completed:     { label: '전사 완료',  backgroundColor: '#D1FAE5', textColor: '#065F46' },
-    failed:        { label: 'STT 실패',   backgroundColor: '#FEE2E2', textColor: '#991B1B' },
-    cancelled:     { label: '취소됨',     backgroundColor: '#F3F4F6', textColor: '#6B7280' },
+    not_requested: { label: 'STT 대기',    icon: '⏳', bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
+    queued:        { label: 'STT 예정',    icon: '☁',  bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE' },
+    processing:    { label: 'STT 처리 중', icon: '↻',  bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE' },
+    completed:     { label: '전사 완료',   icon: '✓',  bg: '#ECFDF5', text: '#059669', border: '#A7F3D0' },
+    failed:        { label: 'STT 실패',    icon: '✕',  bg: '#FEE2E2', text: '#DC2626', border: '#FECACA' },
+    cancelled:     { label: '취소됨',      icon: '○',  bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
   },
-};
-
-const TRACK_LABELS: Record<Track, string> = {
-  recording: '녹음',
-  upload: '업로드',
-  transcription: '전사',
 };
 
 interface Props {
@@ -47,29 +43,32 @@ interface Props {
 }
 
 export function StatusBadge({ track, state }: Props): React.ReactElement | null {
-  const config = BADGE_MAP[track]?.[state];
-  if (!config) return null;
+  const cfg = BADGE_MAP[track]?.[state];
+  if (!cfg) return null;
 
   return (
     <View
-      style={[styles.badge, { backgroundColor: config.backgroundColor }]}
-      accessibilityLabel={`${TRACK_LABELS[track]} 상태: ${config.label}`}
+      style={[styles.badge, { backgroundColor: cfg.bg, borderColor: cfg.border }]}
+      accessibilityLabel={`${track === 'recording' ? '녹음' : track === 'upload' ? '업로드' : '전사'} 상태: ${cfg.label}`}
       accessibilityRole="text"
     >
-      <Text style={[styles.label, { color: config.textColor }]}>{config.label}</Text>
+      <Text style={[styles.icon, { color: cfg.text }]}>{cfg.icon}</Text>
+      <Text style={[styles.label, { color: cfg.text }]}>{cfg.label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   badge: {
-    paddingHorizontal: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
     paddingVertical: 3,
-    borderRadius: 12,
+    borderRadius: 9999,
+    borderWidth: 1,
     alignSelf: 'flex-start',
   },
-  label: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
+  icon: { fontSize: 11, fontFamily: 'HankenGrotesk-Medium' },
+  label: { fontSize: 11, fontFamily: 'HankenGrotesk-SemiBold' },
 });

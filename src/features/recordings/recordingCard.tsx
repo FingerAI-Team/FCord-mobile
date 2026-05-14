@@ -1,9 +1,11 @@
+// src/features/recordings/recordingCard.tsx
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { ServerRecordingCache } from '../../types';
 import { StatusBadge } from './statusBadge';
 import { useUploadProgress } from '../upload/useUploadProgress';
+import { colors, spacing, radius, typography } from '../../theme/tokens';
 
 interface Props {
   item: ServerRecordingCache;
@@ -19,10 +21,7 @@ function formatDuration(ms?: number): string {
 
 function formatDate(ts: number): string {
   return new Date(ts).toLocaleDateString('ko-KR', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    year: 'numeric', month: '2-digit', day: '2-digit',
   });
 }
 
@@ -53,15 +52,17 @@ export function RecordingCard({ item, onPress, onDelete }: Props): React.ReactEl
       <TouchableOpacity
         style={styles.card}
         onPress={onPress}
-        activeOpacity={0.7}
+        activeOpacity={0.95}
         accessibilityLabel={`${item.title}, ${formatDuration(item.durationMs)}`}
         accessibilityRole="button"
       >
         <View style={styles.header}>
-          <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
-          <Text style={styles.duration}>{formatDuration(item.durationMs)}</Text>
+          <View style={styles.titleBlock}>
+            <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+            <Text style={styles.meta}>{formatDate(item.createdAt)} | {formatDuration(item.durationMs)}</Text>
+          </View>
+          <Text style={styles.moreIcon}>⋮</Text>
         </View>
-        <Text style={styles.date}>{formatDate(item.createdAt)}</Text>
         <View style={styles.badges}>
           <StatusBadge track="recording" state={item.recordingState} />
           <StatusBadge track="upload" state={item.uploadState} />
@@ -75,30 +76,41 @@ export function RecordingCard({ item, onPress, onDelete }: Props): React.ReactEl
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    backgroundColor: colors.surfaceLight,
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.md,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    padding: spacing.lg,
+    gap: spacing.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-  title: { fontSize: 15, fontWeight: '600', color: '#111827', flex: 1, marginRight: 8 },
-  duration: { fontSize: 13, color: '#6B7280' },
-  date: { fontSize: 12, color: '#9CA3AF', marginBottom: 10 },
-  badges: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  titleBlock: { flex: 1, marginRight: spacing.sm },
+  title: { ...typography.heading, color: colors.primary, marginBottom: spacing.xs },
+  meta: { ...typography.body, color: colors.secondary, opacity: 0.7 },
+  moreIcon: { fontSize: 20, color: colors.secondary },
+  badges: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' },
   deleteAction: {
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.dangerRed,
     justifyContent: 'center',
     alignItems: 'center',
     width: 80,
+    borderRadius: radius.lg,
+    marginBottom: spacing.md,
+    marginRight: spacing.lg,
   },
-  deleteText: { color: '#FFFFFF', fontWeight: '700', fontSize: 14 },
+  deleteText: { ...typography.label, color: '#FFFFFF' },
   progressTrack: {
     height: 3,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.borderLight,
     borderRadius: 2,
-    marginTop: 10,
     overflow: 'hidden',
   },
-  progressFill: { height: 3, backgroundColor: '#2563EB', borderRadius: 2 },
+  progressFill: { height: 3, backgroundColor: colors.accentBlue, borderRadius: 2 },
 });
