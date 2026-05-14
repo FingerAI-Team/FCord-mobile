@@ -1,4 +1,4 @@
-import { ServerRecordingCache } from '../types';
+import { ServerRecordingCache, TranscriptSegment } from '../types';
 import { apiRequest } from './client';
 
 interface RecordingListResponse {
@@ -63,4 +63,23 @@ export async function searchRecordings(params: {
   qs.set('field', params.field);
   qs.set('limit', String(params.limit ?? 20));
   return apiRequest('GET', `/v1/recordings/search?${qs}`);
+}
+
+// 전사 결과 조회
+export async function getTranscript(
+  recordingId: string
+): Promise<(TranscriptSegment & { id?: string })[]> {
+  const res = await apiRequest<{ segments: (TranscriptSegment & { id?: string })[] }>(
+    'GET',
+    `/v1/recordings/${recordingId}/transcript`
+  );
+  return res.segments ?? [];
+}
+
+// 전사 편집본 저장
+export async function saveTranscriptEdits(
+  recordingId: string,
+  segments: (TranscriptSegment & { id: string })[]
+): Promise<void> {
+  await apiRequest('PATCH', `/v1/recordings/${recordingId}/transcript`, { segments });
 }
