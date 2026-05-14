@@ -1,0 +1,192 @@
+// src/features/transcript/TranscriptScreen.tsx
+import React, { useEffect } from 'react';
+import {
+  View, Text, ScrollView, TouchableOpacity, TextInput,
+  StyleSheet, ActivityIndicator, Alert,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranscriptStore } from '../../stores/transcriptStore';
+import { colors, spacing, radius, typography } from '../../theme/tokens';
+
+const SPEAKER_COLORS = [
+  { bg: '#EFF6FF', text: '#2563EB', border: '#BFDBFE' },
+  { bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' },
+  { bg: '#F0FDF4', text: '#16A34A', border: '#BBF7D0' },
+  { bg: '#FDF4FF', text: '#9333EA', border: '#E9D5FF' },
+  { bg: '#FFF1F2', text: '#E11D48', border: '#FECDD3' },
+  { bg: '#F0FDFA', text: '#0D9488', border: '#99F6E4' },
+];
+
+function speakerColor(label: string) {
+  const idx = label.charCodeAt(label.length - 1) % SPEAKER_COLORS.length;
+  return SPEAKER_COLORS[idx];
+}
+
+function formatMs(ms: number): string {
+  const s = Math.floor(ms / 1000);
+  return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+}
+
+interface Props {
+  navigation: any;
+  route: { params: { id: string } };
+}
+
+export function TranscriptScreen({ navigation, route }: Props): React.ReactElement {
+  const { id } = route.params;
+  const {
+    segments, editMode, pendingEdits, isLoading, error,
+    loadTranscript, toggleEditMode, editSegment, saveEdits, reset,
+  } = useTranscriptStore();
+
+  useEffect(() => {
+    void loadTranscript(id);
+    return () => reset();
+  }, [id, loadTranscript, reset]);
+
+  const onSave = async () => {
+    await saveEdits();
+    if (!useTranscriptStore.getState().error) return;
+    Alert.alert('저장 실패', '편집 내용을 저장하지 못했습니다. 다시 시도해주세요.');
+  };
+
+  if (isLoading && segments.length === 0) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator color={colors.accentBlue} />
+      </View>
+    );
+  }
+
+  if (error && segments.length === 0) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity style={styles.retryBtn} onPress={() => void loadTranscript(id)}>
+          <Text style={styles.retryText}>다시 시도</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+          <Text style={styles.backIcon}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle} numberOfLines={1}>전사 결과</Text>
+        <TouchableOpacity
+          onPress={editMode ? onSave : toggleEditMode}
+          style={styles.editBtn}
+          accessibilityLabel={editMode ? '저장' : '편집'}
+        >
+          <Text style={[styles.editBtnText, editMode && styles.editBtnSave]}>
+            {editMode ? '저장' : '편집'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.list}>
+        {segments.map((seg) => {
+          const sc = speakerColor(seg.speakerLabel);
+          const text = pendingEdits[seg.id] ?? seg.text;
+          return (
+            <View key={seg.id} style={styles.segment}>
+              <View style={styles.segMeta}>
+                <View style={[styles.speakerChip, { backgroundColor: sc.bg, borderColor: sc.border }]}>
+                  <Text style={[styles.speakerLabel, { color: sc.text }]}>{seg.speakerLabel}</Text>
+                </View>
+                <Text style={styles.timestamp}>{formatMs(seg.startMs)}</Text>
+              </View>
+              {editMode ? (
+                <TextInput
+                  style={styles.editInput}
+                  value={text}
+                  onChangeText={(t: string) => editSegment(seg.id, t)}
+                  multiline
+                  accessibilityLabel={`${seg.speakerLabel} 발화 편집`}
+                />
+              ) : (
+                <Text style={styles.segText}>{text}</Text>
+              )}
+            </View>
+          );
+        })}
+      </ScrollView>
+
+      {isLoading && (
+        <View style={styles.savingOverlay}>
+          <ActivityIndicator color={colors.onPrimary} />
+        </View>
+      )}
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.lg },
+  header: {
+    height: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+    backgroundColor: colors.background,
+  },
+  backBtn: { paddingRight: spacing.md },
+  backIcon: { fontSize: 20, color: colors.onSurface },
+  headerTitle: { ...typography.heading, flex: 1, color: colors.onSurface },
+  editBtn: { paddingLeft: spacing.md },
+  editBtnText: { ...typography.label, color: colors.accentBlue },
+  editBtnSave: { color: colors.successGreen },
+  list: { paddingHorizontal: spacing.lg, paddingTop: spacing.xl, paddingBottom: 120 },
+  segment: {
+    paddingVertical: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+  },
+  segMeta: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginBottom: spacing.sm },
+  speakerChip: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.full,
+    borderWidth: 1,
+  },
+  speakerLabel: { ...typography.caption },
+  timestamp: { ...typography.caption, color: colors.outline },
+  segText: { ...typography.body, color: colors.onSurface, paddingLeft: spacing.xs },
+  editInput: {
+    ...typography.body,
+    color: colors.onSurface,
+    borderWidth: 1,
+    borderColor: colors.accentBlue,
+    borderRadius: radius.sm,
+    padding: spacing.sm,
+    minHeight: 60,
+    textAlignVertical: 'top',
+  },
+  retryBtn: {
+    height: 44,
+    paddingHorizontal: spacing.xl,
+    backgroundColor: colors.primary,
+    borderRadius: radius.lg,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  retryText: { ...typography.label, color: colors.onPrimary },
+  errorText: { ...typography.body, color: colors.error },
+  savingOverlay: {
+    position: 'absolute',
+    bottom: 32,
+    alignSelf: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: radius.full,
+    width: 48,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
