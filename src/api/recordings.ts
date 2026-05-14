@@ -52,3 +52,15 @@ export async function requestTranscription(recordingId: string): Promise<{ trans
 export async function retryTranscription(transcriptionId: string): Promise<void> {
   await apiRequest('POST', `/v1/transcriptions/${transcriptionId}/retry`, {});
 }
+
+export async function searchRecordings(params: {
+  q: string;
+  field: string;
+  limit?: number;
+}): Promise<{ items: ServerRecordingCache[] }> {
+  const qs = new URLSearchParams();
+  qs.set('q', params.q);
+  qs.set('field', params.field);
+  qs.set('limit', String(params.limit ?? 20));
+  return apiRequest('GET', `/v1/recordings/search?${qs}`);
+}
