@@ -48,7 +48,7 @@ export const getGenericPassword = jest.fn(
   async (_opts?: { service?: string }): Promise<_Stored | false> => false,
 );
 export const setGenericPassword = jest.fn(
-  async (_u: string, _p: string, opts?: { service?: string }): Promise<{ service: string }> => ({
+  async (_u: string, _p: string, opts?: { service?: string; accessControl?: string }): Promise<{ service: string }> => ({
     service: opts?.service ?? '',
   }),
 );

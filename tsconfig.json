@@ -13,6 +13,8 @@
     "baseUrl": ".",
     "paths": {
       "react-native": ["__mocks__/react-native.ts"],
+      "react-native-safe-area-context": ["__mocks__/react-native-safe-area-context.ts"],
+      "react-native-keychain": ["__mocks__/react-native-keychain.ts"],
       "react-native-*": ["__mocks__/react-native-stub.ts"],
       "@nozbe/watermelondb": ["__mocks__/watermelondb.ts"],
       "@nozbe/watermelondb/*": ["__mocks__/watermelondb.ts"],
