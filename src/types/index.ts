@@ -45,6 +45,7 @@ export interface ServerRecordingCache {
   title: string;
   note?: string;
   tags: string[];
+  isStarred?: boolean; // 클라이언트 전용 — 서버 contract에 없음
   languageHint?: string;
   durationMs?: number;
   fileSizeBytes?: number;

@@ -9,6 +9,8 @@ import {
   TextInput,
 } from 'react-native';
 import { colors, spacing, radius, typography } from '../../theme/tokens';
+import { useRecordingListStore } from '../../stores/recordingListStore';
+import { filterStarred, filterArchived, collectAllTags } from './libraryUtils';
 
 type LibrarySection = 'starred' | 'archived' | 'tags';
 
@@ -21,32 +23,35 @@ interface Section {
 
 // 보관함 화면: 즐겨찾기 / 보관함 / 태그별 섹션 + 태그 편집 모달
 export function LibraryScreen(): React.ReactElement {
+  const items = useRecordingListStore((s) => s.items);
   const [tagModalVisible, setTagModalVisible] = useState(false);
   const [editingTag, setEditingTag] = useState('');
 
-  // 3개 섹션 정의 — 현재는 빈 data, 추후 items에서 필터링하여 채움
+  const starred = filterStarred(items);
+  const archived = filterArchived(items);
+  const allTags = collectAllTags(items);
+
   const sections: Section[] = [
     {
       key: 'starred',
       title: '즐겨찾기',
       icon: '⭐',
-      data: [],
+      data: starred.map((r) => r.title),
     },
     {
       key: 'archived',
       title: '보관함',
       icon: '📦',
-      data: [],
+      data: archived.map((r) => r.title),
     },
     {
       key: 'tags',
       title: '태그별',
       icon: '🏷',
-      data: [],
+      data: allTags,
     },
   ];
 
-  // 섹션 헤더: 제목 + 태그 섹션에만 편집 링크
   const renderSectionHeader = ({ section }: { section: Section }) => (
     <View style={styles.sectionHeader}>
       <View style={styles.sectionTitleRow}>
@@ -64,7 +69,6 @@ export function LibraryScreen(): React.ReactElement {
     </View>
   );
 
-  // 섹션 데이터가 없을 때 표시할 빈 상태 메시지
   const renderEmptyForSection = (section: Section) => (
     <View style={styles.sectionEmpty}>
       <Text style={styles.sectionEmptyText}>
