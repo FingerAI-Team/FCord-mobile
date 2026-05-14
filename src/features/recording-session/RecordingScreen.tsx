@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors, spacing, radius, typography } from '../../theme/tokens';
+import { createRecordingDraft } from '../../api/recordings';
+import { useRecordingListStore } from '../../stores/recordingListStore';
+import { buildSavePayload, buildOptimisticItem } from './recordingSessionUtils';
 
 // 초 → MM:SS 포맷
 function formatTimer(seconds: number): string {
@@ -20,9 +23,11 @@ function formatTimer(seconds: number): string {
 
 export function RecordingScreen(): React.ReactElement {
   const navigation = useNavigation();
+  const { items, setItems } = useRecordingListStore();
   const [elapsed, setElapsed] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [saveModalVisible, setSaveModalVisible] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [title, setTitle] = useState('');
 
   // 파형 애니메이션용 Animated.Value 5개
@@ -70,10 +75,22 @@ export function RecordingScreen(): React.ReactElement {
 
   const onStop = () => setSaveModalVisible(true);
 
-  const onSave = () => {
-    setSaveModalVisible(false);
-    navigation.goBack();
-    // 실제 저장 로직은 추후 구현 (recordingListStore 연동)
+  const onSave = async () => {
+    if (isSaving) return;
+    setIsSaving(true);
+    try {
+      // 서버에 draft 생성 → id 수령
+      const payload = buildSavePayload(title, elapsed);
+      const { id } = await createRecordingDraft(payload);
+
+      // 목록에 낙관적 추가 (최신순 맨 앞)
+      const optimistic = buildOptimisticItem(id, payload.title, elapsed);
+      setItems([optimistic, ...items]);
+    } finally {
+      setIsSaving(false);
+      setSaveModalVisible(false);
+      navigation.goBack();
+    }
   };
 
   const onCancelSave = () => setSaveModalVisible(false);
@@ -144,8 +161,13 @@ export function RecordingScreen(): React.ReactElement {
               <TouchableOpacity style={styles.modalCancelBtn} onPress={onCancelSave}>
                 <Text style={styles.modalCancelText}>취소</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.modalSaveBtn} onPress={onSave}>
-                <Text style={styles.modalSaveText}>저장</Text>
+              <TouchableOpacity
+                style={[styles.modalSaveBtn, isSaving && { opacity: 0.6 }]}
+                onPress={onSave}
+                disabled={isSaving}
+                accessibilityLabel={isSaving ? '저장 중' : '저장'}
+              >
+                <Text style={styles.modalSaveText}>{isSaving ? '저장 중...' : '저장'}</Text>
               </TouchableOpacity>
             </View>
           </View>
