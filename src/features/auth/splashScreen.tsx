@@ -1,18 +1,13 @@
-import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import { useAuthStore } from '../../stores/authStore';
-import { colors, spacing, typography } from '../../theme/tokens';
-
+// src/features/auth/splashScreen.tsx
 // Stitch 매칭 (stitch_ibk_stt_enterprise_app/splash_screen)
 // - 브랜드 + tagline 중앙
-// - 하단 1/3 지점 작은 스피너
+// - 하단 1/3 지점 작은 커스텀 스피너
+// bootstrap()은 AuthGate에서 이미 호출하므로 여기선 생략
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { colors, spacing, typography, radius } from '../../theme/tokens';
+
 export function SplashScreen(): React.ReactElement {
-  const bootstrap = useAuthStore((s) => s.bootstrap);
-
-  useEffect(() => {
-    void bootstrap();
-  }, [bootstrap]);
-
   return (
     <View style={styles.container}>
       <View style={styles.brandBlock}>
@@ -20,7 +15,7 @@ export function SplashScreen(): React.ReactElement {
         <Text style={styles.tagline}>회의를 텍스트로</Text>
       </View>
       <View style={styles.spinnerBlock}>
-        <ActivityIndicator color={colors.textSecondary} />
+        <View style={styles.spinner} />
       </View>
     </View>
   );
@@ -36,11 +31,23 @@ const styles = StyleSheet.create({
     paddingBottom: '20%',
   },
   brandBlock: { alignItems: 'center' },
-  brand: { ...typography.display, color: colors.textOnSurface },
+  brand: {
+    ...typography.display,
+    color: colors.onSurface,
+    letterSpacing: -1,
+  },
   tagline: {
     ...typography.body,
-    color: colors.textSecondary,
+    color: colors.onSurfaceVariant,
     marginTop: spacing.sm,
   },
   spinnerBlock: { alignItems: 'center' },
+  spinner: {
+    width: 20,
+    height: 20,
+    borderRadius: radius.full,
+    borderWidth: 2,
+    borderColor: colors.borderLight,
+    borderTopColor: colors.onSurface,
+  },
 });
