@@ -19,6 +19,7 @@ import { StatusBadge } from './statusBadge';
 import { RetryUploadButton, RetryTranscriptionButton } from './retryButtons';
 import { DeleteConfirmModal } from './deleteConfirmModal';
 import { useUploadProgress } from '../upload/useUploadProgress';
+import { resolveDetailActions, shouldSaveTitle } from './recordingDetailUtils';
 
 interface Props {
   navigation: any;
@@ -80,8 +81,10 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
     );
   }
 
+  const actions = resolveDetailActions(recording);
+
   const onSaveTitle = async () => {
-    if (!editedTitle.trim() || editedTitle === recording.title) {
+    if (!shouldSaveTitle(editedTitle, recording.title)) {
       setIsEditingTitle(false);
       return;
     }
@@ -157,34 +160,33 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
       )}
 
       {/* 재전송 버튼 — upload 실패 시만 */}
-      {recording.uploadState === 'failed' && (
+      {actions.showRetryUpload && (
         <View style={styles.actionRow}>
           <RetryUploadButton onPress={onRetryUpload} disabled={!resolvedQueueId} />
         </View>
       )}
 
       {/* 재처리 버튼 — STT 실패 시만 */}
-      {recording.transcriptionState === 'failed' && (
+      {actions.showRetryTranscription && (
         <View style={styles.actionRow}>
           <RetryTranscriptionButton onPress={onRetryTranscription} />
         </View>
       )}
 
       {/* C2: 업로드 완료 + STT 미요청 상태 — 동의 후 수동 전사 시작 경로 */}
-      {recording.uploadState === 'uploaded' &&
-        recording.transcriptionState === 'not_requested' && (
-          <View style={styles.actionRow}>
-            <TouchableOpacity
-              style={styles.sttRequestBtn}
-              onPress={onRequestTranscription}
-              accessibilityLabel="음성 전사 시작"
-              accessibilityRole="button"
-              accessibilityHint="음성 인식 처리를 요청합니다"
-            >
-              <Text style={styles.sttRequestText}>전사 시작</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+      {actions.showRequestTranscription && (
+        <View style={styles.actionRow}>
+          <TouchableOpacity
+            style={styles.sttRequestBtn}
+            onPress={onRequestTranscription}
+            accessibilityLabel="음성 전사 시작"
+            accessibilityRole="button"
+            accessibilityHint="음성 인식 처리를 요청합니다"
+          >
+            <Text style={styles.sttRequestText}>전사 시작</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* 메타 정보 */}
       <View style={styles.metaBlock}>
@@ -232,7 +234,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
       </View>
 
       {/* 전사 결과 이동 */}
-      {recording.transcriptionState === 'completed' && (
+      {actions.showViewTranscript && (
         <TouchableOpacity
           style={styles.viewTranscriptBtn}
           onPress={() => navigation.navigate('Transcript', { id })}

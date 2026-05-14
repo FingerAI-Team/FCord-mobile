@@ -10,7 +10,12 @@ export const Q = {
 };
 export const appSchema = jest.fn((s) => s);
 export const tableSchema = jest.fn((s) => s);
-export class Database { get = jest.fn(); write = jest.fn(async (fn: () => Promise<void>) => fn()); }
+export class Database {
+  get<_T = unknown>(_tableName: string): { query: jest.Mock } {
+    return { query: jest.fn().mockReturnValue({ fetch: jest.fn().mockResolvedValue([]) }) };
+  }
+  write = jest.fn(async (fn: () => Promise<void>) => fn());
+}
 export const field = () => (_: unknown, __: string) => {};
 export const readonly = () => {};
 export default {};
