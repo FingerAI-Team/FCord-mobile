@@ -97,46 +97,70 @@ export function RecordingScreen(): React.ReactElement {
 
   return (
     <View style={styles.container}>
-      {/* 닫기 */}
-      <TouchableOpacity
-        style={styles.closeBtn}
-        onPress={() => navigation.goBack()}
-        accessibilityLabel="녹음 취소"
-      >
-        <Text style={styles.closeBtnText}>✕</Text>
-      </TouchableOpacity>
-
-      {/* 타이머 */}
-      <Text style={styles.timer}>{formatTimer(elapsed)}</Text>
-      <Text style={styles.timerLabel}>{isPaused ? '일시정지' : '녹음 중'}</Text>
-
-      {/* 파형 */}
-      <View style={styles.waveform}>
-        {waveAnims.map((anim, i) => (
-          <Animated.View
-            key={i}
-            style={[styles.wavebar, { transform: [{ scaleY: anim }] }]}
-          />
-        ))}
+      {/* 상단 헤더 (닫기 + 타이머) */}
+      <View style={styles.topBar}>
+        <TouchableOpacity onPress={onStop} style={styles.closeBtn} accessibilityLabel="녹음 종료">
+          <Text style={styles.closeIcon}>✕</Text>
+        </TouchableOpacity>
+        <Text style={styles.timer}>{formatTimer(elapsed)}</Text>
+        <View style={styles.timerSpacer} />
       </View>
 
-      {/* 컨트롤 */}
-      <View style={styles.controls}>
-        <TouchableOpacity
-          style={styles.pauseBtn}
-          onPress={() => setIsPaused((p) => !p)}
-          accessibilityLabel={isPaused ? '녹음 재개' : '일시정지'}
-        >
-          <Text style={styles.pauseBtnText}>{isPaused ? '▶' : '⏸'}</Text>
-        </TouchableOpacity>
+      {/* 웨이브폼 */}
+      <View style={styles.waveformSection}>
+        <View style={styles.waveform}>
+          {waveAnims.map((anim, i) => (
+            <Animated.View
+              key={i}
+              style={[
+                styles.waveBar,
+                {
+                  transform: [{ scaleY: anim }],
+                  opacity: isPaused ? 0.3 : 0.8,
+                },
+              ]}
+            />
+          ))}
+        </View>
+      </View>
 
-        <TouchableOpacity
-          style={styles.stopBtn}
-          onPress={onStop}
-          accessibilityLabel="녹음 정지"
-        >
-          <View style={styles.stopIcon} />
-        </TouchableOpacity>
+      {/* 빠른 메모 */}
+      <View style={styles.memoSection}>
+        <Text style={styles.memoLabel}>빠른 메모</Text>
+        <View style={styles.memoInput}>
+          <TextInput
+            style={styles.memoField}
+            value={title}
+            onChangeText={setTitle}
+            placeholder="녹음 제목 또는 메모..."
+            placeholderTextColor="#76777d"
+            returnKeyType="done"
+          />
+        </View>
+      </View>
+
+      {/* 하단 컨트롤 */}
+      <View style={styles.controls}>
+        <View style={styles.controlButtons}>
+          <TouchableOpacity
+            style={styles.pauseBtn}
+            onPress={() => setIsPaused((p) => !p)}
+            accessibilityLabel={isPaused ? '녹음 재개' : '녹음 일시정지'}
+            accessibilityRole="button"
+          >
+            <Text style={styles.pauseIcon}>{isPaused ? '▶' : '⏸'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.stopBtn}
+            onPress={onStop}
+            accessibilityLabel="녹음 정지"
+            accessibilityRole="button"
+          >
+            <Text style={styles.stopIcon}>■</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.controlHint}>탭하여 정지</Text>
       </View>
 
       {/* 저장 Modal */}
@@ -178,68 +202,82 @@ export function RecordingScreen(): React.ReactElement {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container: { flex: 1, backgroundColor: '#fcf8fa' },
+  topBar: {
+    height: 64,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+  },
+  closeBtn: { width: 40, height: 40, alignItems: 'flex-start', justifyContent: 'center' },
+  closeIcon: { fontSize: 20, color: '#1b1b1d' },
+  timer: {
+    fontSize: 40,
+    fontFamily: 'HankenGrotesk-ExtraBold',
+    color: '#000000',
+    letterSpacing: -2,
+    lineHeight: 46,
+  },
+  timerSpacer: { width: 40 },
+  waveformSection: {
     flex: 1,
-    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 24,
   },
-  closeBtn: {
-    position: 'absolute',
-    top: 56,
-    right: spacing.lg,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.surfaceContainer,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  closeBtnText: { fontSize: 16, color: colors.textSecondary },
-  timer: { fontSize: 56, fontWeight: '800', color: colors.textPrimary, letterSpacing: -1 },
-  timerLabel: { ...typography.label, color: colors.recordingRed, marginTop: spacing.sm },
-  waveform: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    marginVertical: spacing['3xl'],
-    height: 80,
-  },
-  wavebar: {
-    width: 6,
+  waveform: { flexDirection: 'row', alignItems: 'center', gap: 4, height: 80 },
+  waveBar: {
+    width: 4,
     height: 60,
-    borderRadius: 3,
-    backgroundColor: colors.recordingRed,
-    opacity: 0.8,
+    borderRadius: 2,
+    backgroundColor: '#000000',
   },
-  controls: {
+  memoSection: { paddingHorizontal: 24, marginBottom: 48 },
+  memoLabel: { fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#585f6c', marginBottom: 8, paddingLeft: 4 },
+  memoInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing['2xl'],
+    height: 56,
+    backgroundColor: '#F9FAFB',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    paddingHorizontal: 16,
   },
+  memoField: { fontSize: 15, fontFamily: 'HankenGrotesk-Regular', color: '#1b1b1d', flex: 1 },
+  controls: {
+    paddingBottom: 40,
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    alignItems: 'center',
+    gap: 16,
+  },
+  controlButtons: { flexDirection: 'row', alignItems: 'center', gap: 48 },
   pauseBtn: {
     width: 56,
     height: 56,
-    borderRadius: 28,
-    backgroundColor: colors.surfaceContainer,
+    borderRadius: 9999,
+    backgroundColor: '#f0edee',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pauseBtnText: { fontSize: 22, color: colors.textPrimary },
+  pauseIcon: { fontSize: 22, color: '#000000' },
   stopBtn: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: colors.recordingRed,
+    width: 80,
+    height: 80,
+    borderRadius: 9999,
+    backgroundColor: '#EF4444',
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#EF4444',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 8,
   },
-  stopIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 4,
-    backgroundColor: '#fff',
-  },
+  stopIcon: { fontSize: 28, color: '#FFFFFF' },
+  controlHint: { fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#585f6c' },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
