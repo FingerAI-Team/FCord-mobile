@@ -10,7 +10,7 @@ const adapter = new SQLiteAdapter({
   schema: dbSchema,
   migrations,
   jsi: true,
-  onSetUpError: (error) => {
+  onSetUpError: (error: unknown) => {
     console.error('[DB] 초기화 실패:', error);
   },
 });

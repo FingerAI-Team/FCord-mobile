@@ -39,6 +39,8 @@ export const ScrollView = (props: React.PropsWithChildren<Record<string, unknown
   React.createElement('ScrollView', props);
 export const Modal = (props: React.PropsWithChildren<Record<string, unknown>>) =>
   React.createElement('Modal', props);
+export const KeyboardAvoidingView = (props: React.PropsWithChildren<Record<string, unknown>>) =>
+  React.createElement('KeyboardAvoidingView', props);
 export const Animated = {
   View: (props: React.PropsWithChildren<Record<string, unknown>>) =>
     React.createElement('Animated.View', props),
@@ -63,5 +65,6 @@ export default {
   SectionList,
   ScrollView,
   Modal,
+  KeyboardAvoidingView,
   Animated,
 };

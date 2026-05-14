@@ -5,6 +5,7 @@
     "lib": ["ES2020"],
     "jsx": "react-native",
     "strict": true,
+    "experimentalDecorators": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist",
