@@ -14,8 +14,8 @@ interface BadgeConfig {
 
 const BADGE_MAP: Record<Track, Record<string, BadgeConfig>> = {
   recording: {
-    saved_local: { label: '녹음 완료', icon: '✓', bg: '#ECFDF5', text: '#059669', border: '#A7F3D0' },
-    recording:   { label: '녹음 중',   icon: '●', bg: '#FEE2E2', text: '#DC2626', border: '#FECACA' },
+    saved_local: { label: '생성 완료', icon: '✓', bg: '#ECFDF5', text: '#059669', border: '#A7F3D0' },
+    recording:   { label: '생성 중',   icon: '●', bg: '#FEE2E2', text: '#DC2626', border: '#FECACA' },
     paused:      { label: '일시정지',  icon: '⏸', bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' },
     draft:       { label: '초안',      icon: '○', bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
   },
@@ -28,12 +28,12 @@ const BADGE_MAP: Record<Track, Record<string, BadgeConfig>> = {
     retrying:    { label: '재시도 중',   icon: '↻',  bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' },
   },
   transcription: {
-    not_requested: { label: 'STT 대기',    icon: '⏳', bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
-    queued:        { label: 'STT 예정',    icon: '☁',  bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE' },
-    processing:    { label: 'STT 처리 중', icon: '↻',  bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE' },
-    completed:     { label: '전사 완료',   icon: '✓',  bg: '#ECFDF5', text: '#059669', border: '#A7F3D0' },
-    failed:        { label: 'STT 실패',    icon: '✕',  bg: '#FEE2E2', text: '#DC2626', border: '#FECACA' },
-    cancelled:     { label: '취소됨',      icon: '○',  bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
+    not_requested: { label: '변환 대기',      icon: '⏳', bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
+    queued:        { label: '변환 예정',      icon: '☁',  bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE' },
+    processing:    { label: '음성파일 변환중', icon: '↻',  bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE' },
+    completed:     { label: '변환 완료',      icon: '✓',  bg: '#ECFDF5', text: '#059669', border: '#A7F3D0' },
+    failed:        { label: '변환 실패',      icon: '✕',  bg: '#FEE2E2', text: '#DC2626', border: '#FECACA' },
+    cancelled:     { label: '취소됨',         icon: '○',  bg: '#F3F4F6', text: '#6B7280', border: '#E5E7EB' },
   },
 };
 

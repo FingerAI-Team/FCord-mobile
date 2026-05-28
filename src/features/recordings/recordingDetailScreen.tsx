@@ -192,7 +192,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
       {/* ── 3-track 상태 카드 ── */}
       <View style={styles.statusCard}>
         <View style={styles.statusRow}>
-          <Text style={styles.statusLabel}>녹음</Text>
+          <Text style={styles.statusLabel}>생성</Text>
           <StatusBadge track="recording" state={recording.recordingState} />
         </View>
         <View style={styles.statusRow}>
@@ -200,7 +200,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
           <StatusBadge track="upload" state={recording.uploadState} />
         </View>
         <View style={styles.statusRow}>
-          <Text style={styles.statusLabel}>전사</Text>
+          <Text style={styles.statusLabel}>변환</Text>
           <StatusBadge track="transcription" state={recording.transcriptionState} />
         </View>
       </View>
@@ -245,11 +245,11 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
             <TouchableOpacity
               style={styles.actionBtnFilled}
               onPress={onRequestTranscription}
-              accessibilityLabel="음성 전사 시작"
+              accessibilityLabel="음성 변환 시작"
               accessibilityRole="button"
               accessibilityHint="음성 인식 처리를 요청합니다"
             >
-              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-SemiBold', color: '#ffffff' }}>전사 시작</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-SemiBold', color: '#ffffff' }}>변환 시작</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -260,10 +260,10 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
         <TouchableOpacity
           style={styles.transcriptBtn}
           onPress={() => navigation.navigate('Transcript', { id: recording.id })}
-          accessibilityLabel="전사 결과 보기"
+          accessibilityLabel="음성 변환 내용 보기"
           accessibilityRole="button"
         >
-          <Text style={styles.transcriptBtnText}>전사 결과 보기</Text>
+          <Text style={styles.transcriptBtnText}>음성 변환 내용 보기</Text>
         </TouchableOpacity>
       )}
 

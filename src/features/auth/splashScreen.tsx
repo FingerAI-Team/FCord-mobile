@@ -4,14 +4,19 @@
 // - 하단 1/3 지점 작은 커스텀 스피너
 // bootstrap()은 AuthGate에서 이미 호출하므로 여기선 생략
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { colors, spacing, typography, radius } from '../../theme/tokens';
 
 export function SplashScreen(): React.ReactElement {
   return (
     <View style={styles.container}>
       <View style={styles.brandBlock}>
-        <Text style={styles.brand}>IBK STT</Text>
+        <Image
+          source={require('../../../assets/ibk_logo_big.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+        <Text style={styles.brand}>IBKS 음성회의록</Text>
         <Text style={styles.tagline}>회의를 텍스트로</Text>
       </View>
       <View style={styles.spinnerBlock}>
@@ -31,6 +36,11 @@ const styles = StyleSheet.create({
     paddingBottom: '20%',
   },
   brandBlock: { alignItems: 'center' },
+  logo: {
+    width: 180,
+    height: 72,
+    marginBottom: spacing.lg,
+  },
   brand: {
     ...typography.display,
     color: colors.onSurface,

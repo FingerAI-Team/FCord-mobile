@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Image,
 } from 'react-native';
 import { useAuthStore } from '../../stores/authStore';
 import { MOCK_LOGIN_HINT } from '../../auth';
@@ -43,16 +44,20 @@ export function LoginScreen(): React.ReactElement {
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      {/* Top brand bar (Stitch: VocalLog → IBK STT로 교정) */}
+      {/* Top brand bar */}
       <View style={styles.topBar}>
-        <Text style={styles.brandWordmark}>IBK STT</Text>
+        <Image
+          source={require('../../../assets/ibk_logo_big.png')}
+          style={styles.topBarLogo}
+          resizeMode="contain"
+        />
         <View style={styles.profileChip} />
       </View>
 
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         {/* Heading section */}
         <View style={styles.headingSection}>
-          <Text style={styles.brandLabel}>IBK STT</Text>
+          <Text style={styles.brandLabel}>IBKS 음성회의록</Text>
           <Text style={styles.title}>로그인</Text>
           <Text style={styles.subtitle}>사내 SSO 계정으로 시작하세요</Text>
         </View>
@@ -63,7 +68,7 @@ export function LoginScreen(): React.ReactElement {
           onPress={onSSOPress}
           disabled={isSubmitting}
           accessibilityRole="button"
-          accessibilityLabel="IBK 사내 SSO로 로그인"
+          accessibilityLabel="IBKS 음성회의록 사내 SSO로 로그인"
         >
           {isSubmitting ? (
             <ActivityIndicator color={colors.onPrimary} />
@@ -192,10 +197,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: colors.background,
   },
-  brandWordmark: {
-    ...typography.heading,
-    color: colors.primary,
-    fontWeight: '800',
+  topBarLogo: {
+    width: 80,
+    height: 32,
   },
   profileChip: {
     width: 32, height: 32, borderRadius: radius.full,

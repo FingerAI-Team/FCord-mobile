@@ -172,7 +172,7 @@ export function RecordingScreen(): React.ReactElement {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalSheet}>
-            <Text style={styles.modalTitle}>녹음 저장</Text>
+            <Text style={styles.modalTitle}>회의 종료</Text>
             <TextInput
               style={styles.titleInput}
               value={title}
@@ -189,9 +189,9 @@ export function RecordingScreen(): React.ReactElement {
                 style={[styles.modalSaveBtn, isSaving && { opacity: 0.6 }]}
                 onPress={onSave}
                 disabled={isSaving}
-                accessibilityLabel={isSaving ? '저장 중' : '저장'}
+                accessibilityLabel={isSaving ? '저장 중' : '회의종료'}
               >
-                <Text style={styles.modalSaveText}>{isSaving ? '저장 중...' : '저장'}</Text>
+                <Text style={styles.modalSaveText}>{isSaving ? '저장 중...' : '회의종료'}</Text>
               </TouchableOpacity>
             </View>
           </View>

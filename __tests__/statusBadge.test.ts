@@ -12,26 +12,26 @@ interface BadgeConfig {
 // statusBadge.tsx의 BADGE_MAP과 동일 (UI 없이 순수 매핑 테스트)
 const BADGE_MAP: Record<Track, Record<string, BadgeConfig>> = {
   recording: {
-    saved_local: { label: '저장됨', backgroundColor: '#E5E7EB', textColor: '#374151' },
-    recording:   { label: '녹음 중', backgroundColor: '#FEE2E2', textColor: '#991B1B' },
-    paused:      { label: '일시정지', backgroundColor: '#FEF3C7', textColor: '#92400E' },
-    draft:       { label: '초안', backgroundColor: '#F3F4F6', textColor: '#6B7280' },
+    saved_local: { label: '생성 완료', backgroundColor: '#ECFDF5', textColor: '#059669' },
+    recording:   { label: '생성 중',   backgroundColor: '#FEE2E2', textColor: '#DC2626' },
+    paused:      { label: '일시정지',  backgroundColor: '#FEF3C7', textColor: '#D97706' },
+    draft:       { label: '초안',      backgroundColor: '#F3F4F6', textColor: '#6B7280' },
   },
   upload: {
     not_started: { label: '업로드 대기', backgroundColor: '#F3F4F6', textColor: '#6B7280' },
-    queued:      { label: '업로드 예정', backgroundColor: '#EFF6FF', textColor: '#1D4ED8' },
+    queued:      { label: '업로드 예정', backgroundColor: '#EFF6FF', textColor: '#2563EB' },
     uploading:   { label: '업로드 중',   backgroundColor: '#DBEAFE', textColor: '#1D4ED8' },
-    uploaded:    { label: '업로드 완료', backgroundColor: '#D1FAE5', textColor: '#065F46' },
-    failed:      { label: '업로드 실패', backgroundColor: '#FEE2E2', textColor: '#991B1B' },
-    retrying:    { label: '재시도 중',   backgroundColor: '#FEF3C7', textColor: '#92400E' },
+    uploaded:    { label: '업로드 완료', backgroundColor: '#ECFDF5', textColor: '#059669' },
+    failed:      { label: '업로드 실패', backgroundColor: '#FEE2E2', textColor: '#DC2626' },
+    retrying:    { label: '재시도 중',   backgroundColor: '#FEF3C7', textColor: '#D97706' },
   },
   transcription: {
-    not_requested: { label: 'STT 대기',    backgroundColor: '#F3F4F6', textColor: '#6B7280' },
-    queued:        { label: 'STT 예정',    backgroundColor: '#EDE9FE', textColor: '#5B21B6' },
-    processing:    { label: 'STT 처리 중', backgroundColor: '#EDE9FE', textColor: '#5B21B6' },
-    completed:     { label: '전사 완료',   backgroundColor: '#D1FAE5', textColor: '#065F46' },
-    failed:        { label: 'STT 실패',    backgroundColor: '#FEE2E2', textColor: '#991B1B' },
-    cancelled:     { label: '취소됨',      backgroundColor: '#F3F4F6', textColor: '#6B7280' },
+    not_requested: { label: '변환 대기',      backgroundColor: '#F3F4F6', textColor: '#6B7280' },
+    queued:        { label: '변환 예정',      backgroundColor: '#EDE9FE', textColor: '#7C3AED' },
+    processing:    { label: '음성파일 변환중', backgroundColor: '#EDE9FE', textColor: '#7C3AED' },
+    completed:     { label: '변환 완료',      backgroundColor: '#ECFDF5', textColor: '#059669' },
+    failed:        { label: '변환 실패',      backgroundColor: '#FEE2E2', textColor: '#DC2626' },
+    cancelled:     { label: '취소됨',         backgroundColor: '#F3F4F6', textColor: '#6B7280' },
   },
 };
 
@@ -62,7 +62,7 @@ describe('3-track 배지 렌더 — 스펙 §배지 명세 검증', () => {
     });
     it('uploaded → "업로드 완료" 초록 배경', () => {
       expect(BADGE_MAP.upload.uploaded.label).toBe('업로드 완료');
-      expect(BADGE_MAP.upload.uploaded.backgroundColor).toBe('#D1FAE5');
+      expect(BADGE_MAP.upload.uploaded.backgroundColor).toBe('#ECFDF5');
     });
     it('failed → "업로드 실패" 빨간 배경', () => {
       expect(BADGE_MAP.upload.failed.label).toBe('업로드 실패');
@@ -75,17 +75,26 @@ describe('3-track 배지 렌더 — 스펙 §배지 명세 검증', () => {
   });
 
   describe('transcription track 배지', () => {
-    it('processing → "STT 처리 중" 보라 배경', () => {
-      expect(BADGE_MAP.transcription.processing.label).toBe('STT 처리 중');
+    it('processing → "음성파일 변환중" 보라 배경', () => {
+      expect(BADGE_MAP.transcription.processing.label).toBe('음성파일 변환중');
       expect(BADGE_MAP.transcription.processing.backgroundColor).toBe('#EDE9FE');
     });
-    it('completed → "전사 완료" 초록 배경', () => {
-      expect(BADGE_MAP.transcription.completed.label).toBe('전사 완료');
-      expect(BADGE_MAP.transcription.completed.backgroundColor).toBe('#D1FAE5');
+    it('completed → "변환 완료" 초록 배경', () => {
+      expect(BADGE_MAP.transcription.completed.label).toBe('변환 완료');
+      expect(BADGE_MAP.transcription.completed.backgroundColor).toBe('#ECFDF5');
     });
-    it('failed → "STT 실패" 빨간 배경', () => {
-      expect(BADGE_MAP.transcription.failed.label).toBe('STT 실패');
+    it('failed → "변환 실패" 빨간 배경', () => {
+      expect(BADGE_MAP.transcription.failed.label).toBe('변환 실패');
       expect(BADGE_MAP.transcription.failed.backgroundColor).toBe('#FEE2E2');
+    });
+  });
+
+  describe('recording track 배지 (v4 리브랜딩)', () => {
+    it('saved_local → "생성 완료" 초록 배경', () => {
+      expect(BADGE_MAP.recording.saved_local.label).toBe('생성 완료');
+    });
+    it('recording → "생성 중" 빨간 배경', () => {
+      expect(BADGE_MAP.recording.recording.label).toBe('생성 중');
     });
   });
 
