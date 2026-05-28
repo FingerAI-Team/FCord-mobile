@@ -1,27 +1,26 @@
 import { AuthProvider } from './types';
 import { MockSSOProvider } from './providers/mockSsoProvider';
 import { IBKSSOProvider } from './providers/ibkSsoProvider';
+import { FAICORDAuthProvider } from './providers/faicordAuthProvider';
 
-// 빌드/런타임에 따라 인증 어댑터를 선택.
-// - 기본: mock (현재 IBK SSO 사양 미수령)
-// - process.env.AUTH_PROVIDER='ibk' 으로 전환 가능
-//
-// 실제 IBK 연동 시작 시:
-//   1) .env에 AUTH_PROVIDER=ibk
-//   2) IBK_SSO_AUTHORIZE_URL, IBK_SSO_TOKEN_EXCHANGE_URL 등 env 추가
-//   3) 아래 buildIBK() 활성화
+// AUTH_PROVIDER env:
+//   'faicord' (기본) — faicord.fingerservice.co.kr 실서버 연동
+//   'mock'          — 로컬 목 로그인 (서버 불필요)
+//   'ibk'           — IBK SSO (사양 수령 후)
 
 let cached: AuthProvider | null = null;
 
 export function getAuthProvider(): AuthProvider {
   if (cached) return cached;
 
-  const choice = (process.env.AUTH_PROVIDER ?? 'mock').toLowerCase();
+  const choice = (process.env.AUTH_PROVIDER ?? 'faicord').toLowerCase();
 
   if (choice === 'ibk') {
     cached = buildIBK();
-  } else {
+  } else if (choice === 'mock') {
     cached = new MockSSOProvider();
+  } else {
+    cached = new FAICORDAuthProvider();
   }
   return cached;
 }

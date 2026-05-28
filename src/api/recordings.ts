@@ -1,85 +1,199 @@
-import { ServerRecordingCache, TranscriptSegment } from '../types';
-import { apiRequest } from './client';
+// FAICORD API 연동 레이어
+// FAICORD 응답 → 앱 내부 타입(ServerRecordingCache / TranscriptSegment) 변환
+import { ServerRecordingCache, TranscriptSegment, TranscriptionState } from '../types';
+import { apiRequest, apiUpload } from './client';
 
+// ─── FAICORD 응답 타입 ───────────────────────────────────────────────────────
+
+interface FaicordMeetingItem {
+  confId: string;
+  subject: string;
+  createDt: string;       // "2026-05-27T14:22:00"
+  participant: string;
+}
+
+interface FaicordMeetingDetail {
+  meetingId: string;
+  title: string;
+  date: string;
+  time: string;
+  endTime: string | null;
+  location: string | null;
+  memo: string | null;
+  participants: string[];
+  summary: string | null;
+  statusCode: string | null;
+  activeSummaryType: string | null;
+}
+
+interface FaicordTranscriptSegment {
+  speaker: string;
+  text: string;
+  start: string;    // "00:00:00.00"
+  end: string;
+  sequence_index: number;
+}
+
+// ─── statusCode 매핑 ────────────────────────────────────────────────────────
+// "000" = 변환 완료 확인됨 (transcript 데이터 있음)
+// null / "" = 업로드 완료, 변환 미요청 또는 대기
+// 기타 = 처리 중 또는 실패 (추후 정밀화)
+
+function mapStatusCode(code: string | null): TranscriptionState {
+  if (code === '000') return 'completed';
+  if (!code || code === '') return 'not_requested';
+  if (code.startsWith('9')) return 'failed';
+  return 'processing';
+}
+
+// ─── HH:MM:SS.ss → ms 변환 ──────────────────────────────────────────────────
+function timeToMs(t: string): number {
+  const [hms, frac = '0'] = t.split('.');
+  const [h, m, s] = hms.split(':').map(Number);
+  return (h * 3600 + m * 60 + s) * 1000 + Math.round(Number(`0.${frac}`) * 1000);
+}
+
+// ─── FAICORD 응답 → ServerRecordingCache ────────────────────────────────────
+function toCache(item: FaicordMeetingItem): ServerRecordingCache {
+  const ts = new Date(item.createDt).getTime();
+  return {
+    id: item.confId,
+    title: item.subject,
+    tags: [],
+    note: undefined,
+    uploadState: 'uploaded',
+    transcriptionState: 'completed',  // 목록에 나온다 = 처리 완료로 가정
+    recordingState: 'saved_local',
+    createdAt: ts,
+    updatedAt: ts,
+    cachedAt: Date.now(),
+  };
+}
+
+// ─── 회의 목록 ───────────────────────────────────────────────────────────────
 interface RecordingListResponse {
   items: ServerRecordingCache[];
   next_cursor?: string;
 }
 
-interface CreateDraftBody {
-  title: string;
-  note?: string;
-  tags?: string[];
-  language_hint?: string;
-  duration_ms: number;
-  file_size_bytes: number;
-}
-
-export async function createRecordingDraft(body: CreateDraftBody): Promise<{ id: string }> {
-  return apiRequest('POST', '/v1/recordings', body);
-}
-
-export async function getRecordingList(params: {
+export async function getRecordingList(_params: {
   filter?: string;
   sort?: string;
   cursor?: string;
   limit?: number;
 }): Promise<RecordingListResponse> {
-  const qs = new URLSearchParams();
-  if (params.filter && params.filter !== 'all') qs.set('status', params.filter);
-  if (params.sort) qs.set('sort', params.sort);
-  if (params.cursor) qs.set('cursor', params.cursor);
-  qs.set('limit', String(params.limit ?? 20));
-  return apiRequest('GET', `/v1/recordings?${qs}`);
+  const raw = await apiRequest<FaicordMeetingItem[]>('GET', '/api/meetings');
+  const items = (raw ?? []).map(toCache);
+  return { items, next_cursor: undefined };
 }
+
+// ─── 회의 상세 (statusCode 포함) ─────────────────────────────────────────────
+export async function getMeetingDetail(id: string): Promise<ServerRecordingCache | null> {
+  const res = await apiRequest<{ success: boolean; meeting: FaicordMeetingDetail }>(
+    'GET',
+    `/api/meetings/${id}`,
+  );
+  if (!res?.success || !res.meeting) return null;
+  const m = res.meeting;
+  const ts = new Date(`${m.date}T${m.time}`).getTime();
+  return {
+    id: m.meetingId,
+    title: m.title,
+    note: m.memo ?? undefined,
+    tags: [],
+    uploadState: 'uploaded',
+    transcriptionState: mapStatusCode(m.statusCode),
+    recordingState: 'saved_local',
+    createdAt: ts,
+    updatedAt: ts,
+    cachedAt: Date.now(),
+    transcriptPreview: m.summary ?? undefined,
+  };
+}
+
+// ─── 전사 결과 조회 ──────────────────────────────────────────────────────────
+export async function getTranscript(
+  recordingId: string,
+): Promise<(TranscriptSegment & { id?: string })[]> {
+  const raw = await apiRequest<FaicordTranscriptSegment[]>(
+    'GET',
+    `/api/meetings/transcript/${recordingId}`,
+  );
+  return (raw ?? []).map((seg) => ({
+    id: `seg-${seg.sequence_index}`,
+    speakerLabel: seg.speaker,
+    text: seg.text,
+    startMs: timeToMs(seg.start),
+    endMs: timeToMs(seg.end),
+    confidenceAvg: 0, // FAICORD는 신뢰도 점수 미제공
+  }));
+}
+
+// ─── 음성 파일 업로드 ────────────────────────────────────────────────────────
+export async function uploadRecording(
+  fileUri: string,
+  fileName: string,
+  mimeType: string = 'audio/m4a',
+): Promise<{ confId: string }> {
+  const formData = new FormData();
+  formData.append('file', { uri: fileUri, name: fileName, type: mimeType } as any);
+  return apiUpload<{ confId: string }>('/upload', formData);
+}
+
+// ─── 회의 저장 (draft 생성 → 업로드) ────────────────────────────────────────
+// RecordingScreen에서 호출. fileUri가 없으면 빈 draft만 생성.
+export async function createRecordingDraft(body: {
+  title: string;
+  duration_ms: number;
+  file_size_bytes: number;
+  fileUri?: string;
+  fileName?: string;
+}): Promise<{ id: string }> {
+  if (body.fileUri && body.fileName) {
+    const res = await uploadRecording(body.fileUri, body.fileName);
+    return { id: res.confId };
+  }
+  // 파일 없이 title만 생성하는 draft — FAICORD에 해당 엔드포인트 없으므로 임시 ID 반환
+  return { id: `draft-${Date.now()}` };
+}
+
+// ─── 메타 수정, 삭제, 재처리 (FAICORD 엔드포인트 확인 전 stub) ──────────────
 
 export async function updateRecordingMeta(
-  id: string,
-  patch: Partial<Pick<ServerRecordingCache, 'title' | 'note' | 'tags' | 'languageHint'>>,
+  _id: string,
+  _patch: Partial<Pick<ServerRecordingCache, 'title' | 'note' | 'tags'>>,
 ): Promise<void> {
-  await apiRequest('PATCH', `/v1/recordings/${id}`, patch);
+  // TODO: FAICORD 엔드포인트 확인 후 구현
 }
 
-export async function softDeleteRecording(id: string): Promise<void> {
-  await apiRequest('DELETE', `/v1/recordings/${id}`);
+export async function softDeleteRecording(_id: string): Promise<void> {
+  // TODO: FAICORD 삭제 엔드포인트 확인 후 구현
 }
 
-export async function requestTranscription(recordingId: string): Promise<{ transcriptionId: string }> {
-  // provider 필드 포함하지 않음 — 서버가 라우팅 (가드레일)
-  return apiRequest('POST', `/v1/recordings/${recordingId}/transcriptions`, {});
+export async function requestTranscription(_recordingId: string): Promise<{ transcriptionId: string }> {
+  return { transcriptionId: _recordingId };
 }
 
 export async function retryTranscription(transcriptionId: string): Promise<void> {
-  await apiRequest('POST', `/v1/transcriptions/${transcriptionId}/retry`, {});
+  await apiRequest('POST', `/api/meetings/transcript/${transcriptionId}/regenerate`, {});
 }
 
 export async function searchRecordings(params: {
   q: string;
-  field: string;
   limit?: number;
 }): Promise<{ items: ServerRecordingCache[] }> {
-  const qs = new URLSearchParams();
-  qs.set('q', params.q);
-  qs.set('field', params.field);
-  qs.set('limit', String(params.limit ?? 20));
-  return apiRequest('GET', `/v1/recordings/search?${qs}`);
-}
-
-// 전사 결과 조회
-export async function getTranscript(
-  recordingId: string
-): Promise<(TranscriptSegment & { id?: string })[]> {
-  const res = await apiRequest<{ segments: (TranscriptSegment & { id?: string })[] }>(
+  const qs = new URLSearchParams({ keyword: params.q });
+  const raw = await apiRequest<FaicordMeetingItem[]>(
     'GET',
-    `/v1/recordings/${recordingId}/transcript`
+    `/api/meetings/minutes?${qs}`,
   );
-  return res.segments ?? [];
+  return { items: (raw ?? []).map(toCache) };
 }
 
-// 전사 편집본 저장
+// 전사 편집 저장 (FAICORD 엔드포인트 확인 전 no-op)
 export async function saveTranscriptEdits(
-  recordingId: string,
-  segments: (TranscriptSegment & { id: string })[]
+  _recordingId: string,
+  _segments: (TranscriptSegment & { id: string })[],
 ): Promise<void> {
-  await apiRequest('PATCH', `/v1/recordings/${recordingId}/transcript`, { segments });
+  // TODO: FAICORD 편집 저장 엔드포인트 확인 후 구현
 }
