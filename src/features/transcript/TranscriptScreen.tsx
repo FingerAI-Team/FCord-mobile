@@ -75,7 +75,7 @@ export function TranscriptScreen({ navigation, route }: Props): React.ReactEleme
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
           <Text style={styles.backIcon}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>전사 결과</Text>
+        <Text style={styles.headerTitle} numberOfLines={1}>음성 변환 내용</Text>
         <TouchableOpacity
           onPress={editMode ? onSave : toggleEditMode}
           style={styles.editBtn}
@@ -85,6 +85,14 @@ export function TranscriptScreen({ navigation, route }: Props): React.ReactEleme
             {editMode ? '저장' : '편집'}
           </Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.noticeBanner}>
+        <Text style={styles.noticeIcon}>🔒</Text>
+        <Text style={styles.noticeText}>
+          자동 생성된 회의록은 개인정보 보호를 위해{' '}
+          <Text style={styles.noticeBold}>내부망 PC</Text>에서만 조회 가능합니다.
+        </Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.list}>
@@ -189,4 +197,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  noticeBanner: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    padding: 10,
+    margin: 12,
+    borderRadius: 8,
+    backgroundColor: '#fff7ed',
+    borderWidth: 1,
+    borderColor: '#fdba74',
+  },
+  noticeIcon: { fontSize: 14, lineHeight: 16 },
+  noticeText: { flex: 1, fontSize: 11, color: '#9a3412', lineHeight: 16 },
+  noticeBold: { fontWeight: '800' },
 });

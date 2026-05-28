@@ -26,6 +26,18 @@ interface Props {
   route: { params: { id: string; queueId?: string } };
 }
 
+function InternalOnlyBanner(): React.ReactElement {
+  return (
+    <View style={styles.noticeBanner}>
+      <Text style={styles.noticeIcon}>🔒</Text>
+      <Text style={styles.noticeText}>
+        자동 생성된 회의록은 개인정보 보호를 위해{' '}
+        <Text style={styles.noticeBold}>내부망 PC</Text>에서만 조회 가능합니다.
+      </Text>
+    </View>
+  );
+}
+
 function UploadProgressSection({ recordingId }: { recordingId: string }): React.ReactElement | null {
   const { percent, etaSeconds } = useUploadProgress(recordingId);
   if (percent === 0) return null;
@@ -188,6 +200,9 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
           {dateStr} {timeStr}{durationStr ? `  ·  ${durationStr}` : ''}
         </Text>
       </View>
+
+      {/* ── 내부망 안내 배너 ── */}
+      <InternalOnlyBanner />
 
       {/* ── 3-track 상태 카드 ── */}
       <View style={styles.statusCard}>
@@ -409,4 +424,21 @@ const styles = StyleSheet.create({
   // ── 삭제 버튼 ──
   deleteBtn: { alignSelf: 'center', paddingVertical: 16, paddingHorizontal: 24 },
   deleteBtnText: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#DC2626', opacity: 0.7 },
+
+  // ── 내부망 안내 배너 ──
+  noticeBanner: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    padding: 10,
+    marginHorizontal: 16,
+    marginBottom: 12,
+    borderRadius: 8,
+    backgroundColor: '#fff7ed',
+    borderWidth: 1,
+    borderColor: '#fdba74',
+  },
+  noticeIcon: { fontSize: 14, lineHeight: 16 },
+  noticeText: { flex: 1, fontSize: 11, color: '#9a3412', lineHeight: 16 },
+  noticeBold: { fontWeight: '800' },
 });
