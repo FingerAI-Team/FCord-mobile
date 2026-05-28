@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Modal,
   Animated,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors, spacing, radius, typography } from '../../theme/tokens';
@@ -93,7 +94,23 @@ export function RecordingScreen(): React.ReactElement {
     }
   };
 
-  const onCancelSave = () => setSaveModalVisible(false);
+  const onCancelSave = () => {
+    Alert.alert(
+      '회의가 저장되지 않습니다',
+      '취소하면 지금까지 녹음한 내용이 모두 삭제됩니다. 계속하시겠습니까?',
+      [
+        { text: '계속 녹음', style: 'cancel' },
+        {
+          text: '취소하고 종료',
+          style: 'destructive',
+          onPress: () => {
+            setSaveModalVisible(false);
+            navigation.goBack();
+          },
+        },
+      ],
+    );
+  };
 
   return (
     <View style={styles.container}>

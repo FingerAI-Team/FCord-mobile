@@ -1,6 +1,6 @@
 // src/features/recordings/recordingCard.tsx
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActionSheetIOS, Alert, Platform } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { ServerRecordingCache } from '../../types';
 import { StatusBadge } from './statusBadge';
@@ -36,6 +36,21 @@ function UploadProgressBar({ recordingId }: { recordingId: string }): React.Reac
 }
 
 export function RecordingCard({ item, onPress, onDelete }: Props): React.ReactElement {
+  const openMenu = () => {
+    const opts = ['취소', '즐겨찾기', '폴더 이동', '삭제'];
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        { options: opts, destructiveButtonIndex: 3, cancelButtonIndex: 0 },
+        (idx) => { if (idx === 3) onDelete(); },
+      );
+    } else {
+      Alert.alert('회의 옵션', '', [
+        { text: '취소', style: 'cancel' },
+        { text: '삭제', style: 'destructive', onPress: onDelete },
+      ]);
+    }
+  };
+
   const renderRightActions = () => (
     <TouchableOpacity
       style={styles.deleteAction}
@@ -61,7 +76,14 @@ export function RecordingCard({ item, onPress, onDelete }: Props): React.ReactEl
             <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
             <Text style={styles.meta}>{formatDate(item.createdAt)} | {formatDuration(item.durationMs)}</Text>
           </View>
-          <Text style={styles.moreIcon}>⋮</Text>
+          <TouchableOpacity
+            onPress={openMenu}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityLabel={`${item.title} 더보기 메뉴`}
+            accessibilityRole="button"
+          >
+            <Text style={styles.moreIcon}>⋮</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.badges}>
           <StatusBadge track="recording" state={item.recordingState} />
