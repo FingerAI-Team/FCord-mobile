@@ -76,15 +76,7 @@ export function TranscriptScreen({ navigation, route }: Props): React.ReactEleme
           <Text style={styles.backIcon}>←</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>음성 변환 내용</Text>
-        <TouchableOpacity
-          onPress={editMode ? onSave : toggleEditMode}
-          style={styles.editBtn}
-          accessibilityLabel={editMode ? '저장' : '편집'}
-        >
-          <Text style={[styles.editBtnText, editMode && styles.editBtnSave]}>
-            {editMode ? '저장' : '편집'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.editBtnPlaceholder} />
       </View>
 
       <View style={styles.noticeBanner}>
@@ -93,6 +85,23 @@ export function TranscriptScreen({ navigation, route }: Props): React.ReactEleme
           자동 생성된 회의록은 개인정보 보호를 위해{' '}
           <Text style={styles.noticeBold}>내부망 PC</Text>에서만 조회 가능합니다.
         </Text>
+      </View>
+
+      <View style={styles.toolbar}>
+        <TouchableOpacity style={styles.toolBtn} accessibilityLabel="검색" accessibilityRole="button">
+          <Text style={styles.toolBtnText}>🔍 검색</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.toolBtn}
+          onPress={editMode ? onSave : toggleEditMode}
+          accessibilityLabel={editMode ? '편집 저장' : '편집'}
+          accessibilityRole="button"
+        >
+          <Text style={styles.toolBtnText}>{editMode ? '💾 저장' : '✏️ 편집'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.toolBtn} accessibilityLabel="내보내기" accessibilityRole="button">
+          <Text style={styles.toolBtnText}>📤 내보내기</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.list}>
@@ -197,6 +206,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  toolbar: {
+    flexDirection: 'row',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingBottom: 8,
+    backgroundColor: colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+  },
+  toolBtn: {
+    flex: 1,
+    backgroundColor: colors.surfaceLight,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    borderRadius: 6,
+    paddingVertical: 6,
+    alignItems: 'center',
+  },
+  toolBtnText: { fontSize: 10, fontWeight: '700', color: colors.secondary },
+  editBtnPlaceholder: { width: 40 },
   noticeBanner: {
     flexDirection: 'row',
     alignItems: 'flex-start',
