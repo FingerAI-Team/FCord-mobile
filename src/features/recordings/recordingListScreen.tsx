@@ -6,8 +6,11 @@ import {
   TouchableOpacity,
   Text,
   Alert,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { useRecordingListStore } from '../../stores/recordingListStore';
 import { useAuthStore } from '../../stores/authStore';
 import { getRecordingList, softDeleteRecording } from '../../api/recordings';
@@ -15,6 +18,8 @@ import { ServerRecordingCache, SortType, FilterType } from '../../types';
 import { RecordingCard } from './recordingCard';
 import { DeleteConfirmModal } from './deleteConfirmModal';
 import { EMPTY_MESSAGES } from './recordingListConfig';
+import { AppTopBar } from '../../components/AppTopBar';
+import { resolveFabNavRoute } from '../../navigation/tabBarConfig';
 
 export { EMPTY_MESSAGES };
 
@@ -41,6 +46,33 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
   const onToggleSort = () => setSort(sort === 'recent' ? 'duration' : 'recent');
 
   const [deleteTarget, setDeleteTarget] = useState<ServerRecordingCache | null>(null);
+
+  const onFabPress = async () => {
+    let granted = false;
+    if (Platform.OS === 'ios') {
+      const current = await check(PERMISSIONS.IOS.MICROPHONE);
+      if (current === RESULTS.GRANTED) {
+        granted = true;
+      } else {
+        const result = await request(PERMISSIONS.IOS.MICROPHONE);
+        granted = result === RESULTS.GRANTED;
+      }
+    } else {
+      const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, {
+        title: '마이크 권한 필요',
+        message: '녹음을 위해 마이크 접근 권한이 필요합니다.',
+        buttonPositive: '허용',
+        buttonNegative: '거부',
+      });
+      granted = result === PermissionsAndroid.RESULTS.GRANTED;
+    }
+    const route = resolveFabNavRoute(granted);
+    if (route === 'permission_denied') {
+      Alert.alert('권한 필요', '마이크 권한이 필요합니다. 설정에서 허용해주세요.');
+      return;
+    }
+    navigation.navigate(route as never);
+  };
 
   const loadList = useCallback(
     async (cursor?: string) => {
@@ -112,6 +144,8 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      <AppTopBar title="IBKS 음성회의록" active="home" />
+
       {/* 인사말 헤더 */}
       <View style={styles.homeHeader}>
         <Text style={styles.greetingMeta}>오늘 회의 {items.length}건</Text>
@@ -163,6 +197,16 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
         onConfirm={onDeleteConfirm}
         onCancel={() => setDeleteTarget(null)}
       />
+
+      {/* 플로팅 녹음 시작 버튼 */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={onFabPress}
+        accessibilityLabel="녹음 시작"
+        accessibilityRole="button"
+      >
+        <Text style={styles.fabIcon}>🎙</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -219,4 +263,21 @@ const styles = StyleSheet.create({
   emptyContainer: { alignItems: 'center', paddingTop: 100 },
   emptyText: { fontSize: 15, color: '#9CA3AF' },
   emptyList: { flexGrow: 1 },
+  fab: {
+    position: 'absolute',
+    bottom: 32,
+    alignSelf: 'center',
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#EF4444',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#EF4444',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  fabIcon: { fontSize: 26 },
 });

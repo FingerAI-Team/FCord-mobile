@@ -20,6 +20,7 @@ import { RetryUploadButton, RetryTranscriptionButton } from './retryButtons';
 import { DeleteConfirmModal } from './deleteConfirmModal';
 import { useUploadProgress } from '../upload/useUploadProgress';
 import { resolveDetailActions, shouldSaveTitle } from './recordingDetailUtils';
+import { AppTopBar } from '../../components/AppTopBar';
 
 interface Props {
   navigation: any;
@@ -167,7 +168,9 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
     : null;
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <View style={styles.container}>
+    <AppTopBar title="회의 상세" showBack />
+    <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
 
       {/* ── 제목 섹션 ── */}
       <View style={styles.titleSection}>
@@ -323,12 +326,14 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
         onCancel={() => setShowDeleteModal(false)}
       />
     </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   // ── 레이아웃 기본 ──
   container: { flex: 1, backgroundColor: '#FFFFFF' },
+  scrollView: { flex: 1 },
   content: { paddingTop: 24, paddingBottom: 60 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   notFound: { fontSize: 15, color: '#9CA3AF' },

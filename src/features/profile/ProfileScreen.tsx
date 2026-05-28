@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../stores/authStore';
 import { colors } from '../../theme/tokens';
+import { AppTopBar } from '../../components/AppTopBar';
 
 interface SettingRow {
   id: string;
@@ -72,7 +73,7 @@ export function ProfileScreen(): React.ReactElement {
     {
       title: '알림',
       data: [
-        { id: 'notify_done', label: '전사 완료 알림', toggle: true },
+        { id: 'notify_done', label: '변환 완료 알림', toggle: true },
         { id: 'notify_fail', label: '업로드 실패 알림', toggle: true },
       ],
     },
@@ -96,6 +97,8 @@ export function ProfileScreen(): React.ReactElement {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      <AppTopBar title="설정" active="settings" />
+
       {/* 아바타 헤더 */}
       <View style={{ alignItems: 'center', paddingTop: 32, paddingBottom: 32, paddingHorizontal: 24 }}>
         <View style={{ width: 72, height: 72, borderRadius: 9999, backgroundColor: '#141b2b', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>

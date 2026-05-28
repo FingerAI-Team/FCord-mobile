@@ -17,8 +17,9 @@ export type BottomTabParamList = {
 };
 
 export type MainStackParamList = {
-  Tabs: NavigatorScreenParams<BottomTabParamList>;
-  RecordingDetail: { id: string };
+  Home: undefined;
+  Settings: undefined;
+  RecordingDetail: { id: string; queueId?: string };
   Transcript: { id: string };
   RecordingModal: undefined;
 };
