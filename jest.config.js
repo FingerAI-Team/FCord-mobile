@@ -7,6 +7,7 @@ module.exports = {
     '^react-native$': '<rootDir>/__mocks__/react-native.ts',
     // react-native-keychain은 명시적 모킹 (다른 react-native-* 보다 우선 매칭)
     '^react-native-keychain$': '<rootDir>/__mocks__/react-native-keychain.ts',
+    '^react-native-safe-area-context$': '<rootDir>/__mocks__/react-native-safe-area-context.ts',
     '^react-native-(.*)$': '<rootDir>/__mocks__/react-native-stub.ts',
     '^@nozbe/watermelondb(.*)$': '<rootDir>/__mocks__/watermelondb.ts',
     '^@react-native-community/(.*)$': '<rootDir>/__mocks__/react-native-stub.ts',

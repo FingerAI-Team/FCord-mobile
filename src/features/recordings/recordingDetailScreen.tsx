@@ -8,6 +8,7 @@ import {
   Alert,
   TextInput,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Q } from '@nozbe/watermelondb';
 import { database } from '../../db/database';
 import { LocalRecordingModel } from '../../db/models/LocalRecordingModel';
@@ -168,7 +169,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
     : null;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
     <AppTopBar title="회의 상세" showBack />
     <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
 
@@ -326,7 +327,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
         onCancel={() => setShowDeleteModal(false)}
       />
     </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

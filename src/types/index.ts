@@ -42,6 +42,7 @@ export interface PresignedUrlCache {
 
 export interface ServerRecordingCache {
   id: string;
+  transcriptionId?: string;
   title: string;
   note?: string;
   tags: string[];

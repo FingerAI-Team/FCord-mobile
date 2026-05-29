@@ -133,11 +133,16 @@ export async function getTranscript(
 export async function uploadRecording(
   fileUri: string,
   fileName: string,
-  mimeType: string = 'audio/m4a',
+  mimeType: string = 'audio/mp4',
 ): Promise<{ confId: string }> {
   const formData = new FormData();
   formData.append('file', { uri: fileUri, name: fileName, type: mimeType } as any);
-  return apiUpload<{ confId: string }>('/upload', formData);
+  const res = await apiUpload<{ success: boolean; meetingId: string }>(
+    '/api/meetings/upload',
+    formData,
+  );
+  if (!res.success || !res.meetingId) throw new Error('업로드 응답 오류');
+  return { confId: res.meetingId };
 }
 
 // ─── 회의 저장 (draft 생성 → 업로드) ────────────────────────────────────────

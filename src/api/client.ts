@@ -38,13 +38,14 @@ export async function apiRequest<T>(
   return JSON.parse(text) as T;
 }
 
-// multipart 파일 업로드 전용 (FAICORD POST /upload)
+// multipart 파일 업로드 전용 (FAICORD POST /api/meetings/upload)
+// FAICORD 업로드는 sessionid 쿠키 인증 필요 — token 헤더 미지원
 export async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
   const token = await getAccessToken();
   const res = await fetch(`${BASE_URL}${path}`, {
     method: 'POST',
     headers: {
-      ...(token ? { token } : {}),
+      ...(token ? { token, Cookie: `sessionid=${token}` } : {}),
     },
     credentials: 'include',
     body: formData,

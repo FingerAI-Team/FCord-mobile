@@ -35,6 +35,10 @@ export const StyleSheet = {
   flatten: (style: unknown) => style,
 };
 export const Alert = { alert: jest.fn() };
+export const AppState = {
+  addEventListener: jest.fn((_event: string, _handler: (state: string) => void) => ({ remove: jest.fn() })),
+  currentState: 'active',
+};
 export const Switch = (props: Record<string, unknown>) =>
   React.createElement('Switch', props);
 export const TextInput = (props: Record<string, unknown>) =>
@@ -49,6 +53,8 @@ export const Modal = (props: React.PropsWithChildren<Record<string, unknown>>) =
   React.createElement('Modal', props);
 export const KeyboardAvoidingView = (props: React.PropsWithChildren<Record<string, unknown>>) =>
   React.createElement('KeyboardAvoidingView', props);
+export const Image = (props: Record<string, unknown>) =>
+  React.createElement('Image', props);
 export const Animated = {
   View: (props: React.PropsWithChildren<Record<string, unknown>>) =>
     React.createElement('Animated.View', props),
@@ -62,6 +68,7 @@ export default {
   Platform,
   Dimensions,
   PermissionsAndroid,
+  AppState,
   View,
   ActivityIndicator,
   Text,
@@ -75,5 +82,6 @@ export default {
   ScrollView,
   Modal,
   KeyboardAvoidingView,
+  Image,
   Animated,
 };

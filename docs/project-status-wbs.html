@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBK STT Mobile App — Project Status WBS</title>
+<style>
+  :root {
+    --bg: #FAFAFA;
+    --card: #FFFFFF;
+    --border: #E5E7EB;
+    --text: #111827;
+    --text-mute: #6B7280;
+    --text-faint: #9CA3AF;
+    --done: #10B981;
+    --done-bg: #D1FAE5;
+    --progress: #3B82F6;
+    --progress-bg: #DBEAFE;
+    --planned: #9CA3AF;
+    --planned-bg: #F3F4F6;
+    --blocked: #EF4444;
+    --blocked-bg: #FEE2E2;
+    --accent: #111827;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Text", "Pretendard", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 32px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+
+  header { margin-bottom: 32px; }
+  header h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+  header .meta { color: var(--text-mute); font-size: 13px; margin-top: 4px; }
+  header .meta strong { color: var(--text); font-weight: 500; }
+
+  /* KPI */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .kpi .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-mute);
+    font-weight: 500;
+  }
+  .kpi .value {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-top: 8px;
+    line-height: 1.1;
+  }
+  .kpi .sub { font-size: 12px; color: var(--text-faint); margin-top: 4px; }
+  .kpi.primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+  }
+  .kpi.primary .label { color: rgba(255,255,255,0.6); }
+  .kpi.primary .sub { color: rgba(255,255,255,0.6); }
+
+  /* Overall progress bar */
+  .progress-track {
+    height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10B981 0%, #3B82F6 100%);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  /* Section */
+  section { margin-bottom: 32px; }
+  section h2 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-mute);
+    margin-bottom: 12px;
+  }
+
+  /* Category grid */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .cat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .cat-card:hover { border-color: var(--text); transform: translateY(-1px); }
+  .cat-card.active { border-color: var(--text); background: #FAFAFA; }
+  .cat-card .cat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .cat-card .cat-name { font-size: 14px; font-weight: 600; }
+  .cat-card .cat-pct { font-size: 14px; font-weight: 600; color: var(--text-mute); font-variant-numeric: tabular-nums; }
+  .cat-card .cat-bar {
+    height: 4px;
+    background: var(--planned-bg);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .cat-card .cat-bar-fill { height: 100%; background: var(--text); border-radius: 999px; transition: width 0.4s ease; }
+  .cat-card .cat-stats {
+    font-size: 11px;
+    color: var(--text-faint);
+    display: flex;
+    gap: 10px;
+  }
+  .cat-card .cat-stats span { font-variant-numeric: tabular-nums; }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .filter-btn:hover { border-color: var(--text); }
+  .filter-btn.active { background: var(--text); color: white; border-color: var(--text); }
+
+  /* Table */
+  .table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-mute);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    background: #FAFAFA;
+  }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #FAFAFA; }
+  .task-id {
+    font-family: "SF Mono", "JetBrains Mono", Menlo, monospace;
+    font-size: 11px;
+    color: var(--text-mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .task-name { font-weight: 500; }
+  .task-detail { color: var(--text-mute); font-size: 12px; margin-top: 2px; }
+
+  /* Status badge (라벨 + 색 동시 표기 - CLAUDE.md 가드레일) */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .badge.done { background: var(--done-bg); color: #065F46; }
+  .badge.done::before { background: var(--done); }
+  .badge.progress { background: var(--progress-bg); color: #1E40AF; }
+  .badge.progress::before { background: var(--progress); }
+  .badge.planned { background: var(--planned-bg); color: #4B5563; }
+  .badge.planned::before { background: var(--planned); }
+  .badge.blocked { background: var(--blocked-bg); color: #991B1B; }
+  .badge.blocked::before { background: var(--blocked); }
+
+  .pct-cell { font-variant-numeric: tabular-nums; font-weight: 500; }
+  .mini-bar {
+    width: 60px;
+    height: 4px;
+    background: var(--planned-bg);
+    border-radius: 999px;
+    overflow: hidden;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .mini-bar-fill { height: 100%; background: var(--text); border-radius: 999px; }
+  .mini-bar-fill.done { background: var(--done); }
+  .mini-bar-fill.progress { background: var(--progress); }
+  .mini-bar-fill.blocked { background: var(--blocked); }
+
+  /* Blockers */
+  .blocker-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .blocker {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blocked);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+  .blocker .blocker-title { font-weight: 500; font-size: 13px; }
+  .blocker .blocker-note { color: var(--text-mute); font-size: 12px; margin-top: 4px; }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 11px;
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    body { padding: 16px; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .kpi.primary { grid-column: 1 / -1; }
+    .cat-grid { grid-template-columns: 1fr 1fr; }
+    .blocker-list { grid-template-columns: 1fr; }
+    tbody td { padding: 10px 12px; font-size: 12px; }
+  }
+  @media (max-width: 600px) {
+    .cat-grid { grid-template-columns: 1fr; }
+    thead th:nth-child(3), tbody td:nth-child(3) { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>IBK STT Mobile App — Project Status WBS</h1>
+    <div class="meta">
+      <strong>Leo Kim (김태완)</strong> · 모바일 트랙 단독 진척 · 업데이트 <strong id="updated-at">2026-05-27</strong>
+    </div>
+  </header>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi primary">
+      <div class="label">Overall Progress</div>
+      <div class="value" id="kpi-overall">—</div>
+      <div class="sub" id="kpi-overall-sub">—</div>
+      <div class="progress-track"><div class="progress-fill" id="kpi-fill" style="width:0%"></div></div>
+    </div>
+    <div class="kpi"><div class="label">Done</div><div class="value" id="kpi-done">—</div><div class="sub">완료</div></div>
+    <div class="kpi"><div class="label">In Progress</div><div class="value" id="kpi-progress">—</div><div class="sub">진행 중</div></div>
+    <div class="kpi"><div class="label">Planned</div><div class="value" id="kpi-planned">—</div><div class="sub">예정</div></div>
+    <div class="kpi"><div class="label">Blocked</div><div class="value" id="kpi-blocked">—</div><div class="sub">차단</div></div>
+  </div>
+
+  <!-- Categories -->
+  <section>
+    <h2>Categories (클릭하여 필터)</h2>
+    <div class="cat-grid" id="cat-grid"></div>
+  </section>
+
+  <!-- Tasks -->
+  <section>
+    <h2>WBS Tasks</h2>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-status="all">전체</button>
+      <button class="filter-btn" data-status="done">완료</button>
+      <button class="filter-btn" data-status="progress">진행 중</button>
+      <button class="filter-btn" data-status="planned">예정</button>
+      <button class="filter-btn" data-status="blocked">차단</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:90px">ID</th>
+            <th>작업</th>
+            <th style="width:140px">카테고리</th>
+            <th style="width:140px">상태</th>
+            <th style="width:140px;text-align:right">진척</th>
+          </tr>
+        </thead>
+        <tbody id="task-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Blockers -->
+  <section>
+    <h2>차단점 / TBD</h2>
+    <div class="blocker-list" id="blocker-list"></div>
+  </section>
+
+  <!-- Next Milestones -->
+  <section>
+    <h2>다음 마일스톤</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:120px">ETA</th>
+            <th>마일스톤</th>
+            <th>선행 조건</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="task-id">W19 (6/01)</td>
+            <td class="task-name">IBK SSO 실연동</td>
+            <td class="task-detail">IBKSSOProvider 사양 수령 (TBD)</td>
+          </tr>
+          <tr>
+            <td class="task-id">W19-W20 (6/01-6/08)</td>
+            <td class="task-name">서버 API 실연동 + 통합 테스트</td>
+            <td class="task-detail">IBK 서버 셋업 (DS-05) 완료 필요</td>
+          </tr>
+          <tr>
+            <td class="task-id">W20-W21 (6/08-6/15)</td>
+            <td class="task-name">사내 dogfood (10명, 1주)</td>
+            <td class="task-detail">CI 셋업 + TestFlight/내부 배포</td>
+          </tr>
+          <tr>
+            <td class="task-id">W22 (6/22)</td>
+            <td class="task-name">검증 가설 결과 정리</td>
+            <td class="task-detail">녹음 ≥3건/일/인, 업로드 실패 &lt;5%, 열람률 &gt;70%, 유실 0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Generated from <code>/Users/leokim/workspace/ibk_stt</code> · CLAUDE.md + src/ + __tests__/ 기반 · 가드레일: 색만 X, 라벨 병기
+  </footer>
+</div>
+
+<script>
+// =============================================================
+// DATA — 워크스페이스 실제 코드 기반 산정
+// =============================================================
+const CATEGORIES = [
+  { id: "DS",   name: "설계/기획",       weight: 1 },
+  { id: "INF",  name: "인프라 셋업",     weight: 1 },
+  { id: "AUTH", name: "인증",            weight: 1.5 },
+  { id: "NAV",  name: "네비게이션",      weight: 1 },
+  { id: "REC",  name: "녹음",            weight: 1.5 },
+  { id: "UP",   name: "업로드",          weight: 1.5 },
+  { id: "LIST", name: "녹음 목록/상세",  weight: 1 },
+  { id: "TR",   name: "전사 화면",       weight: 1 },
+  { id: "AUX",  name: "보조 화면",       weight: 0.5 },
+  { id: "ONB",  name: "온보딩",          weight: 0.5 },
+  { id: "DB",   name: "로컬 DB",         weight: 1 },
+  { id: "ST",   name: "상태 관리",       weight: 1 },
+  { id: "API",  name: "서버 통신",       weight: 1.5 },
+  { id: "TE",   name: "테스트",          weight: 1 },
+  { id: "DEP",  name: "배포",            weight: 1 },
+];
+
+// 상태: done / progress / planned / blocked
+const TASKS = [
+  // ========== DS ==========
+  { id:"DS-01", cat:"DS",   name:"요구사항 정의서",       file:"CLAUDE.md, docs/spec.md",                  status:"done",     pct:100 },
+  { id:"DS-02", cat:"DS",   name:"메뉴 트리 (트렌드 반영)", file:"docs/menu-tree.md",                       status:"done",     pct:100 },
+  { id:"DS-03", cat:"DS",   name:"디자인 시스템",         file:"docs/design-system.md, src/theme/tokens.ts", status:"done",     pct:100 },
+  { id:"DS-04", cat:"DS",   name:"API contract draft",   file:"docs/spec-upload-filemanager.md",          status:"done",     pct:100 },
+  { id:"DS-05", cat:"DS",   name:"Stitch → RN 디자인 변환", file:"docs/stitch-prompts.md, superpowers/specs", status:"progress", pct:80 },
+  { id:"DS-06", cat:"DS",   name:"IBK SSO 사양 수령",     file:"-",                                       status:"blocked",  pct:0,
+                 note:"IBK투자증권 SSO 사양 미수령 (OIDC/SAML, 콜백 URL, 클라이언트 ID)" },
+
+  // ========== INF ==========
+  { id:"INF-01", cat:"INF", name:"RN + TypeScript 프로젝트 셋업", file:"package.json, tsconfig.json", status:"done", pct:100 },
+  { id:"INF-02", cat:"INF", name:"iOS 빌드 셋업",          file:"ios/Pods, Info.plist, AppDelegate", status:"done", pct:100 },
+  { id:"INF-03", cat:"INF", name:"Android 빌드 셋업",      file:"android/",                          status:"done", pct:100 },
+  { id:"INF-04", cat:"INF", name:"Jest + Mock 셋업",      file:"jest.config.js, __mocks__/ (9 파일)", status:"done", pct:100 },
+  { id:"INF-05", cat:"INF", name:"라이브러리 patches",     file:"patches/react-native-background-upload+6.6.0.patch", status:"done", pct:100 },
+  { id:"INF-06", cat:"INF", name:"CI 셋업 (GitHub Actions)", file:".github/",                        status:"planned", pct:0,
+                 note:"CLAUDE.md 스프린트 [ ]" },
+
+  // ========== AUTH ==========
+  { id:"AUTH-01", cat:"AUTH", name:"Auth Provider 추상화",  file:"src/auth/authProviderFactory.ts, types.ts", status:"done", pct:100 },
+  { id:"AUTH-02", cat:"AUTH", name:"MockSSOProvider (1차)", file:"src/auth/providers/mockSsoProvider.ts",    status:"done", pct:100 },
+  { id:"AUTH-03", cat:"AUTH", name:"토큰 저장소 (Keychain)", file:"src/auth/tokenStorage.ts",                status:"done", pct:100 },
+  { id:"AUTH-04", cat:"AUTH", name:"AuthGate / 라우팅",     file:"src/navigation/AuthGate.tsx, resolveAuthRoute.ts", status:"done", pct:100 },
+  { id:"AUTH-05", cat:"AUTH", name:"Splash / Login UI",     file:"src/features/auth/splashScreen.tsx, loginScreen.tsx", status:"done", pct:100 },
+  { id:"AUTH-06", cat:"AUTH", name:"생체인증 등록",         file:"src/features/auth/BiometricEnrollmentScreen.tsx", status:"done", pct:100 },
+  { id:"AUTH-07", cat:"AUTH", name:"IBKSSOProvider 실연동", file:"src/auth/providers/ibkSsoProvider.ts (stub)", status:"blocked", pct:20,
+                 note:"DS-06 사양 수령 후 진행" },
+
+  // ========== NAV ==========
+  { id:"NAV-01", cat:"NAV", name:"AppNavigator",           file:"src/navigation/AppNavigator.tsx",   status:"done", pct:100 },
+  { id:"NAV-02", cat:"NAV", name:"AuthStack / MainStack",  file:"src/navigation/AuthStack.tsx, MainStack.tsx", status:"done", pct:100 },
+  { id:"NAV-03", cat:"NAV", name:"BottomTabs + Center FAB", file:"src/navigation/CustomTabBar.tsx, tabBarConfig.ts", status:"done", pct:100 },
+  { id:"NAV-04", cat:"NAV", name:"Landing / 라우팅 헬퍼",  file:"src/navigation/LandingScreen.tsx, resolveAuthRoute.ts", status:"done", pct:100 },
+
+  // ========== REC ==========
+  { id:"REC-01", cat:"REC", name:"RecordingScreen UI",     file:"src/features/recording-session/RecordingScreen.tsx", status:"done", pct:100 },
+  { id:"REC-02", cat:"REC", name:"녹음 세션 utils",        file:"src/features/recording-session/recordingSessionUtils.ts", status:"done", pct:100 },
+  { id:"REC-03", cat:"REC", name:"권한 처리",              file:"src/features/onboarding/PermissionPrimerScreen.tsx", status:"done", pct:100 },
+  { id:"REC-04", cat:"REC", name:"실기기 녹음 검증",       file:"-",                                  status:"planned", pct:0,
+                 note:"iOS/Android 실기기 dogfood 필요" },
+
+  // ========== UP ==========
+  { id:"UP-01", cat:"UP", name:"업로드 큐",                file:"src/features/upload/uploadQueue.ts", status:"done", pct:100 },
+  { id:"UP-02", cat:"UP", name:"백그라운드 업로드 서비스", file:"src/features/upload/uploadService.ts (378줄)", status:"done", pct:100 },
+  { id:"UP-03", cat:"UP", name:"진행률 hook",              file:"src/features/upload/useUploadProgress.ts", status:"done", pct:100 },
+  { id:"UP-04", cat:"UP", name:"재전송/재처리 UI",         file:"src/features/recordings/retryButtons.tsx", status:"done", pct:100 },
+  { id:"UP-05", cat:"UP", name:"실서버 통합 테스트",       file:"-",                                  status:"blocked", pct:0,
+                 note:"서버 API 셋업 (DS-05/서버팀) 대기" },
+
+  // ========== LIST ==========
+  { id:"LIST-01", cat:"LIST", name:"RecordingListScreen",   file:"src/features/recordings/recordingListScreen.tsx", status:"done", pct:100 },
+  { id:"LIST-02", cat:"LIST", name:"RecordingCard + StatusBadge", file:"recordingCard.tsx, statusBadge.tsx", status:"done", pct:100 },
+  { id:"LIST-03", cat:"LIST", name:"FilterTabs",            file:"src/features/recordings/filterTabs.tsx", status:"done", pct:100 },
+  { id:"LIST-04", cat:"LIST", name:"RecordingDetailScreen", file:"src/features/recordings/recordingDetailScreen.tsx + Utils", status:"done", pct:100 },
+  { id:"LIST-05", cat:"LIST", name:"DeleteConfirmModal",    file:"src/features/recordings/deleteConfirmModal.tsx", status:"done", pct:100 },
+
+  // ========== TR ==========
+  { id:"TR-01", cat:"TR", name:"TranscriptScreen",          file:"src/features/transcript/TranscriptScreen.tsx", status:"done", pct:100 },
+  { id:"TR-02", cat:"TR", name:"transcriptStore",           file:"src/stores/transcriptStore.ts",       status:"done", pct:100 },
+  { id:"TR-03", cat:"TR", name:"전사 편집 UI",              file:"-",                                  status:"planned", pct:0,
+                 note:"P2: 편집/검색 기능 (CLAUDE.md)" },
+
+  // ========== AUX ==========
+  { id:"AUX-01", cat:"AUX", name:"LibraryScreen",           file:"src/features/library/LibraryScreen.tsx + utils", status:"done", pct:100 },
+  { id:"AUX-02", cat:"AUX", name:"SearchScreen",            file:"src/features/search/SearchScreen.tsx + utils", status:"done", pct:100 },
+  { id:"AUX-03", cat:"AUX", name:"ProfileScreen",           file:"src/features/profile/ProfileScreen.tsx", status:"done", pct:100 },
+
+  // ========== ONB ==========
+  { id:"ONB-01", cat:"ONB", name:"OnboardingScreen",        file:"src/features/onboarding/OnboardingScreen.tsx", status:"done", pct:100 },
+  { id:"ONB-02", cat:"ONB", name:"PermissionPrimer (마이크/푸시)", file:"src/features/onboarding/PermissionPrimerScreen.tsx", status:"done", pct:100 },
+  { id:"ONB-03", cat:"ONB", name:"약관 동의 (pre-check 금지)", file:"-",                              status:"progress", pct:60,
+                 note:"가드레일: pre-check 금지 (개인정보보호법)" },
+
+  // ========== DB ==========
+  { id:"DB-01", cat:"DB", name:"WatermelonDB 스키마",       file:"src/db/schema.ts",                  status:"done", pct:100 },
+  { id:"DB-02", cat:"DB", name:"LocalRecordingModel",       file:"src/db/models/LocalRecordingModel.ts", status:"done", pct:100 },
+  { id:"DB-03", cat:"DB", name:"LocalUploadQueueModel",     file:"src/db/models/LocalUploadQueueModel.ts", status:"done", pct:100 },
+  { id:"DB-04", cat:"DB", name:"ServerRecordingCacheModel", file:"src/db/models/ServerRecordingCacheModel.ts", status:"done", pct:100 },
+  { id:"DB-05", cat:"DB", name:"migrations",                file:"src/db/migrations.ts",              status:"done", pct:100 },
+
+  // ========== ST (Stores) ==========
+  { id:"ST-01", cat:"ST", name:"authStore",                 file:"src/stores/authStore.ts",          status:"done", pct:100 },
+  { id:"ST-02", cat:"ST", name:"recordingListStore",        file:"src/stores/recordingListStore.ts", status:"done", pct:100 },
+  { id:"ST-03", cat:"ST", name:"uploadQueueStore",          file:"src/stores/uploadQueueStore.ts",   status:"done", pct:100 },
+  { id:"ST-04", cat:"ST", name:"transcriptStore",           file:"src/stores/transcriptStore.ts",    status:"done", pct:100 },
+  { id:"ST-05", cat:"ST", name:"searchStore",               file:"src/stores/searchStore.ts",        status:"done", pct:100 },
+
+  // ========== API ==========
+  { id:"API-01", cat:"API", name:"api/client (HTTP 베이스)", file:"src/api/client.ts",               status:"done", pct:100 },
+  { id:"API-02", cat:"API", name:"api/recordings",          file:"src/api/recordings.ts",            status:"done", pct:100 },
+  { id:"API-03", cat:"API", name:"api/uploadSessions",      file:"src/api/uploadSessions.ts",        status:"done", pct:100 },
+  { id:"API-04", cat:"API", name:"OpenAPI contract 합의",   file:"-",                                status:"blocked", pct:30,
+                 note:"서버팀과 contract 픽스 필요 (CLAUDE.md 스프린트 [ ])" },
+  { id:"API-05", cat:"API", name:"실서버 연동 테스트",      file:"-",                                status:"blocked", pct:0,
+                 note:"DS-05 서버 셋업 대기" },
+
+  // ========== TE ==========
+  { id:"TE-01", cat:"TE", name:"단위 테스트 17건",          file:"__tests__/ (apiClient, authGate, store 등)", status:"done", pct:100 },
+  { id:"TE-02", cat:"TE", name:"커버리지 측정",             file:"-",                                status:"planned", pct:0 },
+  { id:"TE-03", cat:"TE", name:"통합 테스트 (서버 연동)",   file:"-",                                status:"blocked", pct:0,
+                 note:"서버 API 준비 후" },
+  { id:"TE-04", cat:"TE", name:"E2E (Detox/Maestro)",      file:"-",                                status:"planned", pct:0 },
+  { id:"TE-05", cat:"TE", name:"dogfood (10명 × 1주)",      file:"-",                                status:"planned", pct:0,
+                 note:"검증 가설: 녹음 ≥3건/일, 실패 <5%, 열람률 >70%, 유실 0" },
+
+  // ========== DEP ==========
+  { id:"DEP-01", cat:"DEP", name:"iOS TestFlight 셋업",     file:"-",                                status:"planned", pct:0 },
+  { id:"DEP-02", cat:"DEP", name:"Android 내부 배포",       file:"-",                                status:"planned", pct:0 },
+  { id:"DEP-03", cat:"DEP", name:"사내 MDM 배포",           file:"-",                                status:"planned", pct:0,
+                 note:"IBK IT팀과 협의 필요" },
+  { id:"DEP-04", cat:"DEP", name:"개인정보 처리방침 / 약관", file:"-",                                status:"planned", pct:0 },
+];
+
+const BLOCKERS = [
+  { title:"IBK SSO 사양 미수령", note:"DS-06 → AUTH-07 차단. OIDC/SAML, 콜백 URL, 클라이언트 ID 필요" },
+  { title:"서버 셋업 미완료 (DS-05)", note:"UP-05, API-04, API-05, TE-03 차단. IBK 서버 환경 구축 대기" },
+  { title:"OpenAPI contract 미합의", note:"서버팀과 픽스 필요. 현재 앱측 draft만 존재" },
+  { title:"STT 호스팅 위치 미확정", note:"국외이전 동의 여부 결정 필요 (개인정보보호법)" },
+  { title:"푸시 알림 정책 TBD", note:"전사 완료 알림 방식 결정 필요" },
+  { title:"Retention 정책 TBD", note:"원본/raw/편집본 보관 기간" },
+];
+
+// =============================================================
+// RENDER
+// =============================================================
+const STATUS_LABEL = { done:"완료", progress:"진행 중", planned:"예정", blocked:"차단" };
+
+function calcCategoryStats() {
+  const stats = {};
+  for (const c of CATEGORIES) {
+    const items = TASKS.filter(t => t.cat === c.id);
+    const total = items.length;
+    const sum = items.reduce((a,t) => a + t.pct, 0);
+    const avg = total ? Math.round(sum / total) : 0;
+    const done = items.filter(t => t.status === "done").length;
+    const progress = items.filter(t => t.status === "progress").length;
+    const blocked = items.filter(t => t.status === "blocked").length;
+    stats[c.id] = { total, avg, done, progress, blocked, weight: c.weight, name: c.name };
+  }
+  return stats;
+}
+
+function calcOverall() {
+  // 가중 평균
+  let wSum = 0, pSum = 0;
+  for (const c of CATEGORIES) {
+    const items = TASKS.filter(t => t.cat === c.id);
+    if (!items.length) continue;
+    const avg = items.reduce((a,t) => a + t.pct, 0) / items.length;
+    pSum += avg * c.weight;
+    wSum += c.weight;
+  }
+  return Math.round(pSum / wSum);
+}
+
+function countByStatus(st) {
+  return TASKS.filter(t => t.status === st).length;
+}
+
+function renderKPI() {
+  const overall = calcOverall();
+  document.getElementById("kpi-overall").textContent = overall + "%";
+  document.getElementById("kpi-overall-sub").textContent = `${TASKS.length}개 항목 중 가중 평균`;
+  document.getElementById("kpi-fill").style.width = overall + "%";
+  document.getElementById("kpi-done").textContent = countByStatus("done");
+  document.getElementById("kpi-progress").textContent = countByStatus("progress");
+  document.getElementById("kpi-planned").textContent = countByStatus("planned");
+  document.getElementById("kpi-blocked").textContent = countByStatus("blocked");
+}
+
+function renderCategories() {
+  const stats = calcCategoryStats();
+  const grid = document.getElementById("cat-grid");
+  grid.innerHTML = "";
+  for (const c of CATEGORIES) {
+    const s = stats[c.id];
+    const div = document.createElement("div");
+    div.className = "cat-card";
+    div.dataset.cat = c.id;
+    div.innerHTML = `
+      <div class="cat-header">
+        <span class="cat-name">${c.name}</span>
+        <span class="cat-pct">${s.avg}%</span>
+      </div>
+      <div class="cat-bar"><div class="cat-bar-fill" style="width:${s.avg}%"></div></div>
+      <div class="cat-stats">
+        <span>${s.done}/${s.total} 완료</span>
+        ${s.progress ? `<span style="color:#3B82F6">${s.progress} 진행</span>` : ""}
+        ${s.blocked ? `<span style="color:#EF4444">${s.blocked} 차단</span>` : ""}
+      </div>
+    `;
+    div.addEventListener("click", () => {
+      document.querySelectorAll(".cat-card").forEach(el => el.classList.remove("active"));
+      if (currentCatFilter === c.id) {
+        currentCatFilter = null;
+      } else {
+        div.classList.add("active");
+        currentCatFilter = c.id;
+      }
+      renderTasks();
+    });
+    grid.appendChild(div);
+  }
+}
+
+let currentStatusFilter = "all";
+let currentCatFilter = null;
+
+function renderTasks() {
+  const tbody = document.getElementById("task-tbody");
+  tbody.innerHTML = "";
+  const filtered = TASKS.filter(t => {
+    if (currentStatusFilter !== "all" && t.status !== currentStatusFilter) return false;
+    if (currentCatFilter && t.cat !== currentCatFilter) return false;
+    return true;
+  });
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-faint);padding:32px">필터 조건에 맞는 항목 없음</td></tr>`;
+    return;
+  }
+  for (const t of filtered) {
+    const catName = CATEGORIES.find(c => c.id === t.cat)?.name || t.cat;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="task-id">${t.id}</td>
+      <td>
+        <div class="task-name">${t.name}</div>
+        <div class="task-detail">${t.file}${t.note ? ` · <em>${t.note}</em>` : ""}</div>
+      </td>
+      <td style="color:var(--text-mute);font-size:12px">${catName}</td>
+      <td><span class="badge ${t.status}">${STATUS_LABEL[t.status]}</span></td>
+      <td style="text-align:right">
+        <span class="mini-bar"><span class="mini-bar-fill ${t.status}" style="width:${t.pct}%"></span></span>
+        <span class="pct-cell">${t.pct}%</span>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+function renderBlockers() {
+  const list = document.getElementById("blocker-list");
+  list.innerHTML = "";
+  for (const b of BLOCKERS) {
+    const div = document.createElement("div");
+    div.className = "blocker";
+    div.innerHTML = `<div class="blocker-title">${b.title}</div><div class="blocker-note">${b.note}</div>`;
+    list.appendChild(div);
+  }
+}
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentStatusFilter = btn.dataset.status;
+    renderTasks();
+  });
+});
+
+// init
+renderKPI();
+renderCategories();
+renderTasks();
+renderBlockers();
+</script>
+</body>
+</html>

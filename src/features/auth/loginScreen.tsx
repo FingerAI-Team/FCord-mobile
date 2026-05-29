@@ -101,7 +101,7 @@ export function LoginScreen(): React.ReactElement {
                 (employeeIdFocused || employeeId.length > 0) && styles.floatingLabelFocused,
               ]}
             >
-              사번
+              아이디
             </Text>
             <TextInput
               style={styles.input}
@@ -111,7 +111,7 @@ export function LoginScreen(): React.ReactElement {
               onBlur={() => setEmployeeIdFocused(false)}
               autoCapitalize="none"
               autoCorrect={false}
-              keyboardType="number-pad"
+              keyboardType="default"
               editable={!isSubmitting}
             />
           </View>

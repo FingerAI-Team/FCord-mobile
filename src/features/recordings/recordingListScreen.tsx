@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  AppState,
   View,
   FlatList,
   StyleSheet,
@@ -13,7 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { useRecordingListStore } from '../../stores/recordingListStore';
 import { useAuthStore } from '../../stores/authStore';
-import { getRecordingList, softDeleteRecording } from '../../api/recordings';
+import { getRecordingList, getMeetingDetail, softDeleteRecording } from '../../api/recordings';
 import { ServerRecordingCache, SortType, FilterType } from '../../types';
 import { RecordingCard } from './recordingCard';
 import { DeleteConfirmModal } from './deleteConfirmModal';
@@ -35,7 +36,7 @@ interface Props {
 export function RecordingListScreen({ navigation }: Props): React.ReactElement {
   const {
     items, filter, sort, nextCursor, hasMore, isLoading, isRefreshing,
-    setItems, appendItems, removeItem, restoreItem,
+    setItems, appendItems, updateItem, removeItem, restoreItem,
     setFilter, setSort, setLoading, setRefreshing,
   } = useRecordingListStore();
 
@@ -101,6 +102,43 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
     loadList();
   }, [filter, sort, loadList, setLoading]);
 
+  // 포그라운드 복귀 시 목록 자동 갱신
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (nextState: string) => {
+      if (nextState === 'active') loadList();
+    });
+    return () => sub.remove();
+  }, [loadList]);
+
+  // processing 항목이 있으면 30초마다 개별 상태 폴링
+  const processingKey = useMemo(
+    () => items.filter((i) => i.transcriptionState === 'processing').map((i) => i.id).join(','),
+    [items],
+  );
+  const processingKeyRef = useRef(processingKey);
+  processingKeyRef.current = processingKey;
+
+  useEffect(() => {
+    if (!processingKey) return;
+
+    const poll = async () => {
+      const ids = processingKeyRef.current.split(',').filter(Boolean);
+      for (const id of ids) {
+        try {
+          const detail = await getMeetingDetail(id);
+          if (detail && detail.transcriptionState !== 'processing') {
+            updateItem(id, { transcriptionState: detail.transcriptionState });
+          }
+        } catch {
+          // 폴링 실패는 무시 (다음 사이클에 재시도)
+        }
+      }
+    };
+
+    const interval = setInterval(poll, 30_000);
+    return () => clearInterval(interval);
+  }, [processingKey, updateItem]);
+
   const onRefresh = () => {
     if (isRefreshing) return;
     setRefreshing(true);
@@ -143,7 +181,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <AppTopBar title="IBKS 음성회의록" active="home" />
 
       {/* 인사말 헤더 */}
@@ -198,15 +236,18 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
         onCancel={() => setDeleteTarget(null)}
       />
 
-      {/* 플로팅 녹음 시작 버튼 */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={onFabPress}
-        accessibilityLabel="녹음 시작"
-        accessibilityRole="button"
-      >
-        <Text style={styles.fabIcon}>🎙</Text>
-      </TouchableOpacity>
+      {/* 하단 회의 시작 버튼 (데모 v4 tabbar 스타일) */}
+      <View style={styles.bottomBar}>
+        <TouchableOpacity
+          style={styles.startBtn}
+          onPress={onFabPress}
+          accessibilityLabel="회의 시작하기"
+          accessibilityRole="button"
+        >
+          <Text style={styles.startBtnIcon}>🎙</Text>
+          <Text style={styles.startBtnText}>회의 시작하기</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -263,6 +304,25 @@ const styles = StyleSheet.create({
   emptyContainer: { alignItems: 'center', paddingTop: 100 },
   emptyText: { fontSize: 15, color: '#9CA3AF' },
   emptyList: { flexGrow: 1 },
+  bottomBar: {
+    backgroundColor: '#fff',
+    borderTopWidth: 1.5,
+    borderTopColor: '#e0e0e0',
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 12,
+  },
+  startBtn: {
+    height: 56,
+    borderRadius: 12,
+    backgroundColor: '#111',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  startBtnIcon: { fontSize: 22 },
+  startBtnText: { fontSize: 16, fontWeight: '700', color: '#fff', letterSpacing: -0.3 },
   fab: {
     position: 'absolute',
     bottom: 32,

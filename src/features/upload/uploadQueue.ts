@@ -3,7 +3,8 @@
 const BACKOFF_DELAYS_MS = [1_000, 3_000, 10_000, 30_000, 120_000];
 
 export function calcNextRetryAt(attempts: number): number {
-  const delay = BACKOFF_DELAYS_MS[Math.min(attempts, BACKOFF_DELAYS_MS.length - 1)];
+  const normalizedAttempts = Math.max(1, attempts);
+  const delay = BACKOFF_DELAYS_MS[Math.min(normalizedAttempts - 1, BACKOFF_DELAYS_MS.length - 1)];
   return Date.now() + delay;
 }
 

@@ -4,7 +4,7 @@ import { calcNextRetryAt, isRetryReady, isQueueItemReady } from '../src/features
 describe('calcNextRetryAt — backoff 지연 계산', () => {
   const EXPECTED_DELAYS = [1_000, 3_000, 10_000, 30_000, 120_000];
 
-  it.each(EXPECTED_DELAYS.map((delay, i) => [i, delay]))(
+  it.each(EXPECTED_DELAYS.map((delay, i) => [i + 1, delay]))(
     'attempts=%i → 지연 %ims',
     (attempts, expectedDelay) => {
       const before = Date.now();

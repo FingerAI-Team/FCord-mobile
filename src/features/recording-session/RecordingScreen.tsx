@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import AudioRecorderPlayer, {
   AudioSet,
   AudioEncoderAndroidType,
@@ -22,14 +23,17 @@ import { colors, spacing, radius, typography } from '../../theme/tokens';
 import { uploadRecording } from '../../api/recordings';
 import { useRecordingListStore } from '../../stores/recordingListStore';
 
-// 녹음 음질 설정 (m4a/AAC, 고음질)
-const AUDIO_SET: AudioSet = {
-  AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-  AudioSourceAndroid: AudioSourceAndroidType.MIC,
-  AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-  AVNumberOfChannelsKeyIOS: 1,
-  AVFormatIDKeyIOS: AVEncodingOption.aac,
-};
+// Android는 mp4/AAC, iOS는 m4a/AAC
+const AUDIO_SET: AudioSet = Platform.OS === 'android'
+  ? {
+      AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+      AudioSourceAndroid: AudioSourceAndroidType.DEFAULT,
+    }
+  : {
+      AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+      AVNumberOfChannelsKeyIOS: 1,
+      AVFormatIDKeyIOS: AVEncodingOption.aac,
+    };
 
 // 파형 바마다 고정 스케일 오프셋 (자연스러운 파형)
 const BAR_OFFSETS = [0.75, 1.0, 0.55, 0.9, 0.65];
@@ -60,39 +64,62 @@ export function RecordingScreen(): React.ReactElement {
     Array.from({ length: 5 }, () => new Animated.Value(0.15))
   ).current;
 
-  // 마이크 레벨 → 파형 바 업데이트
-  const updateWave = useCallback((metering: number) => {
-    // metering: dBFS (-160 ~ 0). -60dB 이상을 0~1 범위로 정규화
-    const norm = Math.min(1, Math.max(0, (metering + 60) / 60));
-    waveAnims.forEach((anim, i) => {
-      Animated.spring(anim, {
-        toValue: 0.1 + norm * BAR_OFFSETS[i],
-        useNativeDriver: true,
-        speed: 40,
-        bounciness: 0,
-      }).start();
-    });
+  // 파형 루프 애니메이션 ref — stop 호출용
+  const waveLoopAnims = useRef<Animated.CompositeAnimation[]>([]);
+
+  // 파형 루프 시작
+  const startWaveLoop = useCallback(() => {
+    // 이전 루프 정리
+    waveLoopAnims.current.forEach((a) => a.stop());
+    waveLoopAnims.current = waveAnims.map((anim, i) =>
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(anim, {
+            toValue: 0.15 + BAR_OFFSETS[i] * 0.85,
+            duration: 300 + i * 80,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim, {
+            toValue: 0.1 + BAR_OFFSETS[i] * 0.15,
+            duration: 300 + i * 80,
+            useNativeDriver: true,
+          }),
+        ])
+      )
+    );
+    waveLoopAnims.current.forEach((a) => a.start());
   }, [waveAnims]);
 
-  // 화면 진입 시 즉시 녹음 시작
+  // 파형 루프 정지 (일시정지/종료 시)
+  const stopWaveLoop = useCallback(() => {
+    waveLoopAnims.current.forEach((a) => a.stop());
+    waveAnims.forEach((anim) =>
+      Animated.spring(anim, { toValue: 0.1, useNativeDriver: true, speed: 20, bounciness: 0 }).start()
+    );
+  }, [waveAnims]);
+
+  // 화면 진입 시 즉시 녹음 + 파형 시작
   useEffect(() => {
     let active = true;
 
     (async () => {
       try {
-        const fileName = `rec_${Date.now()}.m4a`;
+        const ext = Platform.OS === 'android' ? 'mp4' : 'm4a';
+        const fileName = Platform.OS === 'android'
+          ? `/data/data/com.ibkstt/cache/rec_${Date.now()}.${ext}`
+          : `rec_${Date.now()}.${ext}`;
         await recorder.startRecorder(fileName, AUDIO_SET, true);
+        if (!active) return;
         setIsRecording(true);
+        startWaveLoop(); // 녹음 시작과 동시에 파형 애니메이션 시작
 
         recorder.addRecordBackListener((e) => {
           if (!active) return;
           setElapsed(Math.floor(e.currentPosition / 1000));
-          if (e.currentMetering !== undefined && !isPaused) {
-            updateWave(e.currentMetering);
-          }
         });
-      } catch {
-        Alert.alert('마이크 오류', '마이크에 접근할 수 없습니다. 권한을 확인해주세요.', [
+      } catch (e: any) {
+        const msg = e?.message ?? String(e);
+        Alert.alert('마이크 오류', `녹음 시작 실패: ${msg}`, [
           { text: '확인', onPress: () => navigation.goBack() },
         ]);
       }
@@ -100,7 +127,7 @@ export function RecordingScreen(): React.ReactElement {
 
     return () => {
       active = false;
-      // 화면 이탈 시 녹음 정리 (저장 안 한 경우)
+      stopWaveLoop();
       recorder.stopRecorder().catch(() => {});
       recorder.removeRecordBackListener();
     };
@@ -112,13 +139,11 @@ export function RecordingScreen(): React.ReactElement {
       if (isPaused) {
         await recorder.resumeRecorder();
         setIsPaused(false);
+        startWaveLoop();
       } else {
         await recorder.pauseRecorder();
         setIsPaused(true);
-        // 파형 납작하게
-        waveAnims.forEach((anim) =>
-          Animated.spring(anim, { toValue: 0.1, useNativeDriver: true, speed: 20, bounciness: 0 }).start()
-        );
+        stopWaveLoop();
       }
     } catch {
       // 구버전 OS에서 pause 미지원 시 UI만 토글
@@ -199,7 +224,7 @@ export function RecordingScreen(): React.ReactElement {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       {/* 상단 헤더 */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={onStop} style={styles.closeBtn} accessibilityLabel="녹음 종료">
@@ -318,7 +343,7 @@ export function RecordingScreen(): React.ReactElement {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 }
 

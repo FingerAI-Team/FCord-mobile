@@ -35,7 +35,10 @@ export const useRecordingListStore = create<RecordingListState>((set) => ({
 
   appendItems: (newItems, nextCursor) =>
     set((s) => ({
-      items: [...s.items, ...newItems],
+      items: [
+        ...s.items,
+        ...newItems.filter((newItem) => !s.items.some((existingItem) => existingItem.id === newItem.id)),
+      ],
       nextCursor,
       hasMore: !!nextCursor,
     })),

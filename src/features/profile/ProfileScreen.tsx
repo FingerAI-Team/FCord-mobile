@@ -96,7 +96,7 @@ export function ProfileScreen(): React.ReactElement {
   ];
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <AppTopBar title="설정" active="settings" />
 
       {/* 아바타 헤더 */}

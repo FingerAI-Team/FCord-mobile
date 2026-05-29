@@ -243,6 +243,29 @@ function _doUpload(
   // W1: progressMap 키를 서버 recording ID로 통일 (RecordingCard/Detail이 서버 ID로 조회)
   const progressKey = recording.serverRecordingId!;
   return new Promise((resolve, reject) => {
+    let settled = false;
+    const subscriptions: Array<{ remove: () => void }> = [];
+
+    const cleanupListeners = () => {
+      subscriptions.splice(0).forEach((subscription) => subscription.remove());
+    };
+
+    const settleSuccess = () => {
+      if (settled) return;
+      settled = true;
+      cleanupListeners();
+      store.clearProgress(progressKey);
+      resolve();
+    };
+
+    const settleFailure = (error: Error) => {
+      if (settled) return;
+      settled = true;
+      cleanupListeners();
+      store.clearProgress(progressKey);
+      reject(error);
+    };
+
     Upload.startUpload({
       url: presignedUrl,
       path: filePath,
@@ -260,22 +283,33 @@ function _doUpload(
       },
     })
       .then((uploadId: string) => {
-        Upload.addListener('progress', uploadId, (data: { loaded: number; total: number }) => {
-          store.setProgress(progressKey, data.loaded, data.total);
-          database.write(async () => {
-            await item.update((r) => { r.bytesUploaded = data.loaded; });
-          });
-        });
-        Upload.addListener('error', uploadId, (data: { error: string }) => {
-          store.clearProgress(progressKey);
-          reject(new Error(data.error));
-        });
-        Upload.addListener('completed', uploadId, () => {
-          store.clearProgress(progressKey);
-          resolve();
-        });
+        subscriptions.push(
+          Upload.addListener('progress', uploadId, (data: { loaded: number; total: number }) => {
+            store.setProgress(progressKey, data.loaded, data.total);
+            database.write(async () => {
+              await item.update((r) => { r.bytesUploaded = data.loaded; });
+            });
+          }),
+        );
+        subscriptions.push(
+          Upload.addListener('error', uploadId, (data: { error: string }) => {
+            settleFailure(new Error(data.error));
+          }),
+        );
+        subscriptions.push(
+          Upload.addListener('completed', uploadId, () => {
+            settleSuccess();
+          }),
+        );
+        subscriptions.push(
+          Upload.addListener('cancelled', uploadId, () => {
+            settleFailure(new Error('UPLOAD_CANCELLED'));
+          }),
+        );
       })
-      .catch(reject);
+      .catch((error: Error) => {
+        settleFailure(error);
+      });
   });
 }
 

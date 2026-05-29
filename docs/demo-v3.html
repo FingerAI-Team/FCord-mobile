@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI회의록 — 앱 데모 v3</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --border: rgba(255,255,255,.08);
+  --text-primary: #f1f5f9;
+  --text-muted: #64748b;
+  --font: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif;
+  /* 앱 디자인 토큰 */
+  --r: 6px;
+  --r-sm: 4px;
+  --c-primary: #111;
+  --c-secondary: #f0f0f0;
+  --c-bg: #f5f5f5;
+  --c-surface: #fff;
+  --c-border: #e0e0e0;
+  --c-text: #111;
+  --c-muted: #888;
+  --c-done: #2e7d32;
+  --c-proc: #e65100;
+  --c-fail: #c62828;
+}
+
+body { font-family: var(--font); background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
+
+/* ── 헤더 ── */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,10,.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.logo { display: flex; align-items: center; gap: 10px; margin-right: 6px; }
+.logo-badge { width: 28px; height: 28px; border-radius: var(--r); background: #111; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #fff; }
+.logo-text { font-size: 13px; font-weight: 700; color: #fff; }
+.logo-sub { font-size: 10px; color: var(--text-muted); }
+.sep { width: 1px; height: 22px; background: var(--border); }
+.screen-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.snav-btn { padding: 4px 10px; border-radius: var(--r); border: 1px solid transparent; background: rgba(255,255,255,.05); color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.snav-btn:hover { background: rgba(255,255,255,.1); color: #94a3b8; }
+.snav-btn.active { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.2); }
+
+/* ── 스테이지 ── */
+.stage { display: flex; align-items: flex-start; justify-content: center; padding: 32px 24px; gap: 28px; min-height: calc(100vh - 56px); }
+.phones-wrap { display: flex; gap: 20px; flex-shrink: 0; }
+
+/* ── 디바이스 공통 ── */
+.device-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.device-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+.screen-counter { font-size: 10px; color: var(--text-muted); text-align: center; }
+
+/* ── iPhone 껍데기 ── */
+.iphone-shell { width: 276px; background: linear-gradient(160deg, #2a2a2e, #1c1c1f); border-radius: 46px; padding: 10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), 0 36px 72px rgba(0,0,0,.8); }
+.iphone-screen-wrap { width: 100%; height: 590px; background: var(--c-bg); border-radius: 37px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.dynamic-island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 88px; height: 26px; background: #000; border-radius: 14px; z-index: 100; }
+.ios-status { height: 48px; padding: 14px 18px 0; flex-shrink: 0; position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; background: var(--c-surface); }
+.ios-home-bar { height: 20px; display: flex; align-items: center; justify-content: center; background: var(--c-surface); flex-shrink: 0; }
+.ios-home-indicator { width: 100px; height: 4px; border-radius: 2px; background: #ddd; }
+
+/* ── Android 껍데기 ── */
+.android-shell { width: 276px; background: linear-gradient(160deg, #1e2228, #14171c); border-radius: 28px; padding: 10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.10), 0 36px 72px rgba(0,0,0,.8); }
+.android-screen-wrap { width: 100%; height: 590px; background: var(--c-bg); border-radius: 19px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.punch-hole { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 11px; height: 11px; background: #000; border-radius: 50%; z-index: 100; }
+.aos-status { height: 38px; padding: 8px 16px 0; flex-shrink: 0; position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; background: var(--c-surface); }
+.aos-nav-bar { height: 22px; display: flex; align-items: center; justify-content: center; gap: 20px; background: var(--c-surface); flex-shrink: 0; padding-bottom: 4px; }
+.aos-nav-pill { width: 28px; height: 4px; border-radius: 2px; background: #ccc; }
+.aos-nav-circle { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #ccc; }
+.aos-nav-square { width: 11px; height: 11px; border-radius: 2px; border: 1.5px solid #ccc; }
+
+.st-time { font-size: 12px; font-weight: 700; color: #111; }
+.st-icons { font-size: 10px; color: #111; display: flex; gap: 4px; align-items: center; }
+
+/* ── 전화 공통 ── */
+.phone-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.screen { display: none; flex-direction: column; flex: 1; overflow: hidden; min-height: 0; }
+.screen.active { display: flex; animation: fadein .18s ease; }
+@keyframes fadein { from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══════════════════════════════════════ 공통 앱 컴포넌트 */
+.card { background: var(--c-surface); border-radius: var(--r); padding: 10px 12px; border: 1.5px solid var(--c-border); margin-bottom: 6px; }
+.card-title { font-weight: 700; color: var(--c-text); font-size: 12px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.card-meta { font-size: 10px; color: var(--c-muted); margin-top: 3px; }
+.card-hint { font-size: 9px; color: #ccc; margin-top: 4px; font-style: italic; }
+
+.bdg { display: inline-block; padding: 2px 6px; border-radius: var(--r-sm); font-size: 10px; font-weight: 700; }
+.bdg-done { background: #e8f5e9; color: var(--c-done); }
+.bdg-proc { background: #fff3e0; color: var(--c-proc); }
+.bdg-fail { background: #fce4ec; color: var(--c-fail); }
+
+.seg-filter { display: flex; border: 1.5px solid var(--c-border); border-radius: var(--r); overflow: hidden; }
+.seg-tab { flex: 1; text-align: center; padding: 6px 0; font-size: 10px; font-weight: 700; color: var(--c-muted); background: var(--c-surface); border-right: 1px solid var(--c-border); cursor: pointer; transition: all .12s; }
+.seg-tab:last-child { border-right: none; }
+.seg-tab.on { background: var(--c-text); color: #fff; }
+
+.search-bar { display: flex; align-items: center; background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 8px 10px; gap: 6px; }
+.search-ph { font-size: 11px; color: #bbb; }
+
+.btn-primary { height: 44px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; }
+.btn-secondary { height: 40px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #333; font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; }
+.btn-danger-outline { height: 38px; border-radius: var(--r); background: var(--c-surface); border: 1.5px solid var(--c-border); color: var(--c-fail); font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; }
+
+.tabbar { background: var(--c-surface); border-top: 1.5px solid var(--c-border); flex-shrink: 0; }
+.start-btn { margin: 8px 12px 6px; height: 44px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.start-btn-text { font-size: 13px; font-weight: 700; color: #fff; }
+.tab-row { display: flex; }
+.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 6px 0 8px; font-size: 10px; gap: 2px; color: #bbb; cursor: pointer; }
+.tab-item.on { color: var(--c-text); font-weight: 700; }
+.tab-ic { font-size: 16px; }
+
+.toggle-track { width: 34px; height: 20px; border-radius: 10px; background: var(--c-text); position: relative; flex-shrink: 0; }
+.toggle-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; position: absolute; top: 2px; right: 2px; }
+.toggle-track.off { background: #ddd; }
+.toggle-track.off .toggle-thumb { right: auto; left: 2px; }
+
+/* ═══════════════════════════════════════ 스플래시 */
+.s-splash { background: var(--c-surface); align-items: center; justify-content: center; gap: 14px; }
+.splash-logo { width: 140px; height: 54px; object-fit: contain; }
+.splash-title { font-size: 22px; font-weight: 900; color: #111; letter-spacing: -1px; }
+.splash-sub { font-size: 11px; color: var(--c-muted); }
+.splash-spinner { width: 16px; height: 16px; border: 2px solid #e0e0e0; border-top-color: #aaa; border-radius: 50%; animation: spin .8s linear infinite; margin-top: 8px; }
+@keyframes spin { to{ transform:rotate(360deg); } }
+
+/* ═══════════════════════════════════════ 로그인 */
+.s-login { background: var(--c-surface); overflow-y: auto; }
+.login-topbar { height: 46px; padding: 0 16px; display: flex; align-items: center; border-bottom: 1.5px solid var(--c-border); flex-shrink: 0; }
+.login-wordmark img { height: 28px; object-fit: contain; }
+.login-body { padding: 24px 18px 20px; display: flex; flex-direction: column; }
+.login-eyebrow { font-size: 10px; font-weight: 700; color: var(--c-muted); letter-spacing: 1px; margin-bottom: 5px; }
+.login-title { font-size: 20px; font-weight: 900; color: #111; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 4px; }
+.login-sub { font-size: 11px; color: var(--c-muted); margin-bottom: 20px; }
+.sso-btn { height: 46px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin-bottom: 10px; width: 100%; }
+.divider { display: flex; align-items: center; gap: 8px; margin: 12px 0; }
+.div-line { flex: 1; height: 1px; background: var(--c-border); }
+.div-text { font-size: 10px; color: var(--c-muted); }
+.input-wrap { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); height: 44px; display: flex; align-items: center; padding: 0 12px; margin-bottom: 8px; }
+.input-wrap span { font-size: 11px; color: #bbb; }
+.login-cta { height: 44px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #555; font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; }
+.login-terms { font-size: 10px; color: #bbb; text-align: center; margin-top: 12px; line-height: 1.6; }
+
+/* ═══════════════════════════════════════ 홈 */
+.s-home { background: var(--c-bg); }
+.home-topbar { background: var(--c-surface); padding: 10px 14px 12px; flex-shrink: 0; border-bottom: 1.5px solid var(--c-border); }
+.home-greeting { font-size: 15px; font-weight: 900; color: #111; letter-spacing: -0.3px; margin-bottom: 2px; }
+.home-sub { font-size: 10px; color: var(--c-muted); margin-bottom: 10px; }
+.home-list { flex: 1; overflow-y: auto; padding: 10px 12px 0; }
+
+/* ═══════════════════════════════════════ 녹음 */
+.s-recording { background: var(--c-surface); }
+.rec-topbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 6px; flex-shrink: 0; }
+.rec-close { width: 28px; height: 28px; border-radius: var(--r); background: var(--c-bg); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #555; cursor: pointer; }
+.rec-badge { background: var(--c-text); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-sm); }
+.rec-badge-paused { background: #888; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-sm); }
+.rec-timer { font-size: 48px; font-weight: 900; color: #111; text-align: center; letter-spacing: -3px; padding: 6px 0 4px; }
+.rec-timer.paused { color: #bbb; }
+.wave-row { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 40px; margin: 0 auto 14px; width: 110px; }
+.wb { width: 4px; border-radius: 2px; background: #111; }
+.wb.on { animation: wv .7s ease-in-out infinite alternate; }
+.wb.off { background: #ddd; height: 8px !important; }
+@keyframes wv { from{transform:scaleY(.3)} to{transform:scaleY(1)} }
+.rec-body { flex: 1; padding: 0 14px; display: flex; flex-direction: column; }
+.memo-lbl { font-size: 10px; color: var(--c-muted); font-weight: 700; margin-bottom: 5px; }
+.memo-box { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 10px 12px; font-size: 11px; color: #bbb; margin-bottom: 14px; }
+.ctrl-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.btn-pause { flex: 1; height: 52px; border-radius: var(--r); background: var(--c-secondary); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #333; line-height: 1.5; border: none; cursor: pointer; }
+.btn-end { flex: 2; height: 52px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; gap: 6px; border: none; cursor: pointer; }
+.ctrl-hint { text-align: center; font-size: 10px; color: #bbb; padding-bottom: 10px; }
+
+/* ═══════════════════════════════════════ 마무리 시트 */
+.s-sheet { background: var(--c-bg); position: relative; }
+.sheet-dim { flex: 1; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 10px; background: rgba(0,0,0,0.06); }
+.sheet-body { background: var(--c-surface); border-top: 1.5px solid var(--c-border); padding: 14px 14px 12px; flex-shrink: 0; }
+.sheet-drag { width: 32px; height: 3px; background: #ddd; border-radius: 2px; margin: 0 auto 12px; }
+.sheet-title { font-size: 14px; font-weight: 900; color: #111; margin-bottom: 3px; }
+.sheet-sub { font-size: 10px; color: var(--c-muted); margin-bottom: 10px; }
+.sheet-input { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 10px 12px; font-size: 12px; color: #111; font-weight: 600; margin-bottom: 10px; }
+.sheet-btn-row { display: flex; gap: 8px; }
+.sheet-cancel { flex: 1; height: 44px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #555; font-size: 12px; font-weight: 700; cursor: pointer; }
+.sheet-save { flex: 2; height: 44px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+/* ═══════════════════════════════════════ 상세 */
+.s-detail { background: var(--c-bg); }
+.detail-topbar { background: var(--c-surface); padding: 10px 14px; border-bottom: 1.5px solid var(--c-border); flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+.detail-back { font-size: 14px; color: #555; cursor: pointer; }
+.detail-topbar-title { font-size: 14px; font-weight: 700; color: #111; flex: 1; }
+.detail-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; }
+.detail-header-card { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 12px; }
+.detail-title { font-size: 14px; font-weight: 900; color: #111; margin-bottom: 4px; }
+.detail-meta { font-size: 10px; color: var(--c-muted); }
+.status-row { display: flex; gap: 6px; }
+.status-box { flex: 1; background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 8px 4px; text-align: center; }
+.status-ic { font-size: 15px; }
+.status-lbl { font-size: 9px; font-weight: 700; color: var(--c-muted); margin-top: 2px; }
+.status-val { font-size: 10px; font-weight: 700; margin-top: 2px; }
+.retry-banner { background: #fce4ec; border-radius: var(--r); padding: 10px 12px; display: flex; align-items: center; gap: 6px; }
+.retry-banner-text { font-size: 11px; font-weight: 700; color: var(--c-fail); }
+.retry-link { font-size: 11px; font-weight: 700; color: var(--c-fail); text-decoration: underline; margin-left: auto; cursor: pointer; }
+
+/* ═══════════════════════════════════════ 설정 */
+.s-settings { background: var(--c-bg); overflow-y: auto; }
+.settings-body { padding: 12px; }
+.user-card { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 36px; height: 36px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; font-weight: 900; flex-shrink: 0; }
+.user-name { font-size: 13px; font-weight: 800; color: #111; }
+.user-dept { font-size: 10px; color: var(--c-muted); margin-top: 2px; }
+.settings-section { margin-bottom: 10px; }
+.settings-header { font-size: 10px; font-weight: 700; color: var(--c-muted); margin-bottom: 5px; padding-left: 2px; letter-spacing: 0.5px; }
+.settings-group { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); overflow: hidden; }
+.settings-row { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; gap: 10px; }
+.settings-row:last-child { border-bottom: none; }
+.settings-ic { font-size: 13px; width: 18px; text-align: center; }
+.settings-lbl { font-size: 12px; color: #111; flex: 1; font-weight: 500; }
+.settings-val { font-size: 11px; color: var(--c-muted); }
+.settings-arrow { font-size: 12px; color: #ccc; }
+.logout-btn { width: 100%; height: 40px; border-radius: var(--r); background: var(--c-surface); border: 1.5px solid var(--c-border); color: var(--c-fail); font-size: 12px; font-weight: 700; cursor: pointer; margin-top: 4px; }
+
+/* ═══════════════════════════════════════ 설명 패널 */
+.desc-panel { width: 260px; flex-shrink: 0; position: sticky; top: 72px; display: flex; flex-direction: column; gap: 14px; }
+.desc-card { background: #161616; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.desc-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 3px 8px; border-radius: var(--r); background: rgba(255,255,255,.08); color: #94a3b8; margin-bottom: 10px; }
+.desc-title { font-size: 16px; font-weight: 800; color: #f1f5f9; margin-bottom: 6px; letter-spacing: -.3px; }
+.desc-text { font-size: 12px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+.desc-list { display: flex; flex-direction: column; gap: 6px; }
+.desc-item { display: flex; gap: 8px; align-items: flex-start; }
+.desc-dot { width: 4px; height: 4px; border-radius: 2px; background: #fff; margin-top: 6px; flex-shrink: 0; }
+.desc-item-text { font-size: 11px; color: #64748b; line-height: 1.5; }
+.desc-screen { display: none; flex-direction: column; gap: 14px; }
+.desc-screen.active { display: flex; }
+
+/* ── 버튼 눌림 피드백 ── */
+button:active, .nav-btn:active, .sso-btn:active, .login-cta:active { transform: scale(.97); opacity: .85; }
+.btn-primary:active { filter: brightness(.9); }
+.btn-secondary:active { filter: brightness(.93); }
+.btn-danger-outline:active { background: #fce4ec; }
+.start-btn:active { filter: brightness(.85); }
+
+/* ── 토글 트랜지션 ── */
+.toggle-track { transition: background .2s; cursor: pointer; }
+.toggle-thumb { transition: left .2s, right .2s; }
+
+/* ── 세그먼트 탭 ── */
+.seg-tab { cursor: pointer; transition: all .12s; }
+
+/* ── 화살표 네비게이션 ── */
+.nav-arrow { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--border); background: rgba(255,255,255,.06); color: #94a3b8; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; flex-shrink: 0; align-self: center; }
+.nav-arrow:hover { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.3); }
+.nav-arrow:disabled { opacity: 0.25; cursor: default; }
+
+/* 플랫폼 차이 배지 */
+.platform-diff { background: #1a1f2e; border: 1px solid rgba(99,179,237,.2); border-radius: 8px; padding: 10px 12px; }
+.platform-diff-title { font-size: 10px; font-weight: 700; color: #63b3ed; margin-bottom: 6px; letter-spacing: .5px; }
+.platform-diff-item { font-size: 11px; color: #64748b; line-height: 1.6; }
+
+@media (max-width: 1100px) { .desc-panel { display: none; } }
+@media (max-width: 680px) { .phones-wrap { gap: 12px; } .iphone-shell, .android-shell { width: 240px; } }
+@media (max-width: 560px) { .phones-wrap { flex-direction: column; } }
+</style>
+</head>
+<body>
+
+<!-- ── 헤더 ── -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-badge">S</div>
+    <div>
+      <div class="logo-text">AI회의록</div>
+      <div class="logo-sub">데모 v3 · iOS + Android</div>
+    </div>
+  </div>
+  <div class="sep"></div>
+  <nav class="screen-nav">
+    <button class="snav-btn active" onclick="go('splash')">스플래시</button>
+    <button class="snav-btn" onclick="go('login')">로그인</button>
+    <button class="snav-btn" onclick="go('home')">홈</button>
+    <button class="snav-btn" onclick="go('recording')">진행 중</button>
+    <button class="snav-btn" onclick="go('paused')">일시정지</button>
+    <button class="snav-btn" onclick="go('sheet')">마무리 시트</button>
+    <button class="snav-btn" onclick="go('detail-done')">상세 (완료)</button>
+    <button class="snav-btn" onclick="go('detail-proc')">상세 (처리중)</button>
+    <button class="snav-btn" onclick="go('detail-fail')">상세 (실패)</button>
+    <button class="snav-btn" onclick="go('settings')">설정</button>
+  </nav>
+</header>
+
+<!-- ── 스테이지 ── -->
+<main class="stage">
+
+  <button class="nav-arrow" id="btn-prev" onclick="goPrev()" title="이전 화면 (←)">&#8592;</button>
+
+  <div class="phones-wrap">
+
+    <!-- ══════════ iPhone ══════════ -->
+    <div class="device-wrap">
+      <div class="device-label">iPhone 17 Pro · iOS 26</div>
+      <div class="iphone-shell">
+        <div class="iphone-screen-wrap">
+          <div class="dynamic-island"></div>
+          <div class="ios-status">
+            <span class="st-time">9:41</span>
+            <div class="st-icons"><span>▲</span><span>WiFi</span><span>🔋</span></div>
+          </div>
+          <div class="phone-content" id="phone-ios"><!-- JS로 채움 --></div>
+          <div class="ios-home-bar"><div class="ios-home-indicator"></div></div>
+        </div>
+      </div>
+      <div class="screen-counter" id="counter-ios">1 / 10</div>
+    </div>
+
+    <!-- ══════════ Android ══════════ -->
+    <div class="device-wrap">
+      <div class="device-label">Galaxy S25 · Android 16</div>
+      <div class="android-shell">
+        <div class="android-screen-wrap">
+          <div class="punch-hole"></div>
+          <div class="aos-status">
+            <span class="st-time">9:41</span>
+            <div class="st-icons"><span>▲</span><span>WiFi</span><span>🔋</span></div>
+          </div>
+          <div class="phone-content" id="phone-aos"><!-- JS로 채움 --></div>
+          <div class="aos-nav-bar">
+            <div class="aos-nav-circle"></div>
+            <div class="aos-nav-pill"></div>
+            <div class="aos-nav-square"></div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-counter" id="counter-aos">1 / 10</div>
+    </div>
+
+  </div>
+
+  <button class="nav-arrow" id="btn-next" onclick="goNext()" title="다음 화면 (→)">&#8594;</button>
+
+  <!-- ══════════ 설명 패널 ══════════ -->
+  <aside class="desc-panel">
+
+    <div class="desc-screen active" data-desc="splash">
+      <div class="desc-card">
+        <div class="desc-tag">스플래시</div>
+        <div class="desc-title">앱 진입</div>
+        <div class="desc-text">토큰 확인 후 인증 여부에 따라 자동 라우팅됩니다.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">AuthGate: Keychain 토큰 유효성 검사</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">유효 → 홈 / 만료 → 로그인</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">1초 브랜드 노출 후 자동 이동</div></div>
+        </div>
+      </div>
+      <div class="platform-diff">
+        <div class="platform-diff-title">iOS vs Android 차이</div>
+        <div class="platform-diff-item">iOS — Dynamic Island 존재<br>Android — 펀치홀 카메라 + 제스처 내비바</div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="login">
+      <div class="desc-card">
+        <div class="desc-tag">로그인</div>
+        <div class="desc-title">IBK SSO 인증</div>
+        <div class="desc-text">SSO 버튼이 메인 CTA. 사번/비번은 fallback.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">MockSSOProvider → IBKSSOProvider 교체 가능 구조</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">토큰 발급 후 Keychain/Keystore 저장</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">pre-checked 약관 동의 금지 (개인정보보호법)</div></div>
+        </div>
+      </div>
+      <div class="platform-diff">
+        <div class="platform-diff-title">iOS vs Android 차이</div>
+        <div class="platform-diff-item">iOS — Keychain 저장<br>Android — Keystore 저장 (동일 RN API)</div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="home">
+      <div class="desc-card">
+        <div class="desc-tag">홈</div>
+        <div class="desc-title">회의 목록</div>
+        <div class="desc-text">탭 5개 → 3개로 단순화. 검색·보관함을 홈에 흡수.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">상단 검색바 (검색 탭 대체)</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">세그먼트 필터: 전체/처리중/완료/즐겨찾기</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">카드 스와이프: 좌→즐겨찾기, 우→삭제+Undo</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">하단 "회의 시작하기" 버튼 → RecordingScreen</div></div>
+        </div>
+      </div>
+      <div class="platform-diff">
+        <div class="platform-diff-title">iOS vs Android 차이</div>
+        <div class="platform-diff-item">iOS — 홈 인디케이터로 bottom padding 자동<br>Android — 제스처 내비바 위 tabbar 배치</div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="recording">
+      <div class="desc-card">
+        <div class="desc-tag">회의 진행 중</div>
+        <div class="desc-title">RecordingScreen</div>
+        <div class="desc-text">녹음 → 회의 언어로 전환. 직사각형 컨트롤 2개.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"잠깐 / 멈추기" — 일시정지 (줄바꿈 의도적)</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"■ 마무리하기" → 마무리 시트로 이동</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">파형 애니메이션 + 라이브 타이머</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">메모: 제목 미리 입력 가능</div></div>
+        </div>
+      </div>
+      <div class="platform-diff">
+        <div class="platform-diff-title">iOS vs Android 차이</div>
+        <div class="platform-diff-item">iOS — AVAudioRecorder<br>Android — MediaRecorder<br>RN 래퍼: expo-av / rn-audio-recorder-player</div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="paused">
+      <div class="desc-card">
+        <div class="desc-tag">일시정지</div>
+        <div class="desc-title">멈춤 상태</div>
+        <div class="desc-text">파형 정지 + 타이머 회색. "계속 / 하기" 버튼으로 재개.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"계속 / 하기" — 재개 (검정 버튼)</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"■ 마무리하기" — 멈춤 상태에서도 종료 가능</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">배지 → "⏸ 멈춤" (회색)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="sheet">
+      <div class="desc-card">
+        <div class="desc-tag">마무리 시트</div>
+        <div class="desc-title">저장 확인</div>
+        <div class="desc-text">바텀시트. 둥근 모서리 없이 상단 선으로 분리.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">제목 미입력 시 날짜+시간 자동 placeholder</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"저장하기" → 홈 + 목록 낙관적 추가</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"취소" → 진행 중 화면으로 복귀</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="detail-done">
+      <div class="desc-card">
+        <div class="desc-tag">상세 · 완료</div>
+        <div class="desc-title">전사 완료 상태</div>
+        <div class="desc-text">3-track 상태(녹음/업로드/전사) 모두 완료. 전사 결과 CTA 활성.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"전사 결과 보기" — 주 액션 (검정)</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"녹음 재생" — 보조 액션 (회색)</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"회의 삭제" — 위험 액션 (빨간 아웃라인)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="detail-proc">
+      <div class="desc-card">
+        <div class="desc-tag">상세 · 처리중</div>
+        <div class="desc-title">전사 진행 중</div>
+        <div class="desc-text">전사 상태 "처리중". 전사 버튼 비활성화.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">"⏳ 전사 처리 중..." — 회색 비활성</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">전사 완료 시 푸시 알림 → 버튼 활성화</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">재생은 전사와 무관하게 항상 가능</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="detail-fail">
+      <div class="desc-card">
+        <div class="desc-tag">상세 · 실패</div>
+        <div class="desc-title">업로드 실패</div>
+        <div class="desc-text">업로드 실패 시 빨간 배너 + 재전송 버튼.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">재전송 ≠ 재처리 (다른 버튼, 다른 의미)</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">재전송 버튼 — 빨간 배경 (복구 액션)</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">전사 상태 "대기" — 업로드 전까지 불가</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desc-screen" data-desc="settings">
+      <div class="desc-card">
+        <div class="desc-tag">설정</div>
+        <div class="desc-title">프로필 & 설정</div>
+        <div class="desc-text">탭 단순화로 핵심 설정만 노출.</div>
+        <div class="desc-list">
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">사용자 정보: 사번, 부서</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">보안: 생체인증 토글 / 자동잠금</div></div>
+          <div class="desc-item"><div class="desc-dot"></div><div class="desc-item-text">업로드: Wi-Fi 전용 / 전사 완료 알림</div></div>
+        </div>
+      </div>
+      <div class="platform-diff">
+        <div class="platform-diff-title">iOS vs Android 차이</div>
+        <div class="platform-diff-item">iOS — Face ID / Touch ID<br>Android — Fingerprint / Face Unlock<br>RN API: react-native-biometrics (동일)</div>
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+<!-- ── 화면 HTML 템플릿 (숨김) ── -->
+<div id="screen-template" style="display:none;">
+
+  <!-- 스플래시 -->
+  <div class="screen s-splash" data-screen="splash">
+    <img class="splash-logo" src="../assets/ibk_logo_big.png" alt="IBK 로고">
+    <div class="splash-title">AI회의록</div>
+    <div class="splash-sub">회의를 텍스트로</div>
+    <div class="splash-spinner"></div>
+  </div>
+
+  <!-- 로그인 -->
+  <div class="screen s-login" data-screen="login">
+    <div class="login-topbar"><div class="login-wordmark"><img src="../assets/ibk_logo_big.png" alt="IBK 로고"></div></div>
+    <div class="login-body">
+      <img src="../assets/ibk_logo_big.png" alt="IBK 로고" style="height:40px;object-fit:contain;margin-bottom:12px;">
+      <div class="login-eyebrow">WELCOME</div>
+      <div class="login-title">AI회의록에<br>오신걸 환영해요</div>
+      <div class="login-sub">사내 계정으로 로그인해 주세요</div>
+      <button class="sso-btn nav-btn" data-target="home">🏦 IBK투자증권 SSO로 로그인</button>
+      <div class="divider"><div class="div-line"></div><div class="div-text">또는 직접 입력</div><div class="div-line"></div></div>
+      <div class="input-wrap"><span>사번 또는 이메일</span></div>
+      <div class="input-wrap"><span>비밀번호</span></div>
+      <button class="login-cta nav-btn" data-target="home">로그인</button>
+      <div class="login-terms">로그인 시 이용약관 및 개인정보처리방침에 동의합니다</div>
+    </div>
+  </div>
+
+  <!-- 홈 -->
+  <div class="screen s-home" data-screen="home">
+    <div class="home-topbar">
+      <div class="home-greeting">안녕하세요, 김철수님</div>
+      <div class="home-sub">이번 주 회의 5건</div>
+      <div class="search-bar" style="margin-bottom:10px;">
+        <span style="font-size:12px;color:#bbb;">🔍</span>
+        <span class="search-ph">회의 내용 검색...</span>
+      </div>
+      <div class="seg-filter">
+        <div class="seg-tab on">전체</div>
+        <div class="seg-tab">처리중</div>
+        <div class="seg-tab">완료</div>
+        <div class="seg-tab">즐겨찾기</div>
+      </div>
+    </div>
+    <div class="home-list">
+      <div class="card nav-btn" data-target="detail-done" style="cursor:pointer;">
+        <div class="card-title">팀장 주간 미팅 <span class="bdg bdg-done">완료</span></div>
+        <div class="card-meta">오늘 14:00 · 32분</div>
+        <div class="card-hint">← 즐겨찾기 | 삭제 →</div>
+      </div>
+      <div class="card nav-btn" data-target="detail-proc" style="cursor:pointer;">
+        <div class="card-title">고객사 인터뷰 <span class="bdg bdg-proc">처리중</span></div>
+        <div class="card-meta">오늘 11:00 · 58분</div>
+      </div>
+      <div class="card nav-btn" data-target="detail-fail" style="cursor:pointer;">
+        <div class="card-title">전략기획 브리핑 <span class="bdg bdg-fail">실패</span></div>
+        <div class="card-meta">어제 16:30 · 12분</div>
+      </div>
+      <div class="card">
+        <div class="card-title">신입사원 OJT <span class="bdg bdg-done">완료</span></div>
+        <div class="card-meta">2026.05.16 · 44분</div>
+      </div>
+      <div class="card">
+        <div class="card-title">상반기 실적 발표 <span class="bdg bdg-done">완료</span></div>
+        <div class="card-meta">2026.05.14 · 1시간 12분</div>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording">
+        <span style="font-size:16px;">🎙</span>
+        <span class="start-btn-text">회의 시작하기</span>
+      </div>
+      <div class="tab-row">
+        <div class="tab-item on"><span class="tab-ic">🏠</span>회의</div>
+        <div class="tab-item nav-btn" data-target="settings"><span class="tab-ic">👤</span>설정</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 회의 진행 중 -->
+  <div class="screen s-recording" data-screen="recording">
+    <div class="rec-topbar">
+      <div class="rec-close nav-btn" data-target="home">✕</div>
+      <div class="rec-badge">● 진행 중</div>
+      <div style="width:28px;"></div>
+    </div>
+    <div class="rec-timer rec-timer-el">00:00</div>
+    <div class="wave-row">
+      <div class="wb on" style="height:14px;animation-delay:.00s;"></div>
+      <div class="wb on" style="height:28px;animation-delay:.10s;"></div>
+      <div class="wb on" style="height:40px;animation-delay:.20s;"></div>
+      <div class="wb on" style="height:44px;animation-delay:.05s;"></div>
+      <div class="wb on" style="height:36px;animation-delay:.15s;"></div>
+      <div class="wb on" style="height:22px;animation-delay:.25s;"></div>
+      <div class="wb on" style="height:12px;animation-delay:.08s;"></div>
+    </div>
+    <div class="rec-body">
+      <div class="memo-lbl">메모</div>
+      <div class="memo-box">이 회의 이름은? (예: 주간 팀 미팅)</div>
+      <div class="ctrl-row">
+        <button class="btn-pause nav-btn" data-target="paused"><span>잠깐</span><span>멈추기</span></button>
+        <button class="btn-end nav-btn" data-target="sheet">■ 마무리하기</button>
+      </div>
+      <div class="ctrl-hint">마무리하기 → 저장 화면으로 이동</div>
+    </div>
+  </div>
+
+  <!-- 일시정지 -->
+  <div class="screen s-recording" data-screen="paused">
+    <div class="rec-topbar">
+      <div class="rec-close nav-btn" data-target="home">✕</div>
+      <div class="rec-badge-paused">⏸ 멈춤</div>
+      <div style="width:28px;"></div>
+    </div>
+    <div class="rec-timer paused">12:34</div>
+    <div class="wave-row">
+      <div class="wb off"></div><div class="wb off"></div><div class="wb off"></div>
+      <div class="wb off"></div><div class="wb off"></div><div class="wb off"></div><div class="wb off"></div>
+    </div>
+    <div class="rec-body">
+      <div class="memo-lbl">메모</div>
+      <div class="memo-box">팀장 주간 미팅</div>
+      <div class="ctrl-row">
+        <button class="btn-pause nav-btn" data-target="recording" style="background:#111;color:#fff;"><span>계속</span><span>하기</span></button>
+        <button class="btn-end nav-btn" data-target="sheet">■ 마무리하기</button>
+      </div>
+      <div class="ctrl-hint">계속하기를 누르면 회의가 재개됩니다</div>
+    </div>
+  </div>
+
+  <!-- 마무리 시트 -->
+  <div class="screen s-sheet" data-screen="sheet">
+    <div class="sheet-dim">회의 진행 중 화면</div>
+    <div class="sheet-body">
+      <div class="sheet-drag"></div>
+      <div class="sheet-title">회의를 마무리할까요?</div>
+      <div class="sheet-sub">제목을 입력하면 나중에 찾기 쉬워요</div>
+      <div class="sheet-input">팀장 주간 미팅</div>
+      <div class="sheet-btn-row">
+        <button class="sheet-cancel nav-btn" data-target="recording">취소</button>
+        <button class="sheet-save nav-btn" data-target="home">저장하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상세 (완료) -->
+  <div class="screen s-detail" data-screen="detail-done">
+    <div class="detail-topbar">
+      <div class="detail-back nav-btn" data-target="home">‹ 회의</div>
+      <div class="detail-topbar-title">상세</div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-header-card">
+        <div class="detail-title">팀장 주간 미팅</div>
+        <div class="detail-meta">2026.05.18 · 32분 · 김철수</div>
+      </div>
+      <div class="status-row">
+        <div class="status-box"><div class="status-ic">✅</div><div class="status-lbl">녹음</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+        <div class="status-box"><div class="status-ic">✅</div><div class="status-lbl">업로드</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+        <div class="status-box"><div class="status-ic">✅</div><div class="status-lbl">전사</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+      </div>
+      <button class="btn-primary">📄 전사 결과 보기</button>
+      <button class="btn-secondary">▶ 녹음 재생</button>
+      <button class="btn-danger-outline">🗑 회의 삭제</button>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;">🎙</span><span class="start-btn-text">회의 시작하기</span></div>
+      <div class="tab-row">
+        <div class="tab-item on"><span class="tab-ic">🏠</span>회의</div>
+        <div class="tab-item nav-btn" data-target="settings"><span class="tab-ic">👤</span>설정</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상세 (처리중) -->
+  <div class="screen s-detail" data-screen="detail-proc">
+    <div class="detail-topbar">
+      <div class="detail-back nav-btn" data-target="home">‹ 회의</div>
+      <div class="detail-topbar-title">상세</div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-header-card">
+        <div class="detail-title">고객사 인터뷰</div>
+        <div class="detail-meta">2026.05.18 · 58분 · 김철수</div>
+      </div>
+      <div class="status-row">
+        <div class="status-box"><div class="status-ic">✅</div><div class="status-lbl">녹음</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+        <div class="status-box"><div class="status-ic">✅</div><div class="status-lbl">업로드</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+        <div class="status-box"><div class="status-ic">⚙️</div><div class="status-lbl">전사</div><div class="status-val" style="color:var(--c-proc);">처리중</div></div>
+      </div>
+      <button class="btn-primary" style="background:#ddd;color:#999;cursor:default;">⏳ 전사 처리 중...</button>
+      <button class="btn-secondary">▶ 녹음 재생</button>
+      <button class="btn-danger-outline">🗑 회의 삭제</button>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;">🎙</span><span class="start-btn-text">회의 시작하기</span></div>
+      <div class="tab-row">
+        <div class="tab-item on"><span class="tab-ic">🏠</span>회의</div>
+        <div class="tab-item nav-btn" data-target="settings"><span class="tab-ic">👤</span>설정</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상세 (실패) -->
+  <div class="screen s-detail" data-screen="detail-fail">
+    <div class="detail-topbar">
+      <div class="detail-back nav-btn" data-target="home">‹ 회의</div>
+      <div class="detail-topbar-title">상세</div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-header-card">
+        <div class="detail-title">전략기획 브리핑</div>
+        <div class="detail-meta">2026.05.17 · 12분 · 김철수</div>
+      </div>
+      <div class="retry-banner">
+        <span class="retry-banner-text">⚠️ 업로드에 실패했습니다.</span>
+        <span class="retry-link">재전송하기</span>
+      </div>
+      <div class="status-row">
+        <div class="status-box"><div class="status-ic">✅</div><div class="status-lbl">녹음</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+        <div class="status-box"><div class="status-ic">❌</div><div class="status-lbl">업로드</div><div class="status-val" style="color:var(--c-fail);">실패</div></div>
+        <div class="status-box"><div class="status-ic">—</div><div class="status-lbl">전사</div><div class="status-val" style="color:#bbb;">대기</div></div>
+      </div>
+      <button class="btn-primary" style="background:var(--c-fail);">↑ 재전송하기</button>
+      <button class="btn-secondary">▶ 녹음 재생</button>
+      <button class="btn-danger-outline">🗑 회의 삭제</button>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;">🎙</span><span class="start-btn-text">회의 시작하기</span></div>
+      <div class="tab-row">
+        <div class="tab-item on"><span class="tab-ic">🏠</span>회의</div>
+        <div class="tab-item nav-btn" data-target="settings"><span class="tab-ic">👤</span>설정</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 설정 -->
+  <div class="screen s-settings" data-screen="settings">
+    <div class="settings-body">
+      <div class="user-card">
+        <div class="user-avatar">김</div>
+        <div>
+          <div class="user-name">김철수</div>
+          <div class="user-dept">IBK투자증권 · 리테일사업부 · 12345</div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-header">보안</div>
+        <div class="settings-group">
+          <div class="settings-row"><span class="settings-ic">🔒</span><span class="settings-lbl">생체 인증 잠금</span><div class="toggle-track"><div class="toggle-thumb"></div></div></div>
+          <div class="settings-row"><span class="settings-ic">⏱</span><span class="settings-lbl">자동 잠금</span><span class="settings-val">5분</span><span class="settings-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-header">업로드</div>
+        <div class="settings-group">
+          <div class="settings-row"><span class="settings-ic">📶</span><span class="settings-lbl">Wi-Fi 전용 업로드</span><div class="toggle-track"><div class="toggle-thumb"></div></div></div>
+          <div class="settings-row"><span class="settings-ic">🔔</span><span class="settings-lbl">전사 완료 알림</span><div class="toggle-track"><div class="toggle-thumb"></div></div></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-header">기타</div>
+        <div class="settings-group">
+          <div class="settings-row"><span class="settings-ic">📄</span><span class="settings-lbl">개인정보처리방침</span><span class="settings-arrow">›</span></div>
+          <div class="settings-row"><span class="settings-ic">ℹ️</span><span class="settings-lbl">버전</span><span class="settings-val">1.0.0</span></div>
+        </div>
+      </div>
+      <button class="logout-btn">로그아웃</button>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;">🎙</span><span class="start-btn-text">회의 시작하기</span></div>
+      <div class="tab-row">
+        <div class="tab-item nav-btn" data-target="home"><span class="tab-ic">🏠</span>회의</div>
+        <div class="tab-item on"><span class="tab-ic">👤</span>설정</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /screen-template -->
+
+<script>
+const SCREENS = ['splash','login','home','recording','paused','sheet','detail-done','detail-proc','detail-fail','settings'];
+let current = 'splash';
+let timerInterval = null;
+let elapsed = 0;
+
+// ── 템플릿을 두 폰에 복제 ──
+function cloneScreens(targetId) {
+  const tpl = document.getElementById('screen-template');
+  const target = document.getElementById(targetId);
+  Array.from(tpl.children).forEach(child => {
+    target.appendChild(child.cloneNode(true));
+  });
+
+  // 1) 화면 이동 버튼
+  target.querySelectorAll('.nav-btn[data-target]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      go(el.dataset.target);
+    });
+  });
+
+  // 2) 토글 스위치 — 동글 좌우 이동
+  target.querySelectorAll('.toggle-track').forEach(track => {
+    track.addEventListener('click', () => {
+      const isOn = !track.classList.contains('off');
+      track.classList.toggle('off', isOn);
+    });
+  });
+
+  // 3) 세그먼트 필터 탭
+  target.querySelectorAll('.seg-filter').forEach(filter => {
+    filter.querySelectorAll('.seg-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        filter.querySelectorAll('.seg-tab').forEach(t => t.classList.remove('on'));
+        tab.classList.add('on');
+      });
+    });
+  });
+
+  // 4) 로그아웃 버튼
+  target.querySelectorAll('.logout-btn').forEach(btn => {
+    btn.addEventListener('click', () => go('login'));
+  });
+
+  // 5) 전사 결과 보기 → 전사 화면(없으면 시트로 임시)
+  target.querySelectorAll('.btn-primary').forEach(btn => {
+    if (btn.textContent.includes('전사 결과')) {
+      btn.addEventListener('click', () => {
+        btn.textContent = '📄 열기 중...';
+        setTimeout(() => { btn.textContent = '📄 전사 결과 보기'; }, 900);
+      });
+    }
+    // 재전송 버튼
+    if (btn.textContent.includes('재전송')) {
+      btn.addEventListener('click', () => {
+        const orig = btn.textContent;
+        btn.textContent = '↑ 전송 중...';
+        btn.style.background = '#e65100';
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.textContent = '✅ 재전송 완료';
+          btn.style.background = 'var(--c-done)';
+        }, 1400);
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.style.background = 'var(--c-fail)';
+          btn.disabled = false;
+        }, 3000);
+      });
+    }
+  });
+
+  // 6) 녹음 재생 버튼
+  target.querySelectorAll('.btn-secondary').forEach(btn => {
+    if (btn.textContent.includes('녹음 재생')) {
+      btn.addEventListener('click', () => {
+        const playing = btn.textContent.includes('■');
+        btn.textContent = playing ? '▶ 녹음 재생' : '■ 재생 중...';
+      });
+    }
+  });
+
+  // 7) 회의 삭제 버튼
+  target.querySelectorAll('.btn-danger-outline').forEach(btn => {
+    if (btn.textContent.includes('삭제')) {
+      btn.addEventListener('click', () => {
+        btn.textContent = '삭제됨';
+        btn.style.background = '#fce4ec';
+        setTimeout(() => go('home'), 700);
+        setTimeout(() => { btn.textContent = '🗑 회의 삭제'; btn.style.background = ''; }, 1200);
+      });
+    }
+  });
+}
+
+// ── 화면 전환 ──
+function go(id) {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+
+  ['phone-ios','phone-aos'].forEach(phoneId => {
+    const phone = document.getElementById(phoneId);
+    phone.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = phone.querySelector(`[data-screen="${id}"]`);
+    if (target) target.classList.add('active');
+  });
+
+  // 상단 nav
+  document.querySelectorAll('.snav-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.querySelector(`.snav-btn[onclick="go('${id}')"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  // 설명 패널
+  document.querySelectorAll('.desc-screen').forEach(d => d.classList.remove('active'));
+  const desc = document.querySelector(`.desc-screen[data-desc="${id}"]`);
+  if (desc) desc.classList.add('active');
+
+  // 카운터
+  const idx = SCREENS.indexOf(id) + 1;
+  document.getElementById('counter-ios').textContent = idx + ' / ' + SCREENS.length;
+  document.getElementById('counter-aos').textContent = idx + ' / ' + SCREENS.length;
+
+  current = id;
+  updateArrows();
+
+  // 타이머
+  if (id === 'recording') {
+    elapsed = 0;
+    timerInterval = setInterval(() => {
+      elapsed++;
+      const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const s = String(elapsed % 60).padStart(2, '0');
+      const txt = m + ':' + s;
+      document.querySelectorAll('.rec-timer-el').forEach(el => el.textContent = txt);
+    }, 1000);
+  }
+}
+
+// ── 이전/다음 ──
+function updateArrows() {
+  const idx = SCREENS.indexOf(current);
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === SCREENS.length - 1;
+}
+
+function goPrev() {
+  const idx = SCREENS.indexOf(current);
+  if (idx > 0) go(SCREENS[idx - 1]);
+}
+
+function goNext() {
+  const idx = SCREENS.indexOf(current);
+  if (idx < SCREENS.length - 1) go(SCREENS[idx + 1]);
+}
+
+// ── 키보드 방향키 ──
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') goPrev();
+  if (e.key === 'ArrowRight') goNext();
+});
+
+// ── 초기화 ──
+window.addEventListener('DOMContentLoaded', () => {
+  cloneScreens('phone-ios');
+  cloneScreens('phone-aos');
+
+  // 첫 화면 활성화
+  ['phone-ios','phone-aos'].forEach(phoneId => {
+    const phone = document.getElementById(phoneId);
+    const first = phone.querySelector('[data-screen="splash"]');
+    if (first) first.classList.add('active');
+  });
+
+  document.querySelectorAll('.snav-btn')[0].classList.add('active');
+  document.querySelector('.desc-screen[data-desc="splash"]').classList.add('active');
+  updateArrows();
+});
+</script>
+</body>
+</html>
