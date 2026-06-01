@@ -31,6 +31,33 @@
 4. **batch-first**: 실시간 STT는 MVP 범위 밖.
 5. **오프라인 캡처 항상 가능**: 녹음·로컬 저장은 네트워크 무관, 업로드만 큐잉.
 
+## FAICORD 백엔드 연동 규칙 (faicord.fingerservice.co.kr)
+
+### 인증
+
+- 백엔드는 **`sessionid` 쿠키 전용** 인증 (`SessionInterceptor` — `token` 헤더 미지원)
+- React Native의 `fetch`는 서버 Set-Cookie를 자동 재전송하지 않으므로, 모든 인증 요청(`apiRequest` / `apiUpload`)에 **반드시 `Cookie: sessionid=${token}` 헤더를 수동 설정**해야 한다
+- `token`은 로그인 응답의 `data.token` 값 = 서버 세션 UUID = `sessionid` 쿠키 값 (동일)
+
+### 업로드 (`POST /api/meetings/upload`)
+
+- 오디오 파일은 FormData 필드명 **`audioFile`** 로 전송 (`file` 이름 사용 금지 — 서버가 null 처리)
+- **`startDateTime`을 반드시 포함** (`"yyyy-MM-dd HH:mm"` 형식, 서버 파싱 포맷 일치)
+  - 누락 시 서버가 `startTime = null`로 저장 → API 응답 `date: ""` → 웹 MinutesPage 날짜 필터 탈락으로 목록 미표시
+- `title`은 선택 파라미터 (`@RequestPart(required = false)`)
+
+### 주요 엔드포인트
+
+| 용도 | 메서드 | 경로 |
+|------|--------|------|
+| 회의 목록 | GET | `/api/meetings` |
+| 회의록 목록 (요약 완료 포함 전체) | GET | `/api/meetings/minutes` |
+| 음성 업로드 + 회의 생성 | POST | `/api/meetings/upload` |
+| 전사 결과 조회 | GET | `/api/meetings/transcript/{id}` |
+| 요약 재처리 | POST | `/api/meetings/transcript/{id}/regenerate` |
+
+---
+
 ## 가드레일 (하면 안 되는 것)
 
 - STT provider 직접 호출 금지 (서버 어댑터 경유)

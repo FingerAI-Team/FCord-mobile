@@ -134,9 +134,22 @@ export async function uploadRecording(
   fileUri: string,
   fileName: string,
   mimeType: string = 'audio/mp4',
+  title?: string,
 ): Promise<{ confId: string }> {
   const formData = new FormData();
-  formData.append('file', { uri: fileUri, name: fileName, type: mimeType } as any);
+  // 서버 @RequestPart(value = "audioFile") 와 필드명 일치
+  formData.append('audioFile', { uri: fileUri, name: fileName, type: mimeType } as any);
+
+  // startDateTime 없으면 서버가 null로 저장 → date:"" → MinutesPage 날짜 필터 탈락
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const startDateTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  formData.append('startDateTime', startDateTime);
+
+  if (title && title.trim()) {
+    formData.append('title', title.trim());
+  }
+
   const res = await apiUpload<{ success: boolean; meetingId: string }>(
     '/api/meetings/upload',
     formData,

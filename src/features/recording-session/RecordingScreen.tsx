@@ -175,7 +175,7 @@ export function RecordingScreen(): React.ReactElement {
     const fileName = `${resolvedTitle}.m4a`;
 
     try {
-      const { confId } = await uploadRecording(fileUri, fileName);
+      const { confId } = await uploadRecording(fileUri, fileName, 'audio/mp4', resolvedTitle);
 
       // 목록 맨 앞에 낙관적 추가
       const now = Date.now();
