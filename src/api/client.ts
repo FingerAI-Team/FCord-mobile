@@ -18,10 +18,10 @@ export async function apiRequest<T>(
     method,
     headers: {
       'Content-Type': 'application/json',
-      // FAICORD는 'token' 헤더 사용 (Bearer 아님)
-      ...(token ? { token } : {}),
+      // 백엔드는 sessionid 쿠키로만 인증 — RN은 쿠키 자동 전송 안 되므로 명시적으로 설정
+      ...(token ? { token, Cookie: `sessionid=${token}` } : {}),
     },
-    credentials: 'include', // 세션 쿠키도 함께 전송
+    credentials: 'include',
     body: body != null ? JSON.stringify(body) : undefined,
   });
 
