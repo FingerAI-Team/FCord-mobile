@@ -18,6 +18,7 @@ export type BottomTabParamList = {
 
 export type MainStackParamList = {
   Home: undefined;
+  Library: undefined;
   Settings: undefined;
   RecordingDetail: { id: string; queueId?: string };
   Transcript: { id: string };

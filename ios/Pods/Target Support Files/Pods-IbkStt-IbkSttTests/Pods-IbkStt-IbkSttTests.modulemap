@@ -1,0 +1,6 @@
+module Pods_IbkStt_IbkSttTests {
+  umbrella header "Pods-IbkStt-IbkSttTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -7,10 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 interface Props {
   title?: string;
   showBack?: boolean;
-  active?: 'home' | 'settings';
+  active?: 'home' | 'library' | 'settings';
+  starActive?: boolean;
+  onStar?: () => void;
 }
 
-export function AppTopBar({ title, showBack, active }: Props): React.ReactElement {
+export function AppTopBar({ title, showBack, active, starActive, onStar }: Props): React.ReactElement {
   const nav = useNavigation<any>();
   return (
     <View style={styles.bar}>
@@ -23,6 +25,18 @@ export function AppTopBar({ title, showBack, active }: Props): React.ReactElemen
       )}
       <Text style={styles.title} numberOfLines={1}>{title ?? ''}</Text>
       <View style={styles.icons}>
+        {onStar != null && (
+          <TouchableOpacity
+            style={styles.iconBtn}
+            onPress={onStar}
+            accessibilityLabel={starActive ? '즐겨찾기 해제' : '즐겨찾기'}
+            accessibilityRole="button"
+          >
+            <Text style={[styles.icon, starActive && styles.starActive]}>
+              {starActive ? '★' : '☆'}
+            </Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={[styles.iconBtn, active === 'home' && styles.iconBtnActive]}
           onPress={() => nav.navigate('Home')}
@@ -30,6 +44,14 @@ export function AppTopBar({ title, showBack, active }: Props): React.ReactElemen
           accessibilityRole="button"
         >
           <Text style={[styles.icon, active === 'home' && styles.iconActive]}>🏠</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.iconBtn, active === 'library' && styles.iconBtnActive]}
+          onPress={() => nav.navigate('Library')}
+          accessibilityLabel="보관함"
+          accessibilityRole="button"
+        >
+          <Text style={[styles.icon, active === 'library' && styles.iconActive]}>📚</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.iconBtn, active === 'settings' && styles.iconBtnActive]}
@@ -46,27 +68,28 @@ export function AppTopBar({ title, showBack, active }: Props): React.ReactElemen
 
 const styles = StyleSheet.create({
   bar: {
-    height: 46,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 12,
     backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    gap: 8,
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#dde2eb',
+    gap: 10,
   },
   spacer: { width: 36 },
   back: { width: 36, alignItems: 'center', justifyContent: 'center' },
   backIcon: { fontSize: 24, color: '#555', lineHeight: 28 },
-  title: { flex: 1, fontSize: 13, fontWeight: '800', color: '#111', letterSpacing: -0.2 },
+  title: { flex: 1, fontSize: 13, fontWeight: '800', color: '#0a1628', letterSpacing: -0.2 },
   icons: { flexDirection: 'row', gap: 4 },
   iconBtn: {
-    width: 28, height: 28, borderRadius: 6,
-    backgroundColor: '#f0f0f0',
+    width: 28, height: 28, borderRadius: 14,
+    backgroundColor: '#eef1f6',
     alignItems: 'center', justifyContent: 'center',
   },
-  iconBtnActive: { backgroundColor: '#111' },
+  iconBtnActive: { backgroundColor: '#0a1628' },
   icon: { fontSize: 13 },
   iconActive: { color: '#fff' },
+  starActive: { color: '#e65100' },
 });

@@ -1,0 +1,7 @@
+{
+  "name": "IBK STT 화면 생성",
+  "id": "ibk-stt-screen-generator-001",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"]
+}

@@ -6,28 +6,47 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
+  TextInput,
   Alert,
   Platform,
   PermissionsAndroid,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { useRecordingListStore } from '../../stores/recordingListStore';
+import { useRecordingListStore, toApiFilter } from '../../stores/recordingListStore';
 import { useAuthStore } from '../../stores/authStore';
 import { getRecordingList, getMeetingDetail, softDeleteRecording } from '../../api/recordings';
 import { ServerRecordingCache, SortType, FilterType } from '../../types';
 import { RecordingCard } from './recordingCard';
 import { DeleteConfirmModal } from './deleteConfirmModal';
 import { EMPTY_MESSAGES } from './recordingListConfig';
-import { AppTopBar } from '../../components/AppTopBar';
 import { resolveFabNavRoute } from '../../navigation/tabBarConfig';
 
 export { EMPTY_MESSAGES };
 
-// 필터 탭 레이블 맵
-const FILTER_LABELS: Record<string, string> = {
-  all: '전체', uploading: '업로드중', done: '완료', failed: '실패',
+const FILTER_LABELS: Record<FilterType, string> = {
+  all: '전체', processing: '변환중', done: '완료', starred: '즐겨찾기',
 };
+
+// 클라이언트 사이드 필터 적용
+function applyFilter(items: ServerRecordingCache[], filter: FilterType): ServerRecordingCache[] {
+  switch (filter) {
+    case 'processing':
+      return items.filter(
+        (i) =>
+          i.transcriptionState === 'processing' ||
+          i.transcriptionState === 'queued' ||
+          i.uploadState === 'uploading' ||
+          i.uploadState === 'queued',
+      );
+    case 'done':
+      return items.filter((i) => i.transcriptionState === 'completed');
+    case 'starred':
+      return items.filter((i) => i.isStarred);
+    default:
+      return items;
+  }
+}
 
 interface Props {
   navigation: any;
@@ -35,18 +54,25 @@ interface Props {
 
 export function RecordingListScreen({ navigation }: Props): React.ReactElement {
   const {
-    items, filter, sort, nextCursor, hasMore, isLoading, isRefreshing,
-    setItems, appendItems, updateItem, removeItem, restoreItem,
-    setFilter, setSort, setLoading, setRefreshing,
+    items, filter, sort, searchQuery, nextCursor, hasMore, isLoading, isRefreshing,
+    setItems, appendItems, updateItem, removeItem, restoreItem, toggleStar,
+    setFilter, setSort, setSearchQuery, setLoading, setRefreshing,
   } = useRecordingListStore();
 
-  // 인사말 헤더에 표시할 사용자 이름
   const session = useAuthStore((s) => s.session);
 
   const SORT_LABELS: Record<SortType, string> = { recent: '최신순', duration: '길이순' };
   const onToggleSort = () => setSort(sort === 'recent' ? 'duration' : 'recent');
 
   const [deleteTarget, setDeleteTarget] = useState<ServerRecordingCache | null>(null);
+
+  // 클라이언트 필터 + 검색어 적용
+  const displayedItems = useMemo(() => {
+    const filtered = applyFilter(items, filter);
+    if (!searchQuery.trim()) return filtered;
+    const q = searchQuery.toLowerCase();
+    return filtered.filter((i) => i.title.toLowerCase().includes(q));
+  }, [items, filter, searchQuery]);
 
   const onFabPress = async () => {
     let granted = false;
@@ -77,11 +103,10 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 
   const loadList = useCallback(
     async (cursor?: string) => {
-      if (cursor) {
-        setLoading(true);
-      }
+      if (cursor) setLoading(true);
       try {
-        const res = await getRecordingList({ filter, sort, cursor, limit: 20 });
+        // starred/processing은 클라이언트 필터 → API에는 'all' 전달
+        const res = await getRecordingList({ filter: toApiFilter(filter), sort, cursor, limit: 20 });
         if (cursor) {
           appendItems(res.items, res.next_cursor);
         } else {
@@ -171,6 +196,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
       item={item}
       onPress={() => navigation.navigate('RecordingDetail', { id: item.id })}
       onDelete={() => setDeleteTarget(item)}
+      onToggleStar={() => toggleStar(item.id)}
     />
   );
 
@@ -182,21 +208,72 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <AppTopBar title="IBKS 음성회의록" active="home" />
 
-      {/* 인사말 헤더 */}
-      <View style={styles.homeHeader}>
-        <Text style={styles.greetingMeta}>오늘 회의 {items.length}건</Text>
-        <Text style={styles.greetingName}>{session?.user?.name ?? '안녕하세요'} 님</Text>
-      </View>
+      {/* home-topbar: 인사말+아이콘+검색+필터 한 블록 (HTML .home-topbar 구조) */}
+      <View style={styles.homeTopbar}>
 
-      {/* 필터 row */}
-      <View style={styles.filterRow}>
+        {/* home-topbar-row: 인사말(좌) + 아이콘(우) */}
+        <View style={styles.homeTopbarRow}>
+          <View>
+            <Text style={styles.greetingName}>
+              안녕하세요, {session?.user?.name ?? ''}님
+            </Text>
+            <Text style={styles.greetingMeta}>이번 주 회의 {items.length}건</Text>
+          </View>
+          <View style={styles.topbarIcons}>
+            <TouchableOpacity
+              style={[styles.topbarIconBtn, styles.topbarIconBtnActive]}
+              onPress={() => navigation.navigate('Home' as never)}
+              accessibilityLabel="홈" accessibilityRole="button"
+            >
+              <Text style={styles.topbarIconActive}>🏠</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.topbarIconBtn}
+              onPress={() => navigation.navigate('Library' as never)}
+              accessibilityLabel="보관함" accessibilityRole="button"
+            >
+              <Text style={styles.topbarIcon}>📂</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.topbarIconBtn}
+              onPress={() => navigation.navigate('Settings' as never)}
+              accessibilityLabel="설정" accessibilityRole="button"
+            >
+              <Text style={styles.topbarIcon}>⚙</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* 검색바 */}
+        <View style={styles.searchBarWrap}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="회의 내용 검색..."
+            placeholderTextColor="#bbb"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            returnKeyType="search"
+            accessibilityLabel="회의 검색"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')} accessibilityLabel="검색어 지우기">
+              <Text style={styles.searchClear}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* 필터 탭 (seg-filter) */}
         <View style={styles.filterPills}>
-          {(['all', 'uploading', 'done', 'failed'] as FilterType[]).map((f) => (
+          {(['all', 'processing', 'done', 'starred'] as FilterType[]).map((f, idx, arr) => (
             <TouchableOpacity
               key={f}
-              style={[styles.pill, filter === f && styles.pillActive]}
+              style={[
+                styles.pill,
+                filter === f && styles.pillActive,
+                idx === arr.length - 1 && styles.pillLast,
+              ]}
               onPress={() => setFilter(f)}
               accessibilityRole="button"
               accessibilityState={{ selected: filter === f }}
@@ -207,18 +284,11 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
             </TouchableOpacity>
           ))}
         </View>
-        <TouchableOpacity
-          style={styles.sortBtn}
-          onPress={onToggleSort}
-          accessibilityLabel={`정렬 기준: ${SORT_LABELS[sort]}. 탭하여 변경`}
-          accessibilityRole="button"
-        >
-          <Text style={styles.sortBtnText}>{SORT_LABELS[sort]} ↕</Text>
-        </TouchableOpacity>
+
       </View>
 
       <FlatList
-        data={items}
+        data={displayedItems}
         keyExtractor={(item: ServerRecordingCache) => item.id}
         renderItem={renderItem}
         onRefresh={onRefresh}
@@ -226,7 +296,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
         onEndReached={onEndReached}
         onEndReachedThreshold={0.3}
         ListEmptyComponent={!isLoading ? renderEmpty : null}
-        contentContainerStyle={items.length === 0 ? styles.emptyList : undefined}
+        contentContainerStyle={displayedItems.length === 0 ? styles.emptyList : undefined}
       />
 
       <DeleteConfirmModal
@@ -253,91 +323,120 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F9FAFB' },
-  homeHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    paddingBottom: 16,
-    backgroundColor: '#fcf8fa',
+  container: { flex: 1, backgroundColor: '#f4f6f9' },
+
+  /* home-topbar: 인사말+아이콘+검색+필터 */
+  homeTopbar: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 14,
+    paddingTop: 10,
+    paddingBottom: 12,
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#dde2eb',
   },
-  greetingMeta: {
-    fontSize: 13,
-    fontFamily: 'HankenGrotesk-SemiBold',
-    color: '#585f6c',
-    marginBottom: 4,
+  homeTopbarRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 8,
   },
   greetingName: {
-    fontSize: 32,
-    fontFamily: 'HankenGrotesk-ExtraBold',
-    color: '#000000',
-    lineHeight: 38,
-    letterSpacing: -0.5,
+    fontSize: 15,
+    fontFamily: 'Pretendard-ExtraBold',
+    color: '#0a1628',
+    letterSpacing: -0.3,
+    marginBottom: 2,
   },
-  filterRow: {
+  greetingMeta: {
+    fontSize: 10,
+    fontFamily: 'Pretendard-Regular',
+    color: '#94a3b8',
+  },
+  topbarIcons: { flexDirection: 'row', gap: 4 },
+  topbarIconBtn: {
+    width: 28, height: 28, borderRadius: 14,
+    backgroundColor: '#eef1f6',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  topbarIconBtnActive: { backgroundColor: '#0a1628' },
+  topbarIcon: { fontSize: 13 },
+  topbarIconActive: { fontSize: 13, color: '#fff' },
+
+  /* search-bar */
+  searchBarWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: '#dde2eb',
+    paddingHorizontal: 10,
     paddingVertical: 8,
-    backgroundColor: '#fcf8fa',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    gap: 6,
+    marginBottom: 10,
   },
-  filterPills: {
+  searchIcon: { fontSize: 11, color: '#bbb' },
+  searchInput: {
     flex: 1,
+    fontSize: 11,
+    fontFamily: 'Pretendard-Regular',
+    color: '#0a1628',
+    padding: 0,
+  },
+  searchClear: { fontSize: 11, color: '#aaa' },
+
+  /* seg-filter */
+  filterPills: {
     flexDirection: 'row',
-    backgroundColor: '#f6f3f4',
-    borderRadius: 16,
-    padding: 4,
-    gap: 4,
+    borderWidth: 1.5,
+    borderColor: '#dde2eb',
+    borderRadius: 12,
+    overflow: 'hidden',
   },
   pill: {
     flex: 1,
-    paddingVertical: 8,
-    borderRadius: 12,
+    paddingVertical: 6,
     alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRightWidth: 1,
+    borderRightColor: '#dde2eb',
   },
-  pillActive: { backgroundColor: '#000000' },
-  pillText: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#585f6c' },
-  pillTextActive: { color: '#ffffff' },
-  sortBtn: { paddingHorizontal: 12, paddingVertical: 8 },
-  sortBtnText: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#585f6c' },
-  emptyContainer: { alignItems: 'center', paddingTop: 100 },
-  emptyText: { fontSize: 15, color: '#9CA3AF' },
+  pillActive: { backgroundColor: '#0a1628' },
+  pillLast: { borderRightWidth: 0 },
+  pillText: { fontSize: 10, fontFamily: 'Pretendard-Bold', color: '#94a3b8' },
+  pillTextActive: { color: '#fff' },
+  emptyContainer: { alignItems: 'center', paddingTop: 80 },
+  emptyText: { fontSize: 12, color: '#bbb', fontFamily: 'Pretendard-Regular' },
   emptyList: { flexGrow: 1 },
   bottomBar: {
     backgroundColor: '#fff',
     borderTopWidth: 1.5,
-    borderTopColor: '#e0e0e0',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 12,
+    borderTopColor: '#dde2eb',
   },
   startBtn: {
-    height: 56,
+    height: 44,
     borderRadius: 12,
-    backgroundColor: '#111',
+    backgroundColor: '#005BAC',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
+    gap: 8,
+    marginHorizontal: 12,
+    marginVertical: 8,
   },
-  startBtnIcon: { fontSize: 22 },
-  startBtnText: { fontSize: 16, fontWeight: '700', color: '#fff', letterSpacing: -0.3 },
+  startBtnIcon: { fontSize: 16 },
+  startBtnText: { fontSize: 13, fontFamily: 'Pretendard-Bold', color: '#fff' },
   fab: {
     position: 'absolute',
     bottom: 32,
     alignSelf: 'center',
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: '#EF4444',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#0a1628',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#EF4444',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
     elevation: 8,
   },
-  fabIcon: { fontSize: 26 },
+  fabIcon: { fontSize: 22 },
 });

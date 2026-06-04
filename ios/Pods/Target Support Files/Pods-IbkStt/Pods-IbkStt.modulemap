@@ -1,0 +1,6 @@
+module Pods_IbkStt {
+  umbrella header "Pods-IbkStt-umbrella.h"
+
+  export *
+  module * { export * }
+}

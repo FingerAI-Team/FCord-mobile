@@ -1,0 +1,1161 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="IBKS 회의록">
+<meta name="theme-color" content="#ffffff">
+<link rel="apple-touch-icon" href="data:image/png;base64,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EQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAACh/g/vHAqKUEcIVAAAAABJRU5ErkJggg==">
+<link rel="manifest" href="data:application/manifest+json,{"name":"IBKS 음성회의록","short_name":"IBKS 회의록","display":"standalone","background_color":"%23ffffff","theme_color":"%23ffffff","start_url":"./app.html","scope":"./","icons":[{"src":"data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAbkUlEQVR4nO3de3BU9d3H8c2daxISwsVwTQy3KJIQipSKxWqRuhuyhJAojaFyMTC2TMsIFgXFwXS0ykBMJUVEwMJQAtkuWQahDjQSRYQiFxEIIUAMgVy4BEnIkss%2Bf6SPtoqK4PmdPef7fv3R6Tjt%2Bfza0fMmm92zPp06dbIAAOTx1fsAAAB9EAAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACOWv9wGMLT09fenSpdpdPzc3d968eRpdXOvD34LGxsampqbGxsYv%2F83Vq1dra2svX77c%2Bq%2BXL18%2Bd%2B5ceXn52bNny8vLr169qveRb5eh%2Fxa6eWFhYfn5%2BYMHD1Yzd%2B3atccee6ywsFDNnHERAHiRgICAgICAtm3b3uR%2Fvra29uTJk5%2F9l5qaGk1PiFvQuXNnh8MRGxurZq6%2Bvj4tLa2oqEjNnKERABhYSEhIfHx8fHz8l3%2BltLT0gw8%2BKCoqKioqOnfunI5nQ6uIiAin0zlgwAA1c3V1dRMnTty9e7eaOaMjADCVqKioqKio9PR0i8Vy%2FPjxf%2FzjHw6Ho7i4WO9zCdW1a1en09mvXz81c1evXk1JSdmzZ4%2BaORPgl8Awrf79%2B8%2BdO%2Fejjz4qKip66qmngoOD9T6RLN26dXO5XMru%2FleuXBk%2Ffjx3%2Fx%2BEAMD8Bg0a9OKLL3766acvvfRSz5499T6OCJGRkS6XKzo6Ws1cbW2t3W7ft2%2BfmjnTIACQokOHDjNmzPj3v%2F%2F9pz%2F9iZ8GNNWzZ0%2BXyxUVFaVm7tKlS3a7%2FZNPPlEzZyYEALL4%2B%2Fs%2F%2BeSTe%2FfunTRpko%2BPj97HMaHevXu7XK7evXurmbt48WJSUtKBAwfUzJkMAYBEERERr7%2F%2B%2Bpo1azp27Kj3WUylb9%2B%2BLpdL2etsNTU148aNO3z4sJo58yEAkOuRRx7ZsWOHsncoml50dLTL5YqMjFQzV11dnZiYeOTIETVzpkQAIFp0dPS2bdvi4uL0PojhxcTEuFyu7t27q5mrqqqy2WzHjh1TM2dWBADSdezYcdOmTcqeUmBKAwYMcLlcXbt2VTN3%2Fvx5q9XKxztuHwEALKGhofn5%2BX379tX7IIY0aNCgzZs3R0REqJmrqKiwWq0lJSVq5syNAAAWi8USFha2YsWKwMBAvQ9iMHfffffmzZs7d%2B6sZq68vNxqtZaWlqqZMz0CAPxHXFzcggUL9D6FkQwZMsTpdIaFhamZKysrs1qtp0%2BfVjMnAQEAvjJjxoxhw4bpfQpjiI%2BPdzgcoaGhauZOnz5ttVrLysrUzAlBAICv%2BPj4LFy4UO9TGMCwYcMcDkdISIiaudLSUqvVWl5ermZODgIA%2FI9777334Ycf1vsUXu3ee%2B%2FdtGmTss%2FQlZSUWK3WiooKNXOiEADg655%2B%2Bmm9j%2BC9Ro4cuXHjxg4dOqiZKy4utlqt58%2BfVzMnDQEAvi4uLm7gwIF6n8IbjRo1asOGDe3atVMzd%2BzYMZvNVlVVpWZOIAIA3MCvf%2F1rvY%2FgdX7%2B85%2BvX7%2F%2B5r%2Bw8zYdOXIkMTGxurpazZxMfCMYtHJrX0fu7%2B8fGhoaEhISEhIycODAhISEhIQEZV8n%2B6WUlJT58%2Be3tLQo3vVaDz744DvvvBMUFKRm7vDhw3a7%2FeLFi2rmxCIA8C5NTU01NTWt3%2B2%2Bf%2F%2F%2BtWvXWiyW%2Fv37T58%2BPTU1VdmLD507d46NjeUxk63GjBmzatUqZXf%2FAwcOJCcnX7p0Sc2cZLwEBAM4fvz47Nmzhw4dWlhYqGz0Zz%2F7mbItb%2FbII4%2BsXr1a2d1%2F%2F%2F79drudu78aBACGUVlZOX78%2BJdeeknN3MiRI9UMeTObzbZy5UplT8jYt2%2Bf3W6vra1VMwcCACPxeDyvvfZadna2gi2eEW232996662AgAA1c3v27Bk%2FfvwXX3yhZg4WAgAjWrhw4bZt27Re6datW5s2bbRe8VoTJkxYvny5v7%2BiXxN%2B%2BOGHEyZMuHr1qpo5tCIAMB6PxzN%2F%2Fvzm5mZNV3x8fPr06aPphNdKS0vLzc318%2FNTM7dr166UlJS6ujo1c%2FgSAYAhlZSU5OXlab0SFRWl9YQXmjRpUk5Ojq%2BvoptDYWFhamrqtWvX1MzhvxEAGNW6deu0nlD2JSfeIyMjIzs7W9ndf8eOHWlpaQ0NDWrm8DUEAEa1d%2B9erW8cyj524CWmTJmyePFiHx8fNXP%2F%2FOc%2FJ02a5Ha71czhmwgAjMrtdu%2FZs0fTifbt22t6fa%2BSmZn55z%2F%2FWdnd%2F913301PT%2Bfury8CAAPT%2Bsuh5PwEMHPmzKysLGVzW7ZsycjIuH79urJF3BABgIFp%2FawYZW%2BB19esWbMWLVqkbG7z5s2%2F%2Bc1vGhsblS3i2%2FAsIBjYhQsXNL2%2BhBcoZs%2Be%2FeyzzyqbczgcTz75ZFNTk7JFfAcCAHwr0783ce7cuXPnzlU2l5eXN3PmTK0%2FwIGbRwBgYGFhYZpe39wPo3%2F22Wdnz56tbG79%2BvVPPfUUT9j2KgQABhYeHq7p9SsrKzW9vo6ef%2F75WbNmKZtbu3btrFmzuPt7GwIAA%2BvVq5em1y8pKdH0%2BnpZtGjRzJkzlc2tWbPm97%2F%2FvcfjUbaIm8S7gGBUAQEBw4cP1%2B76brf7zJkz2l1fL1lZWSrv%2FitXruTu77X4CQBGlZCQoOn79A8ePGiyN6v4%2BPi88sorU6ZMUba4fPnyZ555RtkcfigCAKNKTU3V9PofffSRptdXzMfHZ%2FHixRkZGcoWly1bpvINprgFvAQEQ%2Brdu%2Fejjz6q6YSCrxxQxtfXNzs7W%2BXdPycnh7u%2F9%2BMnABjSCy%2B8oOnHdKurq7V%2B0JAyvr6%2BOTk5aWlpyhaXLFny4osvKpvDLSMAMJ45c%2BaMGzdO04l169aZ4z2Lfn5%2Bubm5EyZMULb46quvqnysEG4HAYDBZGZmav17xebm5lWrVmk6oUx6errKL7Z8%2BeWXX375ZWVzuE0EAIYRHh7%2B%2BuuvP%2Fzww1oPbdiwwTRvAFV591%2B0aNHixYuVzeH2EQAYQHR09JQpUx577LHg4GCttxoaGvgz7C144YUXsrOz9T4FfhgCAO%2Fi7%2B8fHBwcEhISEhIyYMCAhISEhISEu%2B%2B%2BW9kXlbz22mtlZWVqtkzjueeee%2BONN%2FQ%2BBX4wAgCtZGZmZmZm6n2KH%2Bb9999fsmSJ3qcwmHnz5uXm5up9CtwKAgD8x9mzZ6dOncrDim%2Bex%2BOZO3fuihUr9D4IbhEBACwWi6WhoSEjI6OmpkbvgxiGx%2BOZPXu2ad4uJROfBAYstbW148eP379%2Fv94HMQyPxzNr1izu%2FkbHTwCQrrKyMjk5%2BbPPPtP7IIbR0tLyu9%2F9bt26dXofBLeLnwAg2scffzxmzBju%2Fjevubl55syZ3P3NgZ8AINS1a9cWLVr017%2F%2B1RyPfFCjubk5MzNz06ZNeh8EPw4CAHE8Hs%2FWrVvnz59%2F6tQpvc9iJE1NTdOmTXM6nXofBD8aAgBBGhsb8%2FLysrOzi4uL9T6LwTQ2Nk6dOrWgoEDvg%2BDHxO8AIMiWLVtWr1594sQJvQ9iPL%2F97W%2B5%2B5sPAYAgSUlJ27ZtO3To0NNPP92lSxe9j2Mk06dPV%2FAgJihGACBOZGTkH%2F%2F4x8OHDy9ZsqRHjx56H8cY4uPjHQ5HSEiI3gfBj4kAQKiAgIDHH3983759zz%2F%2FfNu2bfU%2BjgHExcU5HI7Q0FC9D4IfDQGAaIGBgbNmzdq9e%2FeoUaP0PosBDBkyxOFwdOrUSe%2BD4MdBAABLr1698vPz58yZ4%2BvLPxHf45577qEBpsHf7oDFYrH4%2Bvo%2B88wzK1euDAoK0vss3m7w4MFOpzMsLEzvg%2BB2EQDgK4mJiRs2bOBXAt%2Frrrvucjqd4eHheh8Et4UAAP%2FjvvvuW7NmTUBAgN4H8XaxsbFOp7Nz5856HwS3jgAAX%2FeLX%2Fxi6dKlep%2FCAAYNGuR0OiMiIvQ%2BCG4RAQBuIC0t7YknntD7FAYwcOBAGmBcBAC4saysrEGDBul9CgMYMGBAQUEBDTAiHgYHreTm5s6bN%2B8W%2Fos%2BPj5BQUFBQUHh4eHh4eF9%2BvSJiYmJi4sbNmyYyqcRBAYGZmdn%2F%2FKXv%2BR50d%2BrX79%2BLpfLZrNVVVXpfRb8AAQAXsfj8TQ0NDQ0NNTW1paWlu7du7f1r%2Fv6%2Bv70pz8dP378xIkT27Vrp%2BAk8fHxkydPXrlypYIto4uJiWltQGVlpd5nwc3iJSAYRktLS1FR0R%2F%2B8IfY2NhXX33V7XYrGJ0zZw7vCr1Jd955p8vl6tatm94Hwc0iADCe2trarKyskSNHHjhwQOutLl26TJ06VesV04iOji4oKOjevbveB8FNIQAwqtLS0rFjx27dulXroWnTpvn5%2BWm9YhqtDbjjjjv0Pgi%2BHwGAgbnd7smTJ%2B%2FatUvTlR49eowdO1bTCe0UFhZeuHBB8WhUVFRBQUFkZKTiXfxQBADG1tjY%2BMQTT1RXV2u6kpKSoun1tXP06NGkpCT1Dejbt6%2FL5eLrFrwcAYDhXbhwYcGCBZpOPPTQQ2red6SFI0eOJCYm1tTUKN7t3bu3y%2BXq2bOn4l3cPAIAM8jLyzt58qR212%2FTps3999%2Bv3fW1dvTo0cTERK1%2FTvqmXr16uVyuXr16Kd7FTSIAMIOWlhat360%2FcuRITa%2BvtWPHjtlsNvUN6Nmzp8vl6t27t%2BJd3AwCAJPYvHmzptcfMWKEptdXoLi42Gq1qv%2BgVo8ePVwuV58%2BfRTv4nsRAJjE2bNnT506pd31Bw0aZILvCztx4oTNZjt%2F%2Frzi3cjISJfL1bdvX8W7%2BG6G%2Fxsa%2BNL%2B%2Ffu1u3hQUJA5%2FgxbUlJis9nOnTunePeOO%2B5wuVxRUVGKd%2FEdCADM4%2FTp05pePzo6WtPrK3Py5EmbzVZRUaF4t3v37i6XyzT%2FN5oAAYB5aH1H69q1q6bXV6m0tNRms509e1bxbrdu3QoKCu68807Fu7ghAgDzqK%2Bv1%2FT6JnvM2alTp6xWa3l5ueLd1gbExMQo3sU3EQCYh9bPBw0NDdX0%2BuqdOXPGarV%2B%2Fvnnine7du1aUFDQr18%2Fxbv4GgIA89D6w7pBQUGaXl8XZWVlVqv1zJkzine7dOlSUFDQv39%2Fxbv4bwQA5tGhQwdNr2%2FKAFgsls8%2F%2F9xms2n9K%2FRvioiI2Lx584ABAxTv4ksEAOah9eMnGxsbNb2%2BjsrLy202m6YfpLih1gbw3ct6IQAwD60%2FZ6T1L5n1dfbsWavVWlpaqni3c%2BfOTqczNjZW8S4sBABmMnToUE2vX1dXp%2Bn1dXfu3Dmr1arpY%2FVuKDw83Ol03nXXXYp3QQBgEjExMVp%2FE6HpA2CxWM6fP2%2B1WktKShTvhoWFOZ3OwYMHK94VjgDAJOx2u9YT6r9WRReVlZVWq7W4uFjxbqdOnRwOxz333KN4VzICADMIDAzMyMjQekX96%2BN6qaqqstlsx48fV7zb2oAhQ4Yo3hWLAMAMJk%2BerPXrPxZJAbBYLNXV1YmJiceOHVO8Gxoa6nA44uLiFO%2FKRABgeJGRkfPmzdN6pa6urqqqSusVr9LagM8%2B%2B0zxbkhIiMPhiI%2BPV7wrEAGAsbVp02bNmjXBwcFaDx05ckTrCS9UU1Mzbtw49f%2Fbg4OD8%2FPztX5bFwgADKxDhw55eXlqXi7YtWuXghUvdOHChXHjxh0%2BfFjxbmsDEhISFO%2BKQgBgVLGxsTt27FD2Vb1iA2CxWC5evJiUlHTo0CHFux07dszPz%2F%2FJT36ieFcOAgDjiYiIyMrK2rlzp7LHyrvd7o8%2F%2FljNlne6dOlSUlLSgQMHFO926NBh48aNw4cPV7wrBAGAYfj7%2B48ePTonJ%2BfQoUOZmZn%2B%2Fv7Kprdt29bQ0KBszjtdvnzZbrd%2F8sknindbGzBixAjFuxKo%2B0cIuEk%2BPj6BgYFBQUFhYWFdunTp06dPTEzM0KFDhw0b1r59e12O9Le%2F%2FU2XXW9TW1trt9vz8%2FMVv0Wnffv2eXl5EydO%2FPDDD1Xumh4BgFYyMzMzMzP1PsWPoKKiYufOnXqfwltcuXLFbrdv2rRJ8a9n27Vrt2HDhtTU1A8%2B%2BEDlrrnxEhDwPd5%2B%2B%2B3m5ma9T%2BFFvvjii%2BTk5L179yrebW3Afffdp3jXxAgA8F2qqqqWLVum9ym8TmsD9uzZo3i3bdu269evHzVqlOJdsyIAwHd55ZVXzP01ALfs6tWrEyZM2L17t%2BLd1gbcf%2F%2F9indNiQAA3%2Bro0aNr1qzR%2BxTeq66uLiUlRf0vZtu0abN%2B%2FfrRo0cr3jUfAgDcmNvtnjZtWlNTk94H8Wr19fUTJ04sKipSvBsUFLRu3boHHnhA8a7JEADgxhYsWKD%2BOWhGVF9fn5qa%2Bv777yveDQoKWrt27YMPPqh410wIAHAD%2Bfn5b775pt6nMIxr166lpaUVFhYq3g0KCnrnnXceeughxbumQQCAr9u%2BffuMGTP0PoXBNDQ0PProo%2F%2F6178U77Y2YMyYMYp3zYEAAP9j165dGRkZjY2Neh%2FEeFobsGPHDsW7gYGBq1evHjt2rOJdEyAAwFc2btw4ceJEt9ut90GMyu12T5o06b333lO8GxgYuGrVql%2F96leKd42OAAAWi8XS0tKycOHC6dOnc%2Fe%2FTW63Oz09ffv27Yp3AwIC3n77bavVqnjX0AgAYCkrK0tOTl66dKneBzEJt9v9%2BOOPv%2Fvuu4p3AwIC3nrrLZvNpnjXuAgARGtubn7jjTdGjBih%2Fh0s5nb9%2BvXJkydv3bpV8W5rAxITExXvGhQBgFzbt29%2F4IEHnnvuuWvXrul9FhNqbYDL5VK86%2B%2Fvv2LFiqSkJMW7RkQAII7H49myZcvo0aPT0tLUf9WtKI2NjVOmTCkoKFC86%2B%2Fv%2F%2Babb9rtdsW7hkMAIEhFRcWSJUuGDx%2Benp5%2B8OBBvY8jQmsDnE6n4l0%2FP7%2Fly5cnJycr3jUWvhAG5lddXf3ee%2B9t3LixsLCwpaVF7%2BOI09TUNG3aNI%2FHo%2FhlGT8%2Fv9zcXF9f37y8PJW7BkIAYE719fX79u3buXPnjh07Pv30U4%2FHo%2FeJRGttQHNzs%2BI%2Fkvv5%2BS1btszX1%2Ffvf%2F%2B7yl2jIAAwA4%2FHU1VVdfLkyUOHDh08ePDAgQMnTpzgD%2Ftepbm5OTMzs6WlJSUlReWur6%2FvX%2F7yFx8fn%2FXr16vcNQQCAO%2FV1NTU1NR0%2Ffr169evNzU1NTQ0XLly5dKlSxcvXrx48eKlS5eqqqrO%2FD8%2BwOX9mpubZ8yY0dLSkpqaqnLX19c3JyfHz89v7dq1Kne9n0%2BnTp30PgMAQAe8CwgAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAAChCAAACEUAAEAoAgAAQhEAABCKAACAUAQAAIQiAAAgFAEAAKEIAAAIRQAAQCgCAABCEQAAEIoAAIBQBAAAhCIAACAUAQAAoQgAAAhFAABAKAIAAEIRAAAQigAAgFAEAACEIgAAIBQBAACh%2Fg%2FvHAqKUEcIVAAAAABJRU5ErkJggg==","sizes":"512x512","type":"image/png"}]}">
+<title>IBKS 음성회의록</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --border: rgba(255,255,255,.08);
+  --text-primary: #f1f5f9;
+  --text-muted: #64748b;
+  --font: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif;
+  /* 앱 디자인 토큰 */
+  --r: 6px;
+  --r-sm: 4px;
+  --c-primary: #111;
+  --c-secondary: #f0f0f0;
+  --c-bg: #f5f5f5;
+  --c-surface: #fff;
+  --c-border: #e0e0e0;
+  --c-text: #111;
+  --c-muted: #888;
+  --c-done: #2e7d32;
+  --c-proc: #e65100;
+  --c-fail: #c62828;
+}
+
+body { font-family: var(--font); background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
+
+/* ── 헤더 ── */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,10,.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.logo { display: flex; align-items: center; gap: 10px; margin-right: 6px; }
+.logo-badge { width: 28px; height: 28px; border-radius: var(--r); background: #111; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #fff; }
+.logo-text { font-size: 13px; font-weight: 700; color: #fff; }
+.logo-sub { font-size: 10px; color: var(--text-muted); }
+.sep { width: 1px; height: 22px; background: var(--border); }
+.screen-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.snav-btn { padding: 4px 10px; border-radius: var(--r); border: 1px solid transparent; background: rgba(255,255,255,.05); color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.snav-btn:hover { background: rgba(255,255,255,.1); color: #94a3b8; }
+.snav-btn.active { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.2); }
+
+/* ── 스테이지 ── */
+.stage { display: flex; align-items: flex-start; justify-content: center; padding: 32px 24px; gap: 28px; min-height: calc(100vh - 56px); }
+.phones-wrap { display: flex; gap: 20px; flex-shrink: 0; }
+
+/* ── 디바이스 공통 ── */
+.device-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.device-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+.screen-counter { font-size: 10px; color: var(--text-muted); text-align: center; }
+
+/* ── iPhone 껍데기 ── */
+.iphone-shell { width: 276px; background: linear-gradient(160deg, #2a2a2e, #1c1c1f); border-radius: 46px; padding: 10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), 0 36px 72px rgba(0,0,0,.8); }
+.iphone-screen-wrap { width: 100%; height: 590px; background: var(--c-bg); border-radius: 37px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.dynamic-island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 88px; height: 26px; background: #000; border-radius: 14px; z-index: 100; }
+.ios-status { height: 48px; padding: 14px 18px 0; flex-shrink: 0; position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; background: var(--c-surface); }
+.ios-home-bar { height: 20px; display: flex; align-items: center; justify-content: center; background: var(--c-surface); flex-shrink: 0; }
+.ios-home-indicator { width: 100px; height: 4px; border-radius: 2px; background: #ddd; }
+
+/* ── Android 껍데기 ── */
+.android-shell { width: 276px; background: linear-gradient(160deg, #1e2228, #14171c); border-radius: 28px; padding: 10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.10), 0 36px 72px rgba(0,0,0,.8); }
+.android-screen-wrap { width: 100%; height: 590px; background: var(--c-bg); border-radius: 19px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.punch-hole { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 11px; height: 11px; background: #000; border-radius: 50%; z-index: 100; }
+.aos-status { height: 38px; padding: 8px 16px 0; flex-shrink: 0; position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; background: var(--c-surface); }
+.aos-nav-bar { height: 22px; display: flex; align-items: center; justify-content: center; gap: 20px; background: var(--c-surface); flex-shrink: 0; padding-bottom: 4px; }
+.aos-nav-pill { width: 28px; height: 4px; border-radius: 2px; background: #ccc; }
+.aos-nav-circle { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #ccc; }
+.aos-nav-square { width: 11px; height: 11px; border-radius: 2px; border: 1.5px solid #ccc; }
+
+.st-time { font-size: 12px; font-weight: 700; color: #111; }
+.st-icons { font-size: 10px; color: #111; display: flex; gap: 4px; align-items: center; }
+
+/* ── 전화 공통 ── */
+.phone-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.screen { display: none; flex-direction: column; flex: 1; overflow: hidden; min-height: 0; }
+.screen.active { display: flex; animation: fadein .18s ease; }
+@keyframes fadein { from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══════════════════════════════════════ 공통 앱 컴포넌트 */
+.card { background: var(--c-surface); border-radius: var(--r); padding: 10px 12px; border: 1.5px solid var(--c-border); margin-bottom: 6px; }
+.card-title { font-weight: 700; color: var(--c-text); font-size: 12px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.card-meta { font-size: 10px; color: var(--c-muted); margin-top: 3px; }
+.card-hint { font-size: 9px; color: #ccc; margin-top: 4px; font-style: italic; }
+
+.bdg { display: inline-block; padding: 2px 6px; border-radius: var(--r-sm); font-size: 10px; font-weight: 700; }
+.bdg-done { background: #e8f5e9; color: var(--c-done); }
+.bdg-proc { background: #fff3e0; color: var(--c-proc); }
+.bdg-fail { background: #fce4ec; color: var(--c-fail); }
+
+.seg-filter { display: flex; border: 1.5px solid var(--c-border); border-radius: var(--r); overflow: hidden; }
+.seg-tab { flex: 1; text-align: center; padding: 6px 0; font-size: 10px; font-weight: 700; color: var(--c-muted); background: var(--c-surface); border-right: 1px solid var(--c-border); cursor: pointer; transition: all .12s; }
+.seg-tab:last-child { border-right: none; }
+.seg-tab.on { background: var(--c-text); color: #fff; }
+
+.search-bar { display: flex; align-items: center; background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 8px 10px; gap: 6px; }
+.search-ph { font-size: 11px; color: #bbb; }
+
+.btn-primary { height: 44px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; }
+.btn-secondary { height: 40px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #333; font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; }
+.btn-danger-outline { height: 38px; border-radius: var(--r); background: var(--c-surface); border: 1.5px solid var(--c-border); color: var(--c-fail); font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; }
+
+.tabbar { background: var(--c-surface); border-top: 1.5px solid var(--c-border); flex-shrink: 0; }
+.start-btn { margin: 8px 12px 6px; height: 44px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.start-btn-text { font-size: 13px; font-weight: 700; color: #fff; }
+.tab-row { display: flex; }
+.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 6px 0 8px; font-size: 10px; gap: 2px; color: #bbb; cursor: pointer; }
+.tab-item.on { color: var(--c-text); font-weight: 700; }
+.tab-ic { font-size: 16px; }
+
+.toggle-track { width: 34px; height: 20px; border-radius: 10px; background: var(--c-text); position: relative; flex-shrink: 0; }
+.toggle-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; position: absolute; top: 2px; right: 2px; }
+.toggle-track.off { background: #ddd; }
+.toggle-track.off .toggle-thumb { right: auto; left: 2px; }
+
+/* ═══════════════════════════════════════ 스플래시 */
+.s-splash { background: var(--c-surface); align-items: center; justify-content: center; gap: 14px; }
+.splash-logo { width: 140px; height: 54px; object-fit: contain; }
+.splash-title { font-size: 22px; font-weight: 900; color: #111; letter-spacing: -1px; }
+.splash-sub { font-size: 11px; color: var(--c-muted); }
+.splash-spinner { width: 16px; height: 16px; border: 2px solid #e0e0e0; border-top-color: #aaa; border-radius: 50%; animation: spin .8s linear infinite; margin-top: 8px; }
+@keyframes spin { to{ transform:rotate(360deg); } }
+
+/* ═══════════════════════════════════════ 로그인 */
+.s-login { background: var(--c-surface); overflow-y: auto; }
+.login-topbar { height: 46px; padding: 0 16px; display: flex; align-items: center; border-bottom: 1.5px solid var(--c-border); flex-shrink: 0; }
+.login-wordmark img { height: 28px; object-fit: contain; }
+.login-body { padding: 24px 18px 20px; display: flex; flex-direction: column; }
+.login-eyebrow { font-size: 10px; font-weight: 700; color: var(--c-muted); letter-spacing: 1px; margin-bottom: 5px; }
+.login-title { font-size: 20px; font-weight: 900; color: #111; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 4px; }
+.login-sub { font-size: 11px; color: var(--c-muted); margin-bottom: 20px; }
+.sso-btn { height: 46px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin-bottom: 10px; width: 100%; }
+.divider { display: flex; align-items: center; gap: 8px; margin: 12px 0; }
+.div-line { flex: 1; height: 1px; background: var(--c-border); }
+.div-text { font-size: 10px; color: var(--c-muted); }
+.input-wrap { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); height: 44px; display: flex; align-items: center; padding: 0 12px; margin-bottom: 8px; }
+.input-wrap span { font-size: 11px; color: #bbb; }
+.login-cta { height: 44px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #555; font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; }
+.login-terms { font-size: 10px; color: #bbb; text-align: center; margin-top: 12px; line-height: 1.6; }
+
+/* ═══════════════════════════════════════ 홈 */
+.s-home { background: var(--c-bg); }
+.home-topbar { background: var(--c-surface); padding: 10px 14px 12px; flex-shrink: 0; border-bottom: 1.5px solid var(--c-border); }
+.home-greeting { font-size: 15px; font-weight: 900; color: #111; letter-spacing: -0.3px; margin-bottom: 2px; }
+.home-sub { font-size: 10px; color: var(--c-muted); margin-bottom: 10px; }
+.home-list { flex: 1; overflow-y: auto; padding: 10px 12px 0; }
+
+/* ═══════════════════════════════════════ 회의 생성 */
+.s-recording { background: var(--c-surface); }
+.rec-topbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 6px; flex-shrink: 0; }
+.rec-close { width: 28px; height: 28px; border-radius: var(--r); background: var(--c-bg); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #555; cursor: pointer; }
+.rec-badge { background: var(--c-text); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-sm); }
+.rec-badge-paused { background: #888; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-sm); }
+.rec-timer { font-size: 48px; font-weight: 900; color: #111; text-align: center; letter-spacing: -3px; padding: 6px 0 4px; }
+.rec-timer.paused { color: #bbb; }
+.wave-row { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 40px; margin: 0 auto 14px; width: 110px; }
+.wb { width: 4px; border-radius: 2px; background: #111; }
+.wb.on { animation: wv .7s ease-in-out infinite alternate; }
+.wb.off { background: #ddd; height: 8px !important; }
+@keyframes wv { from{transform:scaleY(.3)} to{transform:scaleY(1)} }
+.rec-body { flex: 1; padding: 0 14px; display: flex; flex-direction: column; }
+.memo-lbl { font-size: 10px; color: var(--c-muted); font-weight: 700; margin-bottom: 5px; }
+.memo-box { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 10px 12px; font-size: 11px; color: #bbb; margin-bottom: 14px; }
+.ctrl-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.btn-pause { flex: 1; height: 52px; border-radius: var(--r); background: var(--c-secondary); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #333; line-height: 1.5; border: none; cursor: pointer; }
+.btn-end { flex: 2; height: 52px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; gap: 6px; border: none; cursor: pointer; }
+.ctrl-hint { text-align: center; font-size: 10px; color: #bbb; padding-bottom: 10px; }
+
+/* ═══════════════════════════════════════ 회의종료 시트 */
+.s-sheet { background: var(--c-bg); position: relative; }
+.sheet-dim { flex: 1; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 10px; background: rgba(0,0,0,0.06); }
+.sheet-body { background: var(--c-surface); border-top: 1.5px solid var(--c-border); padding: 14px 14px 12px; flex-shrink: 0; }
+.sheet-drag { width: 32px; height: 3px; background: #ddd; border-radius: 2px; margin: 0 auto 12px; }
+.sheet-title { font-size: 14px; font-weight: 900; color: #111; margin-bottom: 3px; }
+.sheet-sub { font-size: 10px; color: var(--c-muted); margin-bottom: 10px; }
+.sheet-input { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 10px 12px; font-size: 12px; color: #111; font-weight: 600; margin-bottom: 10px; }
+.sheet-btn-row { display: flex; gap: 8px; }
+.sheet-cancel { flex: 1; height: 44px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #555; font-size: 12px; font-weight: 700; cursor: pointer; }
+.sheet-save { flex: 2; height: 44px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+/* ═══════════════════════════════════════ 상세 */
+.s-detail { background: var(--c-bg); }
+.detail-topbar { background: var(--c-surface); padding: 10px 14px; border-bottom: 1.5px solid var(--c-border); flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+.detail-back { font-size: 14px; color: #555; cursor: pointer; }
+.detail-topbar-title { font-size: 14px; font-weight: 700; color: #111; flex: 1; }
+.detail-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; }
+.detail-header-card { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 12px; }
+.detail-title { font-size: 14px; font-weight: 900; color: #111; margin-bottom: 4px; }
+.detail-meta { font-size: 10px; color: var(--c-muted); }
+.status-row { display: flex; gap: 6px; }
+.status-box { flex: 1; background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 8px 4px; text-align: center; }
+.status-ic { font-size: 15px; }
+.status-lbl { font-size: 9px; font-weight: 700; color: var(--c-muted); margin-top: 2px; }
+.status-val { font-size: 10px; font-weight: 700; margin-top: 2px; }
+.retry-banner { background: #fce4ec; border-radius: var(--r); padding: 10px 12px; display: flex; align-items: center; gap: 6px; }
+.retry-banner-text { font-size: 11px; font-weight: 700; color: var(--c-fail); }
+.retry-link { font-size: 11px; font-weight: 700; color: var(--c-fail); text-decoration: underline; margin-left: auto; cursor: pointer; }
+
+/* ═══════════════════════════════════════ 설정 */
+.s-settings { background: var(--c-bg); overflow-y: auto; }
+.settings-body { padding: 12px; }
+.user-card { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 36px; height: 36px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; font-weight: 900; flex-shrink: 0; }
+.user-name { font-size: 13px; font-weight: 800; color: #111; }
+.user-dept { font-size: 10px; color: var(--c-muted); margin-top: 2px; }
+.settings-section { margin-bottom: 10px; }
+.settings-header { font-size: 10px; font-weight: 700; color: var(--c-muted); margin-bottom: 5px; padding-left: 2px; letter-spacing: 0.5px; }
+.settings-group { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); overflow: hidden; }
+.settings-row { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; gap: 10px; }
+.settings-row:last-child { border-bottom: none; }
+.settings-ic { font-size: 13px; width: 18px; text-align: center; }
+.settings-lbl { font-size: 12px; color: #111; flex: 1; font-weight: 500; }
+.settings-val { font-size: 11px; color: var(--c-muted); }
+.settings-arrow { font-size: 12px; color: #ccc; }
+.logout-btn { width: 100%; height: 40px; border-radius: var(--r); background: var(--c-surface); border: 1.5px solid var(--c-border); color: var(--c-fail); font-size: 12px; font-weight: 700; cursor: pointer; margin-top: 4px; }
+
+/* ═══════════════════════════════════════ 설명 패널 */
+.desc-panel { width: 260px; flex-shrink: 0; position: sticky; top: 72px; display: flex; flex-direction: column; gap: 14px; }
+.desc-card { background: #161616; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.desc-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 3px 8px; border-radius: var(--r); background: rgba(255,255,255,.08); color: #94a3b8; margin-bottom: 10px; }
+.desc-title { font-size: 16px; font-weight: 800; color: #f1f5f9; margin-bottom: 6px; letter-spacing: -.3px; }
+.desc-text { font-size: 12px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+.desc-list { display: flex; flex-direction: column; gap: 6px; }
+.desc-item { display: flex; gap: 8px; align-items: flex-start; }
+.desc-dot { width: 4px; height: 4px; border-radius: 2px; background: #fff; margin-top: 6px; flex-shrink: 0; }
+.desc-item-text { font-size: 11px; color: #64748b; line-height: 1.5; }
+.desc-screen { display: none; flex-direction: column; gap: 14px; }
+.desc-screen.active { display: flex; }
+
+/* ── 버튼 눌림 피드백 ── */
+button:active, .nav-btn:active, .sso-btn:active, .login-cta:active { transform: scale(.97); opacity: .85; }
+.btn-primary:active { filter: brightness(.9); }
+.btn-secondary:active { filter: brightness(.93); }
+.btn-danger-outline:active { background: #fce4ec; }
+.start-btn:active { filter: brightness(.85); }
+
+/* ── 토글 트랜지션 ── */
+.toggle-track { transition: background .2s; cursor: pointer; }
+.toggle-thumb { transition: left .2s, right .2s; }
+
+/* ── 세그먼트 탭 ── */
+.seg-tab { cursor: pointer; transition: all .12s; }
+
+/* ── 화살표 네비게이션 ── */
+.nav-arrow { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--border); background: rgba(255,255,255,.06); color: #94a3b8; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; flex-shrink: 0; align-self: center; }
+.nav-arrow:hover { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.3); }
+.nav-arrow:disabled { opacity: 0.25; cursor: default; }
+
+/* 플랫폼 차이 배지 */
+.platform-diff { background: #1a1f2e; border: 1px solid rgba(99,179,237,.2); border-radius: 8px; padding: 10px 12px; }
+.platform-diff-title { font-size: 10px; font-weight: 700; color: #63b3ed; margin-bottom: 6px; letter-spacing: .5px; }
+.platform-diff-item { font-size: 11px; color: #64748b; line-height: 1.6; }
+
+@media (max-width: 1100px) { .desc-panel { display: none; } }
+@media (max-width: 680px) { .phones-wrap { gap: 12px; } .iphone-shell, .android-shell { width: 240px; } }
+@media (max-width: 560px) { .phones-wrap { flex-direction: column; } }
+
+/* ═══════════════════════════════════════ v4 추가: 우상단 헤더 아이콘 */
+.app-topbar {
+  background: var(--c-surface);
+  padding: 8px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1.5px solid var(--c-border);
+  flex-shrink: 0;
+}
+.app-topbar-title { font-size: 13px; font-weight: 800; color: #111; letter-spacing: -0.2px; flex: 1; }
+.topbar-icons { display: flex; gap: 4px; }
+.topbar-ic-btn {
+  width: 28px; height: 28px; border-radius: var(--r);
+  background: var(--c-bg); border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; cursor: pointer;
+}
+.topbar-ic-btn.on { background: var(--c-text); color: #fff; }
+.topbar-ic-btn:active { transform: scale(.92); }
+
+/* 홈 topbar 재배치 */
+.home-topbar-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 8px; margin-bottom: 8px;
+}
+
+/* ═══════════════════════════════════════ v4: 카드 ⋮ 메뉴 */
+.card { position: relative; }
+.card-row { display: flex; align-items: flex-start; gap: 6px; }
+.card-row-main { flex: 1; min-width: 0; cursor: pointer; }
+.card-more {
+  width: 26px; height: 26px; border-radius: var(--r);
+  background: transparent; border: none;
+  font-size: 14px; color: #999; cursor: pointer;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.card-more:hover { background: #f5f5f5; color: #555; }
+.card-menu {
+  position: absolute; top: 32px; right: 8px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  z-index: 30;
+  min-width: 120px;
+  overflow: hidden;
+}
+.card-menu.hidden { display: none; }
+.card-menu-item {
+  padding: 9px 12px;
+  font-size: 11px; font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+.card-menu-item:hover { background: var(--c-bg); }
+.card-menu-item.danger { color: var(--c-fail); font-weight: 700; border-top: 1px solid #f0f0f0; }
+
+/* ═══════════════════════════════════════ v4: 내부망 안내 배너 */
+.notice-banner {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: var(--r);
+  padding: 9px 11px;
+  display: flex; align-items: flex-start; gap: 7px;
+}
+.notice-banner .nbic { font-size: 12px; line-height: 1.4; }
+.notice-banner .nbtx { font-size: 10px; color: #9a3412; line-height: 1.5; flex: 1; }
+.notice-banner .nbtx b { font-weight: 800; }
+
+/* ═══════════════════════════════════════ v4: 취소 재확인 알럿 */
+.alert-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  z-index: 200;
+}
+.alert-overlay.hidden { display: none; }
+.alert-box {
+  background: #fff;
+  border-radius: 10px;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+.alert-pad { padding: 16px 14px 14px; }
+.alert-title { font-size: 13px; font-weight: 800; color: #111; margin-bottom: 6px; }
+.alert-body { font-size: 10.5px; color: var(--c-muted); line-height: 1.5; }
+.alert-buttons { display: flex; border-top: 1px solid var(--c-border); }
+.alert-btn {
+  flex: 1; padding: 11px;
+  font-size: 11px; font-weight: 700;
+  background: transparent; border: none; cursor: pointer;
+}
+.alert-btn.cancel { color: #555; border-right: 1px solid var(--c-border); }
+.alert-btn.confirm { color: var(--c-fail); }
+.alert-btn:active { background: var(--c-bg); }
+
+/* ═══════════════════════════════════════ v4: 음성 변환 내용 화면 */
+.s-transcript { background: var(--c-bg); }
+.transcript-body { padding: 10px 12px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.tx-headcard { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 10px 12px; }
+.tx-headtitle { font-size: 13px; font-weight: 800; color: #111; }
+.tx-headmeta { font-size: 10px; color: var(--c-muted); margin-top: 2px; }
+.tx-toolbar { display: flex; gap: 6px; }
+.tx-tool {
+  flex: 1;
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r);
+  font-size: 10px; font-weight: 700; color: #555;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.tx-tool:active { background: var(--c-bg); }
+.tx-block {
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r);
+  padding: 9px 11px;
+}
+.tx-speaker { font-size: 10px; font-weight: 700; color: #111; margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
+.tx-ts { font-size: 9px; color: #aaa; font-weight: 500; }
+.tx-text { font-size: 11px; color: #333; line-height: 1.55; }
+
+
+/* ═══════════════════════ v2 머지 CSS ═══════════════════════ */
+/* 온보딩 */
+.s-onboarding { background:#fff; align-items:center; justify-content:space-between; padding:32px 24px 28px; }
+.ob-slide { display:flex; flex-direction:column; align-items:center; flex:1; justify-content:center; gap:16px; }
+.ob-illust { width:120px; height:120px; border-radius:32px; display:flex; align-items:center; justify-content:center; font-size:52px; }
+.ob-illust.c1 { background:linear-gradient(135deg,#fef3c7,#fde68a); }
+.ob-title { font-size:20px; font-weight:800; color:#111; text-align:center; letter-spacing:-.3px; }
+.ob-desc { font-size:13px; color:#6b7280; text-align:center; line-height:1.6; }
+.ob-dots { display:flex; gap:6px; }
+.ob-dot { width:6px; height:6px; border-radius:3px; background:#e5e7eb; transition:all .3s; }
+.ob-dot.on { width:18px; background:#ef4444; }
+.ob-next { width:100%; height:48px; border-radius:9999px; background:#111; border:none; color:#fff; font-size:15px; font-weight:700; cursor:pointer; }
+/* 권한 */
+.s-permission { background:#fff; padding:28px 20px; justify-content:space-between; }
+.perm-header { font-size:11px; font-weight:700; color:#9ca3af; letter-spacing:.5px; text-align:center; }
+.perm-title { font-size:22px; font-weight:800; color:#111; text-align:center; margin-top:6px; letter-spacing:-.3px; }
+.perm-cards { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+.perm-card { border:1px solid #e5e7eb; border-radius:14px; padding:14px; }
+.perm-card-row { display:flex; align-items:center; gap:12px; }
+.perm-icon-box { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.perm-icon-box.mic { background:#fef3c7; }
+.perm-icon-box.notif { background:#eff6ff; }
+.perm-card-title { font-size:14px; font-weight:700; color:#111; }
+.perm-card-desc { font-size:11px; color:#6b7280; margin-top:2px; line-height:1.4; }
+.perm-actions { display:flex; flex-direction:column; gap:8px; }
+.perm-allow { height:48px; border-radius:9999px; background:#111; border:none; color:#fff; font-size:14px; font-weight:700; cursor:pointer; }
+.perm-skip { height:40px; border-radius:9999px; background:none; border:none; color:#9ca3af; font-size:13px; cursor:pointer; }
+/* 생체인증 */
+.s-biometric { background:#fff; align-items:center; justify-content:space-between; padding:36px 24px 28px; }
+.bio-icon { font-size:64px; }
+.bio-title { font-size:22px; font-weight:800; color:#111; text-align:center; letter-spacing:-.3px; }
+.bio-desc { font-size:13px; color:#6b7280; text-align:center; line-height:1.6; }
+.bio-actions { width:100%; display:flex; flex-direction:column; gap:8px; }
+.bio-enable { height:48px; border-radius:9999px; background:#111; border:none; color:#fff; font-size:14px; font-weight:700; cursor:pointer; }
+.bio-skip { height:40px; border-radius:9999px; background:none; border:none; color:#9ca3af; font-size:13px; cursor:pointer; }
+/* v2 상세 */
+.detail-card { background:var(--c-surface); border-radius:var(--r); padding:14px; border:1.5px solid var(--c-border); }
+.detail-card .detail-meta { display:flex; gap:10px; }
+.status-card { background:var(--c-surface); border-radius:var(--r); padding:12px 14px; border:1.5px solid var(--c-border); }
+.status-card .status-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.status-card .status-row:last-child { margin-bottom:0; }
+.status-label { font-size:12px; color:#374151; font-weight:600; }
+.action-row { display:flex; gap:8px; }
+.action-btn { flex:1; height:44px; border-radius:var(--r); border:none; font-size:13px; font-weight:700; cursor:pointer; }
+.action-transcript { background:#111; color:#fff; }
+.action-retry { background:var(--c-secondary); color:#374151; }
+.action-delete { background:#fef2f2; color:#ef4444; }
+/* v2 전사 */
+.transcript-tabs { display:flex; background:var(--c-surface); border-bottom:1.5px solid var(--c-border); flex-shrink:0; }
+.ttab { flex:1; text-align:center; padding:10px 0; font-size:12px; font-weight:700; color:var(--c-muted); border-bottom:2px solid transparent; cursor:pointer; }
+.ttab.on { color:#111; border-bottom-color:#111; }
+.seg-item { background:var(--c-surface); border-radius:var(--r); padding:10px 12px; border:1.5px solid var(--c-border); }
+.seg-header { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+.seg-speaker { font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px; }
+.sp-a { background:#dbeafe; color:#1d4ed8; }
+.sp-b { background:#d1fae5; color:#065f46; }
+.sp-c { background:#fef3c7; color:#92400e; }
+.seg-time { font-size:10px; color:#9ca3af; }
+.seg-text { font-size:12px; color:#374151; line-height:1.6; }
+.edit-btn { font-size:12px; color:#2563eb; font-weight:700; cursor:pointer; }
+/* 보관함 */
+.s-library { background:var(--c-bg); }
+.library-topbar { background:var(--c-surface); padding:10px 14px 12px; border-bottom:1.5px solid var(--c-border); flex-shrink:0; }
+.library-topbar-title { font-size:15px; font-weight:900; color:#111; }
+.lib-tabs { display:flex; gap:6px; margin-top:10px; }
+.lib-tab { padding:5px 12px; border-radius:9999px; font-size:11px; font-weight:700; color:var(--c-muted); background:var(--c-surface); border:1.5px solid var(--c-border); cursor:pointer; }
+.lib-tab.on { background:#111; color:#fff; border-color:#111; }
+.library-body { flex:1; overflow-y:auto; padding:12px; }
+.lib-section { margin-bottom:16px; }
+.lib-section-header { display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+.lib-section-icon { font-size:14px; }
+.lib-section-title { font-size:12px; font-weight:700; color:#374151; }
+.lib-item { background:var(--c-surface); border-radius:var(--r); padding:10px 12px; margin-bottom:6px; border:1.5px solid var(--c-border); display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+.lib-item-left { display:flex; flex-direction:column; gap:2px; }
+.lib-item-title { font-size:12px; font-weight:700; color:#111; }
+.lib-item-meta { font-size:10px; color:#9ca3af; }
+.lib-item-arrow { color:#d1d5db; font-size:14px; }
+.tag-chip-row { display:flex; gap:5px; flex-wrap:wrap; }
+.tag-chip { padding:4px 10px; border-radius:9999px; font-size:10px; font-weight:700; background:#dce2f3; color:#3b4a7a; cursor:pointer; }
+.bdg-uploading { background:#eff6ff; color:#2563eb; }
+.bdg-stt { background:#f5f3ff; color:#7c3aed; }
+.bdg-queued { background:#f3f4f6; color:#6b7280; }
+
+
+/* ═══════ 단색 라인 아이콘 시스템 ═══════ */
+svg.ic{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+svg.ic.fill{fill:currentColor;stroke:none;}
+/* 아이콘 컨테이너 기본 색 보정(라인아이콘은 currentColor 상속) */
+.topbar-ic-btn{color:#111;}
+.topbar-ic-btn.on{color:#fff;}
+.settings-ic{color:#111;}
+.lib-section-icon{color:#374151;}
+.perm-icon-box{color:#111;}
+.bio-icon{color:#111;}
+.ob-illust{color:#111;}
+.nbic{color:#9a3412;}
+/* 포인트 컬러 중성화 */
+.ob-illust.c1{background:var(--c-secondary);}
+.ob-dot.on{background:#111;}
+.perm-icon-box.mic,.perm-icon-box.notif{background:var(--c-secondary);}
+.seg-speaker.sp-a{background:#111;color:#fff;}
+.seg-speaker.sp-b{background:#e4e4e4;color:#111;}
+.seg-speaker.sp-c{background:#fff;color:#555;border:1px solid #d4d4d4;}
+.tag-chip{background:var(--c-secondary);color:#111;}
+.bdg-uploading{background:#ececec;color:#555;}
+.bdg-stt{background:#ececec;color:#555;}
+.bdg-queued{background:#f3f3f3;color:#888;}
+
+
+/* ═══════ 상태 화면 ═══════ */
+.empty-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;}
+.empty-ic{font-size:46px;color:#ccc;}
+.empty-title{font-size:14px;font-weight:800;color:#111;}
+.empty-desc{font-size:11px;color:var(--c-muted);line-height:1.6;}
+.sk-card{background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r);padding:12px;margin-bottom:6px;}
+.sk-line{height:10px;border-radius:4px;background:linear-gradient(90deg,#ececec 25%,#f7f7f7 37%,#ececec 63%);background-size:400% 100%;animation:sk 1.4s ease infinite;margin-bottom:8px;}
+.sk-line.mid{width:72%;}.sk-line.short{width:46%;margin-bottom:0;}
+@keyframes sk{0%{background-position:100% 0}100%{background-position:0 0}}
+.offline-banner{background:var(--c-secondary);border:1px solid #d8d8d8;border-radius:var(--r);padding:9px 11px;display:flex;gap:7px;align-items:flex-start;font-size:10px;color:#555;line-height:1.5;margin-bottom:8px;}
+.offline-banner svg{flex-shrink:0;color:#555;}
+.perm-card.denied{border-color:#fca5a5;background:#fef2f2;}
+.perm-card.denied .perm-icon-box{background:#fee2e2;color:var(--c-fail);}
+.perm-denied-note{font-size:11px;color:var(--c-fail);text-align:center;margin-top:14px;line-height:1.6;}
+
+
+
+html,body{height:100%;margin:0;}
+body{background:#000!important;}
+#app{position:fixed;inset:0;max-width:430px;margin:0 auto;background:var(--c-bg);
+  display:flex;flex-direction:column;overflow:hidden;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:0 0 60px rgba(0,0,0,.5);}
+#app .screen{flex:1;min-height:0;}
+#app .screen.active{display:flex;}
+/* 화면 이동 메뉴 */
+#mbtn{position:fixed;right:14px;bottom:14px;width:44px;height:44px;border-radius:50%;
+  background:#111;color:#fff;border:none;font-size:18px;z-index:9000;cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);opacity:.55;}
+#mbtn:hover{opacity:1;}
+#moverlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9001;display:none;
+  align-items:flex-end;justify-content:center;}
+#moverlay.on{display:flex;}
+#msheet{background:#fff;width:100%;max-width:430px;border-radius:16px 16px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));max-height:70vh;overflow-y:auto;}
+#msheet h4{font-size:13px;font-weight:800;color:#111;margin:2px 4px 12px;}
+#mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+#mgrid button{font-size:11px;font-weight:700;color:#333;background:#f3f3f3;border:1px solid #e2e2e2;border-radius:8px;padding:9px 4px;cursor:pointer;}
+#mgrid button.on{background:#111;color:#fff;border-color:#111;}
+.swipe-hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);font-size:10px;color:#999;background:rgba(255,255,255,.85);padding:5px 12px;border-radius:999px;z-index:8000;pointer-events:none;transition:opacity .4s;}
+</style></head><body>
+<div id="app"></div>
+<div class="swipe-hint">← 좌우로 넘기거나 우측 하단 버튼으로 이동 →</div>
+<button id="mbtn" title="화면 이동">⋯</button>
+<div id="moverlay"><div id="msheet"><h4>화면 이동</h4><div id="mgrid"><button data-go="splash">스플래시</button><button data-go="onboarding">온보딩</button><button data-go="permission">권한</button><button data-go="permission-denied">권한 거부</button><button data-go="biometric">생체인증</button><button data-go="login">로그인</button><button data-go="home">홈</button><button data-go="empty">빈 화면</button><button data-go="loading">로딩</button><button data-go="offline">오프라인</button><button data-go="recording">녹음 중</button><button data-go="paused">일시정지</button><button data-go="sheet">종료 시트</button><button data-go="detail-done">상세(완료)</button><button data-go="transcript">전사 결과</button><button data-go="detail-proc">상세(처리중)</button><button data-go="detail-fail">상세(실패)</button><button data-go="library">보관함</button><button data-go="settings">설정</button></div></div></div>
+
+<div id="screen-template" style="display:none;">
+
+  <!-- 스플래시 -->
+  <div class="screen s-splash" data-screen="splash">
+    <img class="splash-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NTMuMjI0OTVtbSIgaGVpZ2h0PSIxMDBtbSIgdmlld0JveD0iMCAwIDQ1My4yMjQ5NCAxMDAiPjxwYXRoIGQ9Ik0tMTU1LjkxOCAzNDMuMWExMC41NiAxMC41NiAwIDAgMC01LjMzIDYuMTU0bC0xNi45OTEgNTEuMDc2YTEwLjU4IDEwLjU4IDAgMCAwIC41NzggOC4xMjIgMTAuNTg2IDEwLjU4NiAwIDAgMCA2LjE0NSA1LjMxNWw1NS43MzYgMTguNzEzYTEwLjU4IDEwLjU4IDAgMCAwIDguMTI1LS41NzhjMi41MzctMS4yODEgNC40MzgtMy40NTIgNS4zMjUtNi4xNDhsMTYuOTk2LTUxLjA3YzEuODU3LTUuNTYtMS4xNzItMTEuNi02LjcyOS0xMy40NTZsLTU1LjczMy0xOC43MWMtMi43MDktLjg5LTUuNTc5LS42OS04LjEyMi41ODIiIHN0eWxlPSJmaWxsOiNmZmY7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjMuMTc4NzYiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3OC43OSAtMzMzLjAzKSIvPjxwYXRoIGQ9Ik0tMTUxLjA0MyA0MDIuMzk0aC0zLjgzN3YtMjYuNTRoMy44Mzd6bTIyLjM2OS0xMC4yMjljLTMuMDI3IDMuMzgtNi44MSA2LjEwNy0xMS4xOCA3Ljc5NGwtMi41MTguOTh2LTIzLjY3M2wyLjQ4Ni45NjNjNC4zOCAxLjY3OSA4LjE3IDQuMzk3IDExLjIwNSA3Ljc2NiAyLjE2OC0zLjQ5IDMuNTEzLTcuNTI3IDMuNzkzLTExLjkzLjY5My0xMS4zNDgtNi40MjUtMjEuNzU4LTE2LjE4NC0yNS4zNzlsLTguMDQ1LTIuNjgzYy0zLjYzNi0xLjIxNC03LjQ5OS43OTUtOC43MDMgNC40MTVsLTE3LjA0OCA1MS4xMTVjLTEuMjA1IDMuNjQuODI2IDcuNTg1IDQuNDY2IDguNzhsMzguNjg5IDEyLjkxNWEyNS40NjYgMjUuNDY2IDAgMCAwIDYuODcyLTE1Ljk1MSAyNS40NSAyNS40NSAwIDAgMC0zLjgzMy0xNS4xMTIiIHN0eWxlPSJmaWxsOiMwMDk5ZGE7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjMuMTc4NzYiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3OC43OSAtMzMzLjAzKSIvPjxwYXRoIGQ9Ik0tMTMwLjkxMiAzODkuMDhhMjUuNzIxIDI1LjcyMSAwIDAgMC03Ljc3NS02LjIxNHYxMi40NjdhMjUuNTQzIDI1LjU0MyAwIDAgMCA3Ljc3NS02LjI1MyIgc3R5bGU9ImZpbGw6I2YxNWQyMjtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6My4xNzg3NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc4Ljc5IC0zMzMuMDMpIi8+PHBhdGggZD0ibS0xMDIuNzA0IDQwMi4zMDQtNC43OTQuMDIzLTkuODU3LTEzLjI4MSAxMC4wMTMtMTMuMjY4IDQuODM1LS4wMTMtMTAuMDM2IDEzLjMwM3ptOS40MDktMzcuNjYyLTM1LjUtMTEuODZjNC43NjEgNS4yMTQgNy42ODIgMTIuMTQzIDcuNjkyIDE5Ljc0NC4wMTMgNi4wMDgtMS44NTcgMTEuNzQ1LTUuMTI0IDE2LjU1NSAzLjI3NyA0Ljc5MyA1LjE3MSAxMC41MjggNS4xNzUgMTYuNTM2YTI5LjI2IDI5LjI2IDAgMCAxLTYuODY2IDE4Ljg4OGwxMy4zNCA0LjQ1N2MzLjYzNyAxLjIwMSA3LjQ5My0uNzk1IDguNzAxLTQuNDI4bDE3LjA1NC01MS4xMDVjMS4yMDItMy42NC0uODM2LTcuNTgyLTQuNDcyLTguNzg3TS02My4yNzQgMzM0LjczNGgyLjI1djE5Ljg0aC0yLjI1ek0tNDYuNjAxIDM0OC43NjVjLjA1NC0yLjEzMi0xLjM2LTMuMzQtMy43OS0zLjM0aC01LjEzdjYuODc1aDUuMDhjMi42MDMgMCAzLjc2Ny0xLjMxOSAzLjg0LTMuNTM1bS0uNzMxLTguODY1YzAtMS43OTYtMS4xMzUtMi44MzYtMy4yODQtMi44MzZoLTQuOTA1djUuOTc2aDQuODhjMi4wNDcgMCAzLjMwOS0xLjE3OSAzLjMwOS0zLjE0bTMuMjU4IDkuMzk2Yy0uMiAzLjM0NC0zLjAwNCA1LjI3Ny02LjMxNiA1LjI3N2gtNy40M3YtMTkuODY3aDcuNjMzYzMuMTg1IDAgNC45NzUgMS45MzkgNS4zMDUgNC4yOTQuMjc3IDIuMzMtLjg1OCA0LjAxMi0yLjI3MiA0Ljk2NiAxLjMxMy43MDUgMy4yMzIgMi4zODcgMy4wOCA1LjMzTS0yOS42IDM1NC42M2wtNy4zNTItOS4yODlhMzA3LjMxNCAzMDcuMzE0IDAgMCAxLTIuNjU0IDIuNjF2Ni42MjFoLTIuMjk4di0xOS44MzloMi4yOTh2OS44NTFjMi4zNS0yLjM1NSA1Ljk2My02LjI4NyA4LjU5Mi05Ljg4aDIuOTA2Yy0yLjUyNCAzLjQ1My01IDYuNDI4LTcuMTUzIDguNzU4bDguNTE2IDExLjE2N3pNLTkuNjE0IDMzMy4xOWgyLjQydjIzLjYzaC0yLjQyem0tMTQuNTQ5IDE5LjUyLTEuODEyLTEuNTg2YzYuMzU4LTMuMTcgOC42NTMtOS40MjUgOC45Mi0xMy4wMjNoLTcuNjQydi0yLjI1NGgxMC40MmMtLjAyIDUuNTg1LTMuMTY2IDEzLjQyNy05Ljg4NiAxNi44NjNNMTAuOTAyIDM1MS42MDdILjUwN3YyLjcxNWgxMC4zOTVaTS0xLjg4IDM1Ni41NXYtOS42NEguNTA3djIuNTIzaDEwLjM5NXYtMi41MjRoMi40MTZ2OS42NDF6bTIuNTM0LTIwLjI3NGMtMS43MTcgMC0zLjI0IDEuMzctMy4yNCAzLjA2MSAwIDEuNzQ1IDEuNTIzIDMuMTQgMy4yNCAzLjE0IDEuNzEzIDAgMy4yMzktMS4zOTUgMy4yMzktMy4xNCAwLTEuNzItMS41MjYtMy4wNi0zLjI0LTMuMDZtMTAuMjcxIDEuODI0di00LjkxMWgyLjQydjEyLjU2OGgtMi40MnYtNS40SDYuMzFjLS40ODMgMi43NC0yLjk3MiA0LjUzNi01LjY1NSA0LjUzNi0yLjk3MiAwLTUuNzI4LTIuMi01LjcyOC01LjUgMC0zLjI4IDIuNzA4LTUuNDggNS43MjgtNS40OCAyLjU4NCAwIDQuOTc4IDEuNjQgNS41ODUgNC4xODd6TTI1LjM5NyAzMzUuMTIyYy0zLjMzNCAwLTUuNTM0IDEuMjg4LTUuNTM0IDMuMDMzIDAgMS43NzQgMi4zMTggMi45MjcgNS41MSAyLjkyNyAzLjI2NCAwIDUuNTg0LTEuMSA1LjU4NC0yLjg3IDAtMS43NzQtMi4yMjUtMy4wOS01LjU2LTMuMDltLTcuOTAyIDIxLjE1OHYtNi43MWgyLjQxNnY0LjQ1M2gxNC4wMTh2Mi4yNTd6bTcuODc3LTEzLjA0NmMtNS4xOTQgMC04LjA5My0yLjA5OC04LjA5My01LjA1IDAtMi45IDIuODc0LTUuMTUzIDguMDkzLTUuMTUzIDUuMjcgMCA4LjEgMi4yMjUgOC4xIDUuMTUyIDAgMi45NTMtMi44MDQgNS4wNTEtOC4xIDUuMDUxbS0xMC42MSAxLjk4NEgzNi4wM3YyLjI4NkgxNC43NjFaTTUzLjM1NCAzNDcuOTU1di02LjQxOGgtMi40ODl2NS45MWgtMi4yNzJWMzMzLjU5aDIuMjcydjUuNTA2aDIuNDl2LTUuOTFoMi4yNzJ2MTQuNzd6bS01Ljk5MiAyLjYzMmMtMy4zMzcgMC01LjYzMi43NS01LjYzMiAyLjI1NyAwIDEuNDc4IDIuMjcgMi4zMTEgNS42MzIgMi4zMTEgMy4yNjIgMCA1LjUxLS44MzMgNS41MS0yLjI4NSAwLTEuNTMzLTIuMi0yLjI4My01LjUxLTIuMjgzbS01LjczLTguNTM1Yy0xLjY2NyAwLTIuNDkuNjcxLTIuNDkgMS43MzkgMCAxLjEwMy44MjMgMS44MDIgMi40OSAxLjgwMiAxLjcxNiAwIDIuNDg4LS42OTkgMi40ODgtMS44MDIgMC0xLjA2OC0uNzcyLTEuNzM5LTIuNDg5LTEuNzM5bTUuNzA2IDE1LjIyM2MtNS4zMTggMC04LjI0My0xLjkwNy04LjI0My00LjQ2IDAtMi41NDkgMi45NzMtNC4yOTQgOC4yOS00LjI5NCA1LjM0MSAwIDguMjE4IDEuODI1IDguMjE4IDQuMzc3IDAgMi41NS0yLjkyNSA0LjM3Ny04LjI2NSA0LjM3N20tOC41MzUtMjMuODQ0aDUuNjF2Mi4wNjdoLTUuNjF6bTIuODA0IDE0LjEyNGMtMi45MjUgMC00Ljg1Ny0xLjU1OC00Ljg1Ny0zLjc4NiAwLTIuMjAzIDEuOTMyLTMuNjgxIDQuODgyLTMuNjgxIDIuOTk4IDAgNC44NiAxLjQ3OCA0Ljg2IDMuNzAzIDAgMi4yMDYtMS44ODUgMy43NjQtNC44ODUgMy43NjRtLTUuMzYzLTEwLjY1OWgxMC44MDV2Mi4wNjZIMzYuMjQzWk03OS4zNSAzNDkuNzgzSDY4LjU0NnY0LjUzOUg3OS4zNXptLTEzLjI2OC0yLjIyOWgxNS43NnY4Ljk5NmgtMTUuNzZabS0yLjc1Ni0yLjYzMnYtMi4yNTdINzguNTNjLjI0Mi0xLjIwNy43OTUtNC4xMDcuOTY3LTYuMjU1aC0xMy43M3YtMi4yNTRoMTYuNTA4Yy0uMTY5IDMuODk0LS45ODkgNy4yNS0xLjI4MSA4LjUxaDMuNjA0djIuMjU2eiIgc3R5bGU9ImZpbGw6IzAwNTZhMztmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6My4xNzg3NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc4Ljc5IC0zMzMuMDMpIi8+PHBhdGggZD0iTTk3LjQ0NyAzNDYuMDUyaC01LjM2NXYyLjQxNmEyMC4wMTUgMjAuMDE1IDAgMCAxIDIuNjU3LS4xNjJjLjk5MiAwIDEuODg1LjA1NCAyLjcwOC4xNjJ6bS0yLjcwOC0xMS4wMTFjLTMuNTAzIDAtNS41MDkgMS4wNzQtNS41MDkgMi40OTggMCAxLjM5NiAyLjA1NCAyLjQ3IDUuNTEgMi40NyAzLjM4NCAwIDUuNTU5LTEuMDQ2IDUuNTU5LTIuNDQxIDAtMS40MjQtMi4xMjctMi41MjctNS41Ni0yLjUyN20wIDE1LjMwNmMtMy40MzMgMC01LjcyNS44ODYtNS43MjUgMi4zOSAwIDEuNDUgMi4yOTIgMi4zODcgNS43MjUgMi4zODcgMy4zODUgMCA1LjcwNi0uOTEyIDUuNzA2LTIuMzYyIDAtMS40NzgtMi4zMi0yLjQxNS01LjcwNi0yLjQxNW0wLTguMjk3Yy01LjM4OCAwLTguMTQ0LTEuODUzLTguMTQ0LTQuNDgyIDAtMi41NzggMi43NTYtNC41MTQgOC4xNDQtNC41MTQgNS40MTcgMCA4LjE3MyAxLjk2MSA4LjE3MyA0LjU0IDAgMi42MDMtMi43NTYgNC40NTYtOC4xNzMgNC40NTZtLTUuMDk5IDQuMDAyaC01LjUzdi0yLjI2aDIxLjI2NXYyLjI2SDk5Ljg5djMuMDA0YzIuMTUyLjc3OSAzLjMxMiAyLjA5NSAzLjMxMiAzLjcwNiAwIDIuNjA3LTMuMDIzIDQuNDg2LTguNDYyIDQuNDg2LTUuNDEzIDAtOC40OC0xLjg3OS04LjQ4LTQuNDg2IDAtMS42MzcgMS4xODItMi45NSAzLjM4MS0zLjczMXpNMTA0Ljg4NyAzNTMuMzI5di0yLjI1N2gxNC41NDljLjM4OC0yLjI4MyAxLjQ1LTkuMjkyIDEuNTQ4LTEyLjQ1OGgtMTMuODV2LTIuMjU3aDE2LjUwN2MwIDMuODQtLjk2NiAxMS42MjUtMS43MTYgMTQuNzE1aDQuMjN2Mi4yNTd6TTE0MS43MTEgMzUyLjIyN0gxMzAuODZ2Mi4yaDEwLjg1MnptLTEzLjI5MyA0LjMyM3YtOC4zNWgyLjQ0MXYyLjAxMmgxMC44NTJWMzQ4LjJoMi40NDV2OC4zNXptMC0xMy44Mjd2LTUuNDUySDE0MS40di0xLjU1OGgtMTIuOTgydi0xLjk4NmgxNS41NDR2NS40NTFoLTEzLjAwNHYxLjU1OGgxMy40NHYxLjk4N3ptMTguNTE2IDMuODY1aC05LjM1NXYyLjQxNmgtMi41ODR2LTIuNDE2aC05LjMzdi0yLjE3NGgyMS4yNjl6TTQ5Ljc2NyAzNjcuNDZjLTIuOTQ2IDMuMDgtMjUuMTA5IDI2LjQ1Ni0yNS4xMDkgMjYuNDU2czI0LjA0NSAyNi4wNjYgMjcuMDcgMjkuMzI3SDM4LjcwNmMtMS4yMi0xLjM5NS0yMS44MTUtMjUuMTI1LTIxLjgxNS0yNS4xMjV2MjUuMTVINy41NHYtNTUuOGg5LjM1djIyLjU2N3MxOS42Ni0yMS4zMjMgMjAuODE3LTIyLjU3NnpNNTcuOCA0MDcuNTk0aDIxLjA1OXYxNS43aDcuNDczdi0xNS43aDIxLjA1NnYtNS44Mkg1Ny44Wm00NC42OTYtMTYuMzM5SDcwLjE2OHYtNS41ODJoMzIuMzI4di01LjY3SDcwLjE2OHYtNS40NjJoMzIuMzI4di01LjY3SDYyLjY5MnYyOC4wNTVoMzkuODA0em03Mi40MTYgOC4xNjdIMjI0LjV2LTUuODI0aC00OS41ODh6bTMyLjE4NSAxOC4wNzdjLTEuODc2IDEuMTY3LTQuMjkyIDEuNzQ5LTcuMjY0IDEuNzQ5LTIuOTM3IDAtNS4zNC0uNTgyLTcuMjIyLTEuNzQ5LTEuODYzLTEuMTg1LTIuNzcyLTIuNjIyLTIuNzgxLTQuNDA5IDAtMS43OS45MjEtMy4yODMgMi43OS00LjUyMyAxLjg4Ni0xLjI1NiA0LjI4LTEuODg1IDcuMjEzLTEuODg1IDIuOTY2IDAgNS4zODIuNjMgNy4yNiAxLjg4NSAxLjg4MiAxLjI0IDIuNzc5IDIuNzM0IDIuNzkxIDQuNTIzLS4wMTIgMS43ODctLjkwOSAzLjIyNC0yLjc4NyA0LjQxbTUuMTk3LTEyLjc0MWMtMy40NzgtMS45NzEtNy42MTMtMi45NjMtMTIuNDYtMi45NjMtNC44NDggMC05LjAxMy45OTItMTIuNDY1IDIuOTYzLTMuNDggMS45NzctNS4yNiA0Ljc4NC01LjI1MSA4LjMzNS0uMDEgMy41MDYgMS43NzQgNi4yODQgNS4yNTEgOC4yMzYgMy40NTIgMS45NTUgNy42MjMgMi45MzcgMTIuNDY0IDIuOTNoLjAyNmM0LjgzMSAwIDguOTY0LS45NzkgMTIuNDM1LTIuOTMgMy40NzQtMS45NTIgNS4yNDUtNC43MyA1LjIzOC04LjIzNi4wMDYtMy41NTEtMS43NjQtNi4zNTgtNS4yMzgtOC4zMzVtLTMyLjIwNy0xMy44MzRjMTIuMjczLTIuMjU3IDE4LjMzNS04LjY4NSAxOS41ODQtMTAuMTYzIDEuMjU5IDEuNDc4IDcuMzI3IDcuOTA2IDE5LjU5NyAxMC4xNjNsLjExOC4wMjIgMy44NzgtNS4xNS0uMzQ3LS4wNDdjLS4wMjUtLjAwMy0xNC44ODYtMS45MjctMTguODg4LTEwLjk5NmgxNi4xNDV2LTUuOTAzaC00MC42ODJ2NS45aDE1LjgyNGMtNC4wMDIgOS4wNzItMTguODgyIDEwLjk4LTE4Ljg4MiAxMC45OTlsLS4zNDYuMDQ3IDMuODc1IDUuMTUzem0tNDQuMS01Ljk2di0xMC41OGwxMC42NTYuMDA0di01LjUxOUgxMTguNjR2NS41MTloMTAuMTc5djEwLjQ1OGMwIDkuMzE0LTUuODY1IDE3LjIxMy0xMy45NjIgMTkuODk2bC0uMzA4LjEwNSAzLjk2NyA0LjE3My4xMjQtLjA0YzUuNzk1LTIuMTc4IDEwLjY0OS02LjQ0NCAxMy43NDgtMTEuOTQ3IDMuMDk2IDUuNTAzIDcuOTc2IDkuNzY5IDEzLjc5IDExLjk0NmwuMTIuMDQxIDMuOTU1LTQuMTgtLjMwMi0uMDk4Yy04LjA2MS0yLjY3LTEzLjkxNC0xMC41MDMtMTMuOTY0LTE5Ljc3OW0yNS4zMjUtMTcuNTJoLTcuNDd2NTUuODA5aDcuNDd2LTMyLjg1Nmg4LjE0N3YtNS41MThoLTguMTQ3em04MS42MDggMzYuOTE0aC03LjUxOHYxNy45OTJoMzkuMDMzdi01LjM2OUgyNDIuOTJ6bTI0LjA1LTM3LjAyNi4wMDQgMjIuNDhoLTguMjk3Yy4wODMtLjI0OC4xNDYtLjQ1OC4yMTMtLjY3N2EzOS41MzQgMzkuNTM0IDAgMCAwIDEuNTA3LTEwLjgwOHYtOS40NTdoLTI2LjkzdjUuNDU1aDE5LjI5MXY1LjMzNGMwIC43MjgtLjA2NiAxLjY0Ny0uMTY1IDIuNzRhNDcuNzQ4IDQ3Ljc0OCAwIDAgMS0uMzYgMi42NmwtMS4wNzQgNC43NTNoLTIxLjExdjUuODE3aDE0LjY5M3Y5LjQ1N2g3LjQ3di05LjQ1N2gxNC43NjJ2My40MTdoLTEwLjkzMnY1LjUxOWgxMC45Mjl2My45Mmg3LjQ2M3YtNDEuMTUzWk0tNjMuMjc0IDQyMy4zMzZoOS4zNjRWMzY3LjQ3aC05LjM2NHpNLTIyLjQ5MiAzNzUuNDNjMi42ODYuMDEgOS4xLjkyMyA5LjExMyA3LjQxNC4wMTMgMy41NjYtMS40MzYgNS41ODgtMy43OTUgNi42My0yLjM0MyAxLjA0My01LjU1MyAxLjE3Ny05LjE3NCAxLjE4aC01LjI2N1YzNzUuNDNoOS4xMjNtLTMuMDggMjMuMTkyYzYuNjgxLjAwNiAxMy4xIDEuMDY1IDEzLjExNSA4LjY1Ni4wMDcgMi43MzQtLjkzOCA0LjkzNy0yLjk3MiA2LjIxOC0yLjAzMSAxLjI4LTUuMDk5IDEuODUtOS4zNzcgMS44NWgtNi44MXYtMTYuNzI0aDYuMDQ0bS0xNS40MDgtMzEuMTYxdjU1Ljg1NGgxNy4wMjJjMTQuNDY0LS4wMjkgMjEuMzAxLTUuMTMgMjEuMzItMTUuMzUtLjAwNi02LjQtMy42MzMtMTEuMjYtOS42MTktMTMuMDU5bC0uNTU2LS4xNjUuNTM0LS4yMjZjNS41Ny0yLjM0MyA4LjI1LTYuMzc2IDguMjU5LTEyLjQ0NS0uMDItOS41NDItNi41MjMtMTQuNTgtMTkuNzA2LTE0LjYxeiIgc3R5bGU9ImZpbGw6IzAwNTZhMztmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6My4xNzg3NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc4Ljc5IC0zMzMuMDMpIi8+PC9zdmc+" alt="IBK 로고">
+    <div class="splash-title">IBKS 음성회의록</div>
+    <div class="splash-sub">회의를 텍스트로</div>
+    <div class="splash-spinner"></div>
+  </div>
+
+  <!-- 온보딩 (v2) -->
+  <div class="screen s-onboarding" data-screen="onboarding">
+    <div class="ob-slide">
+      <div class="ob-illust c1"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></div>
+      <div class="ob-title">회의를 그대로<br>텍스트로</div>
+      <div class="ob-desc">녹음 버튼 하나로 회의 내용을<br>자동으로 텍스트로 변환합니다.</div>
+    </div>
+    <div class="ob-dots"><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <button class="ob-next nav-btn" data-target="permission" style="margin-top:16px">다음</button>
+  </div>
+
+  <!-- 권한 (v2) -->
+  <div class="screen s-permission" data-screen="permission">
+    <div>
+      <div class="perm-header">앱 시작 전</div>
+      <div class="perm-title">권한이 필요해요</div>
+      <div class="perm-cards">
+        <div class="perm-card"><div class="perm-card-row"><div class="perm-icon-box mic"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></div><div><div class="perm-card-title">마이크</div><div class="perm-card-desc">음성 녹음에 사용됩니다.<br>녹음 기능의 핵심 권한입니다.</div></div></div></div>
+        <div class="perm-card"><div class="perm-card-row"><div class="perm-icon-box notif"><svg class="ic" viewBox="0 0 24 24"><path d="M6 9.5a6 6 0 0 1 12 0c0 4.5 1.8 5.5 1.8 5.5H4.2S6 14 6 9.5"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div><div><div class="perm-card-title">알림 (선택)</div><div class="perm-card-desc">전사 완료 시 알림을 받습니다.<br>나중에 설정할 수 있습니다.</div></div></div></div>
+      </div>
+    </div>
+    <div class="perm-actions">
+      <button class="perm-allow nav-btn" data-target="biometric">허용하기</button>
+      <button class="perm-skip nav-btn" data-target="biometric">나중에</button>
+    </div>
+  </div>
+
+  <!-- 권한 거부 -->
+  <div class="screen s-permission" data-screen="permission-denied">
+    <div>
+      <div class="perm-header">권한 거부됨</div>
+      <div class="perm-title">마이크 권한이 필요해요</div>
+      <div class="perm-cards">
+        <div class="perm-card denied"><div class="perm-card-row"><div class="perm-icon-box mic"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5M12 17.5h.01"/></svg></div><div><div class="perm-card-title">마이크 — 거부됨</div><div class="perm-card-desc">녹음 기능을 쓰려면 마이크 권한이<br>반드시 필요합니다.</div></div></div></div>
+      </div>
+      <div class="perm-denied-note">설정 &gt; 앱 &gt; 마이크 에서<br>권한을 허용해 주세요.</div>
+    </div>
+    <div class="perm-actions">
+      <button class="perm-allow">설정 열기</button>
+      <button class="perm-skip nav-btn" data-target="home">홈으로</button>
+    </div>
+  </div>
+
+  <!-- 생체인증 (v2) -->
+  <div class="screen s-biometric" data-screen="biometric">
+    <div class="bio-icon"><svg class="ic" viewBox="0 0 24 24"><path d="M5 11a7 7 0 0 1 14 0M8.5 11.5a3.5 3.5 0 0 1 7 0v3M8.5 15v2.5M15.5 15v1a4 4 0 0 1-.6 2M12 11.5V19"/></svg></div>
+    <div class="bio-title">Face ID로 빠르게<br>로그인하세요</div>
+    <div class="bio-desc">매번 비밀번호 입력 없이<br>Face ID로 간편하게 로그인할 수 있습니다.</div>
+    <div class="bio-actions">
+      <button class="bio-enable nav-btn" data-target="login">Face ID 등록하기</button>
+      <button class="bio-skip nav-btn" data-target="login">나중에</button>
+    </div>
+  </div>
+
+  <!-- 로그인 -->
+  <div class="screen s-login" data-screen="login">
+    <div class="login-topbar"><div class="login-wordmark"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NTMuMjI0OTVtbSIgaGVpZ2h0PSIxMDBtbSIgdmlld0JveD0iMCAwIDQ1My4yMjQ5NCAxMDAiPjxwYXRoIGQ9Ik0tMTU1LjkxOCAzNDMuMWExMC41NiAxMC41NiAwIDAgMC01LjMzIDYuMTU0bC0xNi45OTEgNTEuMDc2YTEwLjU4IDEwLjU4IDAgMCAwIC41NzggOC4xMjIgMTAuNTg2IDEwLjU4NiAwIDAgMCA2LjE0NSA1LjMxNWw1NS43MzYgMTguNzEzYTEwLjU4IDEwLjU4IDAgMCAwIDguMTI1LS41NzhjMi41MzctMS4yODEgNC40MzgtMy40NTIgNS4zMjUtNi4xNDhsMTYuOTk2LTUxLjA3YzEuODU3LTUuNTYtMS4xNzItMTEuNi02LjcyOS0xMy40NTZsLTU1LjczMy0xOC43MWMtMi43MDktLjg5LTUuNTc5LS42OS04LjEyMi41ODIiIHN0eWxlPSJmaWxsOiNmZmY7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjMuMTc4NzYiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3OC43OSAtMzMzLjAzKSIvPjxwYXRoIGQ9Ik0tMTUxLjA0MyA0MDIuMzk0aC0zLjgzN3YtMjYuNTRoMy44Mzd6bTIyLjM2OS0xMC4yMjljLTMuMDI3IDMuMzgtNi44MSA2LjEwNy0xMS4xOCA3Ljc5NGwtMi41MTguOTh2LTIzLjY3M2wyLjQ4Ni45NjNjNC4zOCAxLjY3OSA4LjE3IDQuMzk3IDExLjIwNSA3Ljc2NiAyLjE2OC0zLjQ5IDMuNTEzLTcuNTI3IDMuNzkzLTExLjkzLjY5My0xMS4zNDgtNi40MjUtMjEuNzU4LTE2LjE4NC0yNS4zNzlsLTguMDQ1LTIuNjgzYy0zLjYzNi0xLjIxNC03LjQ5OS43OTUtOC43MDMgNC40MTVsLTE3LjA0OCA1MS4xMTVjLTEuMjA1IDMuNjQuODI2IDcuNTg1IDQuNDY2IDguNzhsMzguNjg5IDEyLjkxNWEyNS40NjYgMjUuNDY2IDAgMCAwIDYuODcyLTE1Ljk1MSAyNS40NSAyNS40NSAwIDAgMC0zLjgzMy0xNS4xMTIiIHN0eWxlPSJmaWxsOiMwMDk5ZGE7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjMuMTc4NzYiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3OC43OSAtMzMzLjAzKSIvPjxwYXRoIGQ9Ik0tMTMwLjkxMiAzODkuMDhhMjUuNzIxIDI1LjcyMSAwIDAgMC03Ljc3NS02LjIxNHYxMi40NjdhMjUuNTQzIDI1LjU0MyAwIDAgMCA3Ljc3NS02LjI1MyIgc3R5bGU9ImZpbGw6I2YxNWQyMjtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6My4xNzg3NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc4Ljc5IC0zMzMuMDMpIi8+PHBhdGggZD0ibS0xMDIuNzA0IDQwMi4zMDQtNC43OTQuMDIzLTkuODU3LTEzLjI4MSAxMC4wMTMtMTMuMjY4IDQuODM1LS4wMTMtMTAuMDM2IDEzLjMwM3ptOS40MDktMzcuNjYyLTM1LjUtMTEuODZjNC43NjEgNS4yMTQgNy42ODIgMTIuMTQzIDcuNjkyIDE5Ljc0NC4wMTMgNi4wMDgtMS44NTcgMTEuNzQ1LTUuMTI0IDE2LjU1NSAzLjI3NyA0Ljc5MyA1LjE3MSAxMC41MjggNS4xNzUgMTYuNTM2YTI5LjI2IDI5LjI2IDAgMCAxLTYuODY2IDE4Ljg4OGwxMy4zNCA0LjQ1N2MzLjYzNyAxLjIwMSA3LjQ5My0uNzk1IDguNzAxLTQuNDI4bDE3LjA1NC01MS4xMDVjMS4yMDItMy42NC0uODM2LTcuNTgyLTQuNDcyLTguNzg3TS02My4yNzQgMzM0LjczNGgyLjI1djE5Ljg0aC0yLjI1ek0tNDYuNjAxIDM0OC43NjVjLjA1NC0yLjEzMi0xLjM2LTMuMzQtMy43OS0zLjM0aC01LjEzdjYuODc1aDUuMDhjMi42MDMgMCAzLjc2Ny0xLjMxOSAzLjg0LTMuNTM1bS0uNzMxLTguODY1YzAtMS43OTYtMS4xMzUtMi44MzYtMy4yODQtMi44MzZoLTQuOTA1djUuOTc2aDQuODhjMi4wNDcgMCAzLjMwOS0xLjE3OSAzLjMwOS0zLjE0bTMuMjU4IDkuMzk2Yy0uMiAzLjM0NC0zLjAwNCA1LjI3Ny02LjMxNiA1LjI3N2gtNy40M3YtMTkuODY3aDcuNjMzYzMuMTg1IDAgNC45NzUgMS45MzkgNS4zMDUgNC4yOTQuMjc3IDIuMzMtLjg1OCA0LjAxMi0yLjI3MiA0Ljk2NiAxLjMxMy43MDUgMy4yMzIgMi4zODcgMy4wOCA1LjMzTS0yOS42IDM1NC42M2wtNy4zNTItOS4yODlhMzA3LjMxNCAzMDcuMzE0IDAgMCAxLTIuNjU0IDIuNjF2Ni42MjFoLTIuMjk4di0xOS44MzloMi4yOTh2OS44NTFjMi4zNS0yLjM1NSA1Ljk2My02LjI4NyA4LjU5Mi05Ljg4aDIuOTA2Yy0yLjUyNCAzLjQ1My01IDYuNDI4LTcuMTUzIDguNzU4bDguNTE2IDExLjE2N3pNLTkuNjE0IDMzMy4xOWgyLjQydjIzLjYzaC0yLjQyem0tMTQuNTQ5IDE5LjUyLTEuODEyLTEuNTg2YzYuMzU4LTMuMTcgOC42NTMtOS40MjUgOC45Mi0xMy4wMjNoLTcuNjQydi0yLjI1NGgxMC40MmMtLjAyIDUuNTg1LTMuMTY2IDEzLjQyNy05Ljg4NiAxNi44NjNNMTAuOTAyIDM1MS42MDdILjUwN3YyLjcxNWgxMC4zOTVaTS0xLjg4IDM1Ni41NXYtOS42NEguNTA3djIuNTIzaDEwLjM5NXYtMi41MjRoMi40MTZ2OS42NDF6bTIuNTM0LTIwLjI3NGMtMS43MTcgMC0zLjI0IDEuMzctMy4yNCAzLjA2MSAwIDEuNzQ1IDEuNTIzIDMuMTQgMy4yNCAzLjE0IDEuNzEzIDAgMy4yMzktMS4zOTUgMy4yMzktMy4xNCAwLTEuNzItMS41MjYtMy4wNi0zLjI0LTMuMDZtMTAuMjcxIDEuODI0di00LjkxMWgyLjQydjEyLjU2OGgtMi40MnYtNS40SDYuMzFjLS40ODMgMi43NC0yLjk3MiA0LjUzNi01LjY1NSA0LjUzNi0yLjk3MiAwLTUuNzI4LTIuMi01LjcyOC01LjUgMC0zLjI4IDIuNzA4LTUuNDggNS43MjgtNS40OCAyLjU4NCAwIDQuOTc4IDEuNjQgNS41ODUgNC4xODd6TTI1LjM5NyAzMzUuMTIyYy0zLjMzNCAwLTUuNTM0IDEuMjg4LTUuNTM0IDMuMDMzIDAgMS43NzQgMi4zMTggMi45MjcgNS41MSAyLjkyNyAzLjI2NCAwIDUuNTg0LTEuMSA1LjU4NC0yLjg3IDAtMS43NzQtMi4yMjUtMy4wOS01LjU2LTMuMDltLTcuOTAyIDIxLjE1OHYtNi43MWgyLjQxNnY0LjQ1M2gxNC4wMTh2Mi4yNTd6bTcuODc3LTEzLjA0NmMtNS4xOTQgMC04LjA5My0yLjA5OC04LjA5My01LjA1IDAtMi45IDIuODc0LTUuMTUzIDguMDkzLTUuMTUzIDUuMjcgMCA4LjEgMi4yMjUgOC4xIDUuMTUyIDAgMi45NTMtMi44MDQgNS4wNTEtOC4xIDUuMDUxbS0xMC42MSAxLjk4NEgzNi4wM3YyLjI4NkgxNC43NjFaTTUzLjM1NCAzNDcuOTU1di02LjQxOGgtMi40ODl2NS45MWgtMi4yNzJWMzMzLjU5aDIuMjcydjUuNTA2aDIuNDl2LTUuOTFoMi4yNzJ2MTQuNzd6bS01Ljk5MiAyLjYzMmMtMy4zMzcgMC01LjYzMi43NS01LjYzMiAyLjI1NyAwIDEuNDc4IDIuMjcgMi4zMTEgNS42MzIgMi4zMTEgMy4yNjIgMCA1LjUxLS44MzMgNS41MS0yLjI4NSAwLTEuNTMzLTIuMi0yLjI4My01LjUxLTIuMjgzbS01LjczLTguNTM1Yy0xLjY2NyAwLTIuNDkuNjcxLTIuNDkgMS43MzkgMCAxLjEwMy44MjMgMS44MDIgMi40OSAxLjgwMiAxLjcxNiAwIDIuNDg4LS42OTkgMi40ODgtMS44MDIgMC0xLjA2OC0uNzcyLTEuNzM5LTIuNDg5LTEuNzM5bTUuNzA2IDE1LjIyM2MtNS4zMTggMC04LjI0My0xLjkwNy04LjI0My00LjQ2IDAtMi41NDkgMi45NzMtNC4yOTQgOC4yOS00LjI5NCA1LjM0MSAwIDguMjE4IDEuODI1IDguMjE4IDQuMzc3IDAgMi41NS0yLjkyNSA0LjM3Ny04LjI2NSA0LjM3N20tOC41MzUtMjMuODQ0aDUuNjF2Mi4wNjdoLTUuNjF6bTIuODA0IDE0LjEyNGMtMi45MjUgMC00Ljg1Ny0xLjU1OC00Ljg1Ny0zLjc4NiAwLTIuMjAzIDEuOTMyLTMuNjgxIDQuODgyLTMuNjgxIDIuOTk4IDAgNC44NiAxLjQ3OCA0Ljg2IDMuNzAzIDAgMi4yMDYtMS44ODUgMy43NjQtNC44ODUgMy43NjRtLTUuMzYzLTEwLjY1OWgxMC44MDV2Mi4wNjZIMzYuMjQzWk03OS4zNSAzNDkuNzgzSDY4LjU0NnY0LjUzOUg3OS4zNXptLTEzLjI2OC0yLjIyOWgxNS43NnY4Ljk5NmgtMTUuNzZabS0yLjc1Ni0yLjYzMnYtMi4yNTdINzguNTNjLjI0Mi0xLjIwNy43OTUtNC4xMDcuOTY3LTYuMjU1aC0xMy43M3YtMi4yNTRoMTYuNTA4Yy0uMTY5IDMuODk0LS45ODkgNy4yNS0xLjI4MSA4LjUxaDMuNjA0djIuMjU2eiIgc3R5bGU9ImZpbGw6IzAwNTZhMztmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6My4xNzg3NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc4Ljc5IC0zMzMuMDMpIi8+PHBhdGggZD0iTTk3LjQ0NyAzNDYuMDUyaC01LjM2NXYyLjQxNmEyMC4wMTUgMjAuMDE1IDAgMCAxIDIuNjU3LS4xNjJjLjk5MiAwIDEuODg1LjA1NCAyLjcwOC4xNjJ6bS0yLjcwOC0xMS4wMTFjLTMuNTAzIDAtNS41MDkgMS4wNzQtNS41MDkgMi40OTggMCAxLjM5NiAyLjA1NCAyLjQ3IDUuNTEgMi40NyAzLjM4NCAwIDUuNTU5LTEuMDQ2IDUuNTU5LTIuNDQxIDAtMS40MjQtMi4xMjctMi41MjctNS41Ni0yLjUyN20wIDE1LjMwNmMtMy40MzMgMC01LjcyNS44ODYtNS43MjUgMi4zOSAwIDEuNDUgMi4yOTIgMi4zODcgNS43MjUgMi4zODcgMy4zODUgMCA1LjcwNi0uOTEyIDUuNzA2LTIuMzYyIDAtMS40NzgtMi4zMi0yLjQxNS01LjcwNi0yLjQxNW0wLTguMjk3Yy01LjM4OCAwLTguMTQ0LTEuODUzLTguMTQ0LTQuNDgyIDAtMi41NzggMi43NTYtNC41MTQgOC4xNDQtNC41MTQgNS40MTcgMCA4LjE3MyAxLjk2MSA4LjE3MyA0LjU0IDAgMi42MDMtMi43NTYgNC40NTYtOC4xNzMgNC40NTZtLTUuMDk5IDQuMDAyaC01LjUzdi0yLjI2aDIxLjI2NXYyLjI2SDk5Ljg5djMuMDA0YzIuMTUyLjc3OSAzLjMxMiAyLjA5NSAzLjMxMiAzLjcwNiAwIDIuNjA3LTMuMDIzIDQuNDg2LTguNDYyIDQuNDg2LTUuNDEzIDAtOC40OC0xLjg3OS04LjQ4LTQuNDg2IDAtMS42MzcgMS4xODItMi45NSAzLjM4MS0zLjczMXpNMTA0Ljg4NyAzNTMuMzI5di0yLjI1N2gxNC41NDljLjM4OC0yLjI4MyAxLjQ1LTkuMjkyIDEuNTQ4LTEyLjQ1OGgtMTMuODV2LTIuMjU3aDE2LjUwN2MwIDMuODQtLjk2NiAxMS42MjUtMS43MTYgMTQuNzE1aDQuMjN2Mi4yNTd6TTE0MS43MTEgMzUyLjIyN0gxMzAuODZ2Mi4yaDEwLjg1MnptLTEzLjI5MyA0LjMyM3YtOC4zNWgyLjQ0MXYyLjAxMmgxMC44NTJWMzQ4LjJoMi40NDV2OC4zNXptMC0xMy44Mjd2LTUuNDUySDE0MS40di0xLjU1OGgtMTIuOTgydi0xLjk4NmgxNS41NDR2NS40NTFoLTEzLjAwNHYxLjU1OGgxMy40NHYxLjk4N3ptMTguNTE2IDMuODY1aC05LjM1NXYyLjQxNmgtMi41ODR2LTIuNDE2aC05LjMzdi0yLjE3NGgyMS4yNjl6TTQ5Ljc2NyAzNjcuNDZjLTIuOTQ2IDMuMDgtMjUuMTA5IDI2LjQ1Ni0yNS4xMDkgMjYuNDU2czI0LjA0NSAyNi4wNjYgMjcuMDcgMjkuMzI3SDM4LjcwNmMtMS4yMi0xLjM5NS0yMS44MTUtMjUuMTI1LTIxLjgxNS0yNS4xMjV2MjUuMTVINy41NHYtNTUuOGg5LjM1djIyLjU2N3MxOS42Ni0yMS4zMjMgMjAuODE3LTIyLjU3NnpNNTcuOCA0MDcuNTk0aDIxLjA1OXYxNS43aDcuNDczdi0xNS43aDIxLjA1NnYtNS44Mkg1Ny44Wm00NC42OTYtMTYuMzM5SDcwLjE2OHYtNS41ODJoMzIuMzI4di01LjY3SDcwLjE2OHYtNS40NjJoMzIuMzI4di01LjY3SDYyLjY5MnYyOC4wNTVoMzkuODA0em03Mi40MTYgOC4xNjdIMjI0LjV2LTUuODI0aC00OS41ODh6bTMyLjE4NSAxOC4wNzdjLTEuODc2IDEuMTY3LTQuMjkyIDEuNzQ5LTcuMjY0IDEuNzQ5LTIuOTM3IDAtNS4zNC0uNTgyLTcuMjIyLTEuNzQ5LTEuODYzLTEuMTg1LTIuNzcyLTIuNjIyLTIuNzgxLTQuNDA5IDAtMS43OS45MjEtMy4yODMgMi43OS00LjUyMyAxLjg4Ni0xLjI1NiA0LjI4LTEuODg1IDcuMjEzLTEuODg1IDIuOTY2IDAgNS4zODIuNjMgNy4yNiAxLjg4NSAxLjg4MiAxLjI0IDIuNzc5IDIuNzM0IDIuNzkxIDQuNTIzLS4wMTIgMS43ODctLjkwOSAzLjIyNC0yLjc4NyA0LjQxbTUuMTk3LTEyLjc0MWMtMy40NzgtMS45NzEtNy42MTMtMi45NjMtMTIuNDYtMi45NjMtNC44NDggMC05LjAxMy45OTItMTIuNDY1IDIuOTYzLTMuNDggMS45NzctNS4yNiA0Ljc4NC01LjI1MSA4LjMzNS0uMDEgMy41MDYgMS43NzQgNi4yODQgNS4yNTEgOC4yMzYgMy40NTIgMS45NTUgNy42MjMgMi45MzcgMTIuNDY0IDIuOTNoLjAyNmM0LjgzMSAwIDguOTY0LS45NzkgMTIuNDM1LTIuOTMgMy40NzQtMS45NTIgNS4yNDUtNC43MyA1LjIzOC04LjIzNi4wMDYtMy41NTEtMS43NjQtNi4zNTgtNS4yMzgtOC4zMzVtLTMyLjIwNy0xMy44MzRjMTIuMjczLTIuMjU3IDE4LjMzNS04LjY4NSAxOS41ODQtMTAuMTYzIDEuMjU5IDEuNDc4IDcuMzI3IDcuOTA2IDE5LjU5NyAxMC4xNjNsLjExOC4wMjIgMy44NzgtNS4xNS0uMzQ3LS4wNDdjLS4wMjUtLjAwMy0xNC44ODYtMS45MjctMTguODg4LTEwLjk5NmgxNi4xNDV2LTUuOTAzaC00MC42ODJ2NS45aDE1LjgyNGMtNC4wMDIgOS4wNzItMTguODgyIDEwLjk4LTE4Ljg4MiAxMC45OTlsLS4zNDYuMDQ3IDMuODc1IDUuMTUzem0tNDQuMS01Ljk2di0xMC41OGwxMC42NTYuMDA0di01LjUxOUgxMTguNjR2NS41MTloMTAuMTc5djEwLjQ1OGMwIDkuMzE0LTUuODY1IDE3LjIxMy0xMy45NjIgMTkuODk2bC0uMzA4LjEwNSAzLjk2NyA0LjE3My4xMjQtLjA0YzUuNzk1LTIuMTc4IDEwLjY0OS02LjQ0NCAxMy43NDgtMTEuOTQ3IDMuMDk2IDUuNTAzIDcuOTc2IDkuNzY5IDEzLjc5IDExLjk0NmwuMTIuMDQxIDMuOTU1LTQuMTgtLjMwMi0uMDk4Yy04LjA2MS0yLjY3LTEzLjkxNC0xMC41MDMtMTMuOTY0LTE5Ljc3OW0yNS4zMjUtMTcuNTJoLTcuNDd2NTUuODA5aDcuNDd2LTMyLjg1Nmg4LjE0N3YtNS41MThoLTguMTQ3em04MS42MDggMzYuOTE0aC03LjUxOHYxNy45OTJoMzkuMDMzdi01LjM2OUgyNDIuOTJ6bTI0LjA1LTM3LjAyNi4wMDQgMjIuNDhoLTguMjk3Yy4wODMtLjI0OC4xNDYtLjQ1OC4yMTMtLjY3N2EzOS41MzQgMzkuNTM0IDAgMCAwIDEuNTA3LTEwLjgwOHYtOS40NTdoLTI2LjkzdjUuNDU1aDE5LjI5MXY1LjMzNGMwIC43MjgtLjA2NiAxLjY0Ny0uMTY1IDIuNzRhNDcuNzQ4IDQ3Ljc0OCAwIDAgMS0uMzYgMi42NmwtMS4wNzQgNC43NTNoLTIxLjExdjUuODE3aDE0LjY5M3Y5LjQ1N2g3LjQ3di05LjQ1N2gxNC43NjJ2My40MTdoLTEwLjkzMnY1LjUxOWgxMC45Mjl2My45Mmg3LjQ2M3YtNDEuMTUzWk0tNjMuMjc0IDQyMy4zMzZoOS4zNjRWMzY3LjQ3aC05LjM2NHpNLTIyLjQ5MiAzNzUuNDNjMi42ODYuMDEgOS4xLjkyMyA5LjExMyA3LjQxNC4wMTMgMy41NjYtMS40MzYgNS41ODgtMy43OTUgNi42My0yLjM0MyAxLjA0My01LjU1MyAxLjE3Ny05LjE3NCAxLjE4aC01LjI2N1YzNzUuNDNoOS4xMjNtLTMuMDggMjMuMTkyYzYuNjgxLjAwNiAxMy4xIDEuMDY1IDEzLjExNSA4LjY1Ni4wMDcgMi43MzQtLjkzOCA0LjkzNy0yLjk3MiA2LjIxOC0yLjAzMSAxLjI4LTUuMDk5IDEuODUtOS4zNzcgMS44NWgtNi44MXYtMTYuNzI0aDYuMDQ0bS0xNS40MDgtMzEuMTYxdjU1Ljg1NGgxNy4wMjJjMTQuNDY0LS4wMjkgMjEuMzAxLTUuMTMgMjEuMzItMTUuMzUtLjAwNi02LjQtMy42MzMtMTEuMjYtOS42MTktMTMuMDU5bC0uNTU2LS4xNjUuNTM0LS4yMjZjNS41Ny0yLjM0MyA4LjI1LTYuMzc2IDguMjU5LTEyLjQ0NS0uMDItOS41NDItNi41MjMtMTQuNTgtMTkuNzA2LTE0LjYxeiIgc3R5bGU9ImZpbGw6IzAwNTZhMztmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6My4xNzg3NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc4Ljc5IC0zMzMuMDMpIi8+PC9zdmc+" alt="IBK 로고"></div></div>
+    <div class="login-body">
+      <div class="login-eyebrow">WELCOME</div>
+      <div class="login-title">IBKS 음성회의록에<br>오신걸 환영해요</div>
+      <div class="login-sub">사내 계정으로 로그인해 주세요</div>
+      <button class="sso-btn nav-btn" data-target="home"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 4l9 5.5M4.5 9.5V19M19.5 9.5V19M8 10.5V18M12 10.5V18M16 10.5V18M3 20.5h18"/></svg> IBK투자증권 SSO로 로그인</button>
+      <div class="divider"><div class="div-line"></div><div class="div-text">또는 직접 입력</div><div class="div-line"></div></div>
+      <div class="input-wrap"><span>사번 또는 이메일</span></div>
+      <div class="input-wrap"><span>비밀번호</span></div>
+      <button class="login-cta nav-btn" data-target="home">로그인</button>
+      <div class="login-terms">로그인 시 이용약관 및 개인정보처리방침에 동의합니다</div>
+    </div>
+  </div>
+
+  <!-- 홈 -->
+  <div class="screen s-home" data-screen="home">
+    <div class="home-topbar">
+      <div class="home-topbar-row">
+        <div>
+          <div class="home-greeting">안녕하세요, 김철수님</div>
+          <div class="home-sub">이번 주 회의 5건</div>
+        </div>
+        <div class="topbar-icons">
+          <button class="topbar-ic-btn on" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="library" title="보관함"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        </div>
+      </div>
+      <div class="search-bar" style="margin-bottom:10px;">
+        <span style="font-size:12px;color:#bbb;"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+        <span class="search-ph">회의 내용 검색...</span>
+      </div>
+      <div class="seg-filter">
+        <div class="seg-tab on">전체</div>
+        <div class="seg-tab">변환중</div>
+        <div class="seg-tab">완료</div>
+        <div class="seg-tab">즐겨찾기</div>
+      </div>
+    </div>
+    <div class="home-list">
+      <div class="card">
+        <div class="card-row">
+          <div class="card-row-main nav-btn" data-target="detail-done">
+            <div class="card-title">팀장 주간 미팅 <span class="bdg bdg-done">완료</span></div>
+            <div class="card-meta">오늘 14:00 · 32분</div>
+          </div>
+          <button class="card-more">⋮</button>
+        </div>
+        <div class="card-menu hidden">
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.7 6.8 19.2l1-5.8-4.3-4.1 5.9-.9z"/></svg> 즐겨찾기</div>
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg> 폴더 이동</div>
+          <div class="card-menu-item danger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7"/></svg> 삭제</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-row">
+          <div class="card-row-main nav-btn" data-target="detail-proc">
+            <div class="card-title">고객사 인터뷰 <span class="bdg bdg-proc">변환중</span></div>
+            <div class="card-meta">오늘 11:00 · 58분</div>
+          </div>
+          <button class="card-more">⋮</button>
+        </div>
+        <div class="card-menu hidden">
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.7 6.8 19.2l1-5.8-4.3-4.1 5.9-.9z"/></svg> 즐겨찾기</div>
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg> 폴더 이동</div>
+          <div class="card-menu-item danger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7"/></svg> 삭제</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-row">
+          <div class="card-row-main nav-btn" data-target="detail-fail">
+            <div class="card-title">전략기획 브리핑 <span class="bdg bdg-fail">실패</span></div>
+            <div class="card-meta">어제 16:30 · 12분</div>
+          </div>
+          <button class="card-more">⋮</button>
+        </div>
+        <div class="card-menu hidden">
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.7 6.8 19.2l1-5.8-4.3-4.1 5.9-.9z"/></svg> 즐겨찾기</div>
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg> 폴더 이동</div>
+          <div class="card-menu-item danger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7"/></svg> 삭제</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-row">
+          <div class="card-row-main nav-btn" data-target="detail-done">
+            <div class="card-title">신입사원 OJT <span class="bdg bdg-done">완료</span></div>
+            <div class="card-meta">2026.05.16 · 44분</div>
+          </div>
+          <button class="card-more">⋮</button>
+        </div>
+        <div class="card-menu hidden">
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.7 6.8 19.2l1-5.8-4.3-4.1 5.9-.9z"/></svg> 즐겨찾기</div>
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg> 폴더 이동</div>
+          <div class="card-menu-item danger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7"/></svg> 삭제</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-row">
+          <div class="card-row-main nav-btn" data-target="detail-done">
+            <div class="card-title">상반기 실적 발표 <span class="bdg bdg-done">완료</span></div>
+            <div class="card-meta">2026.05.14 · 1시간 12분</div>
+          </div>
+          <button class="card-more">⋮</button>
+        </div>
+        <div class="card-menu hidden">
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.7 6.8 19.2l1-5.8-4.3-4.1 5.9-.9z"/></svg> 즐겨찾기</div>
+          <div class="card-menu-item"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg> 폴더 이동</div>
+          <div class="card-menu-item danger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7"/></svg> 삭제</div>
+        </div>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording">
+        <span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span>
+        <span class="start-btn-text">회의 시작하기</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 빈 상태 -->
+  <div class="screen s-home" data-screen="empty">
+    <div class="home-topbar">
+      <div class="home-topbar-row">
+        <div><div class="home-greeting">안녕하세요, 김이사님</div><div class="home-sub">아직 회의가 없어요</div></div>
+        <div class="topbar-icons">
+          <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="library" title="보관함"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        </div>
+      </div>
+      <div class="search-bar" style="margin-bottom:10px;"><span style="font-size:12px;color:#bbb;"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><span class="search-ph">회의 내용 검색...</span></div>
+      <div class="seg-filter"><div class="seg-tab on">전체</div><div class="seg-tab">변환중</div><div class="seg-tab">완료</div><div class="seg-tab">즐겨찾기</div></div>
+    </div>
+    <div class="empty-wrap">
+      <div class="empty-ic"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></div>
+      <div class="empty-title">첫 회의를 녹음해 보세요</div>
+      <div class="empty-desc">아래 버튼을 누르면 녹음이 시작되고<br>회의가 끝나면 자동으로 텍스트로 변환됩니다.</div>
+    </div>
+    <div class="tabbar"><div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div></div>
+  </div>
+
+  <!-- 로딩(스켈레톤) -->
+  <div class="screen s-home" data-screen="loading">
+    <div class="home-topbar">
+      <div class="home-topbar-row">
+        <div><div class="home-greeting">안녕하세요, 김이사님</div><div class="home-sub">불러오는 중...</div></div>
+        <div class="topbar-icons">
+          <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="library" title="보관함"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        </div>
+      </div>
+      <div class="search-bar" style="margin-bottom:10px;"><span style="font-size:12px;color:#bbb;"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><span class="search-ph">회의 내용 검색...</span></div>
+      <div class="seg-filter"><div class="seg-tab on">전체</div><div class="seg-tab">변환중</div><div class="seg-tab">완료</div><div class="seg-tab">즐겨찾기</div></div>
+    </div>
+    <div class="home-list"><div class="sk-card"><div class="sk-line mid"></div><div class="sk-line"></div><div class="sk-line short"></div></div><div class="sk-card"><div class="sk-line mid"></div><div class="sk-line"></div><div class="sk-line short"></div></div><div class="sk-card"><div class="sk-line mid"></div><div class="sk-line"></div><div class="sk-line short"></div></div><div class="sk-card"><div class="sk-line mid"></div><div class="sk-line"></div><div class="sk-line short"></div></div></div>
+    <div class="tabbar"><div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div></div>
+  </div>
+
+  <!-- 오프라인 -->
+  <div class="screen s-home" data-screen="offline">
+    <div class="home-topbar">
+      <div class="home-topbar-row">
+        <div><div class="home-greeting">안녕하세요, 김이사님</div><div class="home-sub">오프라인 · 업로드 대기 2건</div></div>
+        <div class="topbar-icons">
+          <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="library" title="보관함"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        </div>
+      </div>
+      <div class="search-bar" style="margin-bottom:10px;"><span style="font-size:12px;color:#bbb;"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><span class="search-ph">회의 내용 검색...</span></div>
+      <div class="seg-filter"><div class="seg-tab on">전체</div><div class="seg-tab">변환중</div><div class="seg-tab">완료</div><div class="seg-tab">즐겨찾기</div></div>
+    </div>
+    <div class="home-list">
+      <div class="offline-banner"><svg class="ic" viewBox="0 0 24 24"><path d="M3 3l18 18M2.5 8.8a14 14 0 0 1 5-3.2M10.5 4.3a14 14 0 0 1 11 4.5M5.6 12.2a9.5 9.5 0 0 1 3-1.9M8.7 15.6a5 5 0 0 1 5.7-.8M12 19h.01"/></svg><span>오프라인 상태예요. 녹음은 정상 저장되며, <b>네트워크 연결 시 자동으로 업로드</b>됩니다.</span></div>
+      <div class="card"><div class="card-row"><div class="card-row-main"><div class="card-title">2분기 투자 전략 회의 <span class="bdg bdg-queued">업로드 대기</span></div><div class="card-meta">오늘 15:20 · 42분 · 로컬 저장됨</div></div></div></div>
+      <div class="card"><div class="card-row"><div class="card-row-main"><div class="card-title">현장 메모 <span class="bdg bdg-queued">업로드 대기</span></div><div class="card-meta">오늘 13:05 · 8분 · 로컬 저장됨</div></div></div></div>
+      <div class="card"><div class="card-row"><div class="card-row-main"><div class="card-title">팀장 주간 미팅 <span class="bdg bdg-done">완료</span></div><div class="card-meta">어제 14:00 · 32분</div></div></div></div>
+    </div>
+    <div class="tabbar"><div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div></div>
+  </div>
+
+  <!-- 회의 진행 중 -->
+  <div class="screen s-recording" data-screen="recording">
+    <div class="rec-topbar">
+      <div class="rec-close nav-btn" data-target="home">✕</div>
+      <div class="rec-badge">● 진행 중</div>
+      <div style="width:28px;"></div>
+    </div>
+    <div class="rec-timer rec-timer-el">00:00</div>
+    <div class="wave-row">
+      <div class="wb on" style="height:14px;animation-delay:.00s;"></div>
+      <div class="wb on" style="height:28px;animation-delay:.10s;"></div>
+      <div class="wb on" style="height:40px;animation-delay:.20s;"></div>
+      <div class="wb on" style="height:44px;animation-delay:.05s;"></div>
+      <div class="wb on" style="height:36px;animation-delay:.15s;"></div>
+      <div class="wb on" style="height:22px;animation-delay:.25s;"></div>
+      <div class="wb on" style="height:12px;animation-delay:.08s;"></div>
+    </div>
+    <div class="rec-body">
+      <div class="memo-lbl">메모</div>
+      <div class="memo-box">이 회의 이름은? (예: 주간 팀 미팅)</div>
+      <div class="ctrl-row">
+        <button class="btn-pause nav-btn" data-target="paused">일시정지</button>
+        <button class="btn-end nav-btn" data-target="sheet">회의종료</button>
+      </div>
+      <div class="ctrl-hint">회의종료 → 저장 화면으로 이동</div>
+    </div>
+  </div>
+
+  <!-- 일시정지 -->
+  <div class="screen s-recording" data-screen="paused">
+    <div class="rec-topbar">
+      <div class="rec-close nav-btn" data-target="home">✕</div>
+      <div class="rec-badge-paused">⏸ 멈춤</div>
+      <div style="width:28px;"></div>
+    </div>
+    <div class="rec-timer paused">12:34</div>
+    <div class="wave-row">
+      <div class="wb off"></div><div class="wb off"></div><div class="wb off"></div>
+      <div class="wb off"></div><div class="wb off"></div><div class="wb off"></div><div class="wb off"></div>
+    </div>
+    <div class="rec-body">
+      <div class="memo-lbl">메모</div>
+      <div class="memo-box">팀장 주간 미팅</div>
+      <div class="ctrl-row">
+        <button class="btn-pause nav-btn" data-target="recording" style="background:#111;color:#fff;">계속</button>
+        <button class="btn-end nav-btn" data-target="sheet">회의종료</button>
+      </div>
+      <div class="ctrl-hint">계속하기를 누르면 회의가 재개됩니다</div>
+    </div>
+  </div>
+
+  <!-- 회의종료 시트 -->
+  <div class="screen s-sheet" data-screen="sheet">
+    <div class="sheet-dim">회의 진행 중 화면</div>
+    <div class="sheet-body">
+      <div class="sheet-drag"></div>
+      <div class="sheet-title">회의를 종료할까요?</div>
+      <div class="sheet-sub">제목을 입력하면 나중에 찾기 쉬워요</div>
+      <div class="sheet-input">팀장 주간 미팅</div>
+      <div class="sheet-btn-row">
+        <button class="sheet-cancel sheet-cancel-trigger">취소</button>
+        <button class="sheet-save sheet-save-trigger">회의종료</button>
+      </div>
+    </div>
+    <!-- 취소 확인 알럿 -->
+    <div class="alert-overlay hidden cancel-alert">
+      <div class="alert-box">
+        <div class="alert-pad">
+          <div class="alert-title">회의가 저장되지 않습니다</div>
+          <div class="alert-body">취소하면 지금까지 녹음한 내용이<br>모두 삭제됩니다. 계속하시겠습니까?</div>
+        </div>
+        <div class="alert-buttons">
+          <button class="alert-btn cancel alert-cancel-btn">계속 녹음</button>
+          <button class="alert-btn confirm alert-confirm-btn">취소하고 종료</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상세 (완료) v2레이아웃 + v4 상단아이콘 -->
+  <div class="screen s-detail" data-screen="detail-done">
+    <div class="detail-topbar">
+      <div class="detail-back nav-btn" data-target="home">‹ 회의</div>
+      <div class="detail-topbar-title">녹음 상세</div>
+      <div class="topbar-icons">
+        <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+        <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-card">
+        <div class="detail-title">2분기 투자 전략 회의</div>
+        <div class="detail-meta"><span>2026.05.14</span><span>42분 18초</span><span>김이사</span></div>
+      </div>
+      <div class="notice-banner">
+        <span class="nbic"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
+        <span class="nbtx">자동 생성된 회의록은 개인정보 보호를 위해 <b>내부망 PC</b>에서만 조회 가능합니다.</span>
+      </div>
+      <div class="status-card">
+        <div class="status-row"><span class="status-label"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg> 녹음</span><span class="bdg bdg-done">완료</span></div>
+        <div class="status-row"><span class="status-label"><svg class="ic" viewBox="0 0 24 24"><path d="M7 18.5a4 4 0 0 1-.3-8A5.5 5.5 0 0 1 17 8.6a3.6 3.6 0 0 1 .6 9.9z"/></svg> 업로드</span><span class="bdg bdg-done">완료</span></div>
+        <div class="status-row"><span class="status-label"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/></svg> 전사</span><span class="bdg bdg-done">완료</span></div>
+      </div>
+      <div class="action-row"><button class="action-btn action-transcript nav-btn" data-target="transcript">전사 결과 보기</button></div>
+      <div class="action-row">
+        <button class="action-btn action-retry" style="flex:none;width:48%">재전송</button>
+        <button class="action-btn action-delete btn-danger-outline" style="flex:none;width:48%;height:44px;border:none;">삭제</button>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div>
+    </div>
+  </div>
+
+  <!-- 상세 (처리중) -->
+  <div class="screen s-detail" data-screen="detail-proc">
+    <div class="detail-topbar">
+      <div class="detail-back nav-btn" data-target="home">‹ 회의</div>
+      <div class="detail-topbar-title">상세</div>
+      <div class="topbar-icons">
+        <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+        <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-header-card">
+        <div class="detail-title">고객사 인터뷰</div>
+        <div class="detail-meta">2026.05.18 · 58분 · 김철수</div>
+      </div>
+      <div class="notice-banner">
+        <span class="nbic"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
+        <span class="nbtx">자동 생성된 회의록은 개인정보 보호를 위해 <b>내부망 PC</b>에서만 조회 가능합니다.</span>
+      </div>
+      
+      <div class="status-row">
+        <div class="status-box"><div class="status-ic"><svg class="ic" viewBox="0 0 24 24" style="color:var(--c-done)"><path d="M5 12.5 10 17.5 19.5 7"/></svg></div><div class="status-lbl">생성</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+        <div class="status-box"><div class="status-ic"><svg class="ic" viewBox="0 0 24 24" style="color:var(--c-done)"><path d="M5 12.5 10 17.5 19.5 7"/></svg></div><div class="status-lbl">업로드</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+        <div class="status-box"><div class="status-ic"><svg class="ic" viewBox="0 0 24 24" style="color:var(--c-proc)"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><div class="status-lbl">변환</div><div class="status-val" style="color:var(--c-proc);">처리중</div></div>
+      </div>
+      <button class="btn-primary" style="background:#ddd;color:#999;cursor:default;"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg> 음성파일 변환중...</button>
+      <button class="btn-secondary"><svg class="ic fill" viewBox="0 0 24 24"><path d="M7 5v14l11-7z"/></svg>  파일 재생</button>
+      <button class="btn-danger-outline"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7"/></svg> 회의 삭제</button>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div>
+    </div>
+  </div>
+
+  <!-- 상세 (실패) -->
+  <div class="screen s-detail" data-screen="detail-fail">
+    <div class="detail-topbar">
+      <div class="detail-back nav-btn" data-target="home">‹ 회의</div>
+      <div class="detail-topbar-title">상세</div>
+      <div class="topbar-icons">
+        <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+        <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-header-card">
+        <div class="detail-title">전략기획 브리핑</div>
+        <div class="detail-meta">2026.05.17 · 12분 · 김철수</div>
+      </div>
+      <div class="retry-banner">
+        <span class="retry-banner-text"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5M12 17.5h.01"/></svg> 업로드에 실패했습니다.</span>
+        <span class="retry-link">재전송하기</span>
+      </div>
+      <div class="status-row">
+        <div class="status-box"><div class="status-ic"><svg class="ic" viewBox="0 0 24 24" style="color:var(--c-done)"><path d="M5 12.5 10 17.5 19.5 7"/></svg></div><div class="status-lbl">생성</div><div class="status-val" style="color:var(--c-done);">완료</div></div>
+        <div class="status-box"><div class="status-ic"><svg class="ic" viewBox="0 0 24 24" style="color:var(--c-fail)"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></div><div class="status-lbl">업로드</div><div class="status-val" style="color:var(--c-fail);">실패</div></div>
+        <div class="status-box"><div class="status-ic">—</div><div class="status-lbl">변환</div><div class="status-val" style="color:#bbb;">대기</div></div>
+      </div>
+      <button class="btn-primary" style="background:var(--c-fail);"><svg class="ic" viewBox="0 0 24 24"><path d="M12 20V5M6 11l6-6 6 6"/></svg> 재전송하기</button>
+      <button class="btn-secondary"><svg class="ic fill" viewBox="0 0 24 24"><path d="M7 5v14l11-7z"/></svg>  파일 재생</button>
+      <button class="btn-danger-outline"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7"/></svg> 회의 삭제</button>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div>
+    </div>
+  </div>
+
+  <!-- 음성 변환 내용 v2느낌 + v4구조 -->
+  <div class="screen s-transcript" data-screen="transcript">
+    <div class="detail-topbar">
+      <div class="detail-back nav-btn" data-target="detail-done">‹ 상세</div>
+      <div class="detail-topbar-title">전사 결과</div>
+      <div class="topbar-icons">
+        <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+        <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      </div>
+    </div>
+    <div class="transcript-tabs">
+      <div class="ttab on">원문</div>
+      <div class="ttab">편집본</div>
+    </div>
+    <div class="transcript-body">
+      <div class="notice-banner">
+        <span class="nbic"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
+        <span class="nbtx">자동 생성된 회의록은 개인정보 보호를 위해 <b>내부망 PC</b>에서만 조회 가능합니다.</span>
+      </div>
+      <div class="seg-item">
+        <div class="seg-header"><span class="seg-speaker sp-a">화자 A</span><span class="seg-time">00:00</span></div>
+        <div class="seg-text">안녕하세요, 오늘 2분기 투자 전략 회의를 시작하겠습니다. 먼저 지난 분기 포트폴리오 성과를 검토해 보겠습니다.</div>
+      </div>
+      <div class="seg-item">
+        <div class="seg-header"><span class="seg-speaker sp-b">화자 B</span><span class="seg-time">00:38</span></div>
+        <div class="seg-text">1분기 주식 비중을 60%까지 높인 결과 벤치마크 대비 2.3% 초과 수익을 달성했습니다.</div>
+      </div>
+      <div class="seg-item">
+        <div class="seg-header"><span class="seg-speaker sp-a">화자 A</span><span class="seg-time">01:12</span></div>
+        <div class="seg-text">2분기에는 금리 환경 변화를 감안해 채권 비중을 소폭 늘리는 방향을 검토해봅시다.</div>
+      </div>
+      <div class="seg-item">
+        <div class="seg-header"><span class="seg-speaker sp-c">화자 C</span><span class="seg-time">01:50</span></div>
+        <div class="seg-text">네, 리스크 관리팀과 협의해 채권 듀레이션 조정안을 다음 회의 전까지 정리하겠습니다.</div>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div>
+    </div>
+  </div>
+
+  <!-- 보관함 (v2 + 태그) -->
+  <div class="screen s-library" data-screen="library">
+    <div class="library-topbar">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="library-topbar-title">보관함</div>
+        <div class="topbar-icons">
+          <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+          <button class="topbar-ic-btn nav-btn" data-target="settings" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        </div>
+      </div>
+      <div class="lib-tabs"><div class="lib-tab on">즐겨찾기</div><div class="lib-tab">보관됨</div><div class="lib-tab">태그</div></div>
+    </div>
+    <div class="library-body">
+      <div class="lib-section">
+        <div class="lib-section-header"><span class="lib-section-icon"><svg class="ic" viewBox="0 0 24 24"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.7 6.8 19.2l1-5.8-4.3-4.1 5.9-.9z"/></svg></span><span class="lib-section-title">즐겨찾기</span></div>
+        <div class="lib-item nav-btn" data-target="detail-done"><div class="lib-item-left"><div class="lib-item-title">2분기 투자 전략 회의</div><div class="lib-item-meta">42분 · 오늘</div></div><span class="lib-item-arrow">›</span></div>
+        <div class="lib-item nav-btn" data-target="detail-done"><div class="lib-item-left"><div class="lib-item-title">고객사 미팅 — (주)한국제조</div><div class="lib-item-meta">72분 · 어제</div></div><span class="lib-item-arrow">›</span></div>
+      </div>
+      <div class="lib-section">
+        <div class="lib-section-header"><span class="lib-section-icon"><svg class="ic" viewBox="0 0 24 24"><path d="M20.6 13.4 12 22l-9-9V4a1 1 0 0 1 1-1h8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg></span><span class="lib-section-title">태그</span></div>
+        <div class="tag-chip-row">
+          <span class="tag-chip">투자전략</span><span class="tag-chip">고객미팅</span><span class="tag-chip">리스크</span><span class="tag-chip">주간회의</span><span class="tag-chip">포트폴리오</span>
+        </div>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div>
+    </div>
+  </div>
+
+  <!-- 설정 (v2 구성 + v4 토글) -->
+  <div class="screen s-settings" data-screen="settings">
+    <div class="app-topbar">
+      <div class="app-topbar-title">설정</div>
+      <div class="topbar-icons">
+        <button class="topbar-ic-btn nav-btn" data-target="home" title="홈"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></button>
+        <button class="topbar-ic-btn on" title="설정"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      </div>
+    </div>
+    <div class="settings-body">
+      <div class="user-card">
+        <div class="user-avatar">김</div>
+        <div>
+          <div class="user-name">김이사</div>
+          <div class="user-dept">IBK투자증권 · 리테일사업부 · lkim@ibkinvestment.com</div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-header">계정</div>
+        <div class="settings-group">
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c0-3.8 3.5-6 7.5-6s7.5 2.2 7.5 6"/></svg></span><span class="settings-lbl">내 정보</span><span class="settings-arrow">›</span></div>
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M5 11a7 7 0 0 1 14 0M8.5 11.5a3.5 3.5 0 0 1 7 0v3M8.5 15v2.5M15.5 15v1a4 4 0 0 1-.6 2M12 11.5V19"/></svg></span><span class="settings-lbl">생체 인증 (Face ID)</span><div class="toggle-track"><div class="toggle-thumb"></div></div></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-header">보안</div>
+        <div class="settings-group">
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span><span class="settings-lbl">자동 잠금</span><span class="settings-val">5분</span><span class="settings-arrow">›</span></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-header">업로드 · 알림</div>
+        <div class="settings-group">
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M2.5 8.8a14 14 0 0 1 19 0M5.5 12.2a9.5 9.5 0 0 1 13 0M8.7 15.6a5 5 0 0 1 6.6 0M12 19h.01"/></svg></span><span class="settings-lbl">Wi-Fi 전용 업로드</span><div class="toggle-track"><div class="toggle-thumb"></div></div></div>
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M6 9.5a6 6 0 0 1 12 0c0 4.5 1.8 5.5 1.8 5.5H4.2S6 14 6 9.5"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span><span class="settings-lbl">전사 완료 알림</span><div class="toggle-track"><div class="toggle-thumb"></div></div></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-header">앱</div>
+        <div class="settings-group">
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5a13 13 0 0 1 0 17M12 3.5a13 13 0 0 0 0 17"/></svg></span><span class="settings-lbl">언어</span><span class="settings-val">한국어</span><span class="settings-arrow">›</span></div>
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="13" width="18" height="7.5" rx="2"/><path d="M5.5 13 7.5 5h9l2 8M7 16.8h.01"/></svg></span><span class="settings-lbl">저장공간</span><span class="settings-val">1.2 GB</span></div>
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M6 2.5h7l5 5v14H6z"/><path d="M13 2.5v5h5M9 13h6M9 17h6"/></svg></span><span class="settings-lbl">개인정보처리방침</span><span class="settings-arrow">›</span></div>
+          <div class="settings-row"><span class="settings-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8h.01"/></svg></span><span class="settings-lbl">버전</span><span class="settings-val">1.0.0</span></div>
+        </div>
+      </div>
+      <button class="logout-btn">로그아웃</button>
+    </div>
+    <div class="tabbar">
+      <div class="start-btn nav-btn" data-target="recording"><span style="font-size:16px;color:#fff;"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></span><span class="start-btn-text">회의 시작하기</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SCREENS=['splash', 'onboarding', 'permission', 'permission-denied', 'biometric', 'login', 'home', 'empty', 'loading', 'offline', 'recording', 'paused', 'sheet', 'detail-done', 'transcript', 'detail-proc', 'detail-fail', 'library', 'settings'];
+const LABELS={"splash":"스플래시","onboarding":"온보딩","permission":"권한","permission-denied":"권한 거부","biometric":"생체인증","login":"로그인","home":"홈","empty":"빈 화면","loading":"로딩","offline":"오프라인","recording":"녹음 중","paused":"일시정지","sheet":"종료 시트","detail-done":"상세(완료)","transcript":"전사 결과","detail-proc":"상세(처리중)","detail-fail":"상세(실패)","library":"보관함","settings":"설정"};
+let current='splash',timer=null,elapsed=0;
+const app=document.getElementById('app');
+
+function bind(t){
+ t.querySelectorAll('.nav-btn[data-target]').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();go(el.dataset.target);}));
+ t.querySelectorAll('.toggle-track').forEach(tr=>tr.addEventListener('click',()=>{const on=!tr.classList.contains('off');tr.classList.toggle('off',on);}));
+ t.querySelectorAll('.seg-filter,.lib-tabs,.transcript-tabs').forEach(g=>{const s=g.classList.contains('lib-tabs')?'.lib-tab':(g.classList.contains('transcript-tabs')?'.ttab':'.seg-tab');g.querySelectorAll(s).forEach(tab=>tab.addEventListener('click',()=>{g.querySelectorAll(s).forEach(x=>x.classList.remove('on'));tab.classList.add('on');}));});
+ t.querySelectorAll('.logout-btn').forEach(b=>b.addEventListener('click',()=>go('login')));
+ t.querySelectorAll('.btn-primary').forEach(b=>{
+   if(b.textContent.includes('재전송')){b.addEventListener('click',()=>{const o=b.textContent;b.textContent='↑ 전송 중...';b.disabled=true;setTimeout(()=>{b.textContent='✅ 재전송 완료';},1400);setTimeout(()=>{b.textContent=o;b.disabled=false;},3000);});}
+ });
+ t.querySelectorAll('.btn-secondary').forEach(b=>{if(b.textContent.includes('재생')){b.addEventListener('click',()=>{const p=b.textContent.includes('■');b.textContent=p?'▶ 파일 재생':'■ 재생 중...';});}});
+ t.querySelectorAll('.card-more').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const c=b.closest('.card'),m=c.querySelector('.card-menu');t.querySelectorAll('.card-menu').forEach(x=>{if(x!==m)x.classList.add('hidden');});m.classList.toggle('hidden');}));
+ t.querySelectorAll('.card-menu-item.danger').forEach(it=>it.addEventListener('click',e=>{e.stopPropagation();const c=it.closest('.card');c.style.transition='opacity .2s,transform .2s';c.style.opacity='0';c.style.transform='translateX(40px)';setTimeout(()=>c.remove(),220);}));
+ t.querySelectorAll('.sheet-cancel-trigger').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const s=b.closest('.s-sheet'),a=s&&s.querySelector('.cancel-alert');if(a)a.classList.remove('hidden');}));
+ t.querySelectorAll('.alert-cancel-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.closest('.alert-overlay').classList.add('hidden');}));
+ t.querySelectorAll('.alert-confirm-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();b.closest('.alert-overlay').classList.add('hidden');go('home');}));
+ t.querySelectorAll('.sheet-save-trigger').forEach(b=>b.addEventListener('click',()=>go('home')));
+ t.querySelectorAll('.btn-danger-outline').forEach(b=>{if(b.textContent.includes('삭제')){b.addEventListener('click',()=>{b.textContent='삭제됨';setTimeout(()=>go('home'),600);});}});
+ t.addEventListener('click',()=>t.querySelectorAll('.card-menu').forEach(m=>m.classList.add('hidden')));
+}
+
+function go(id){
+ if(timer){clearInterval(timer);timer=null;}
+ app.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+ const el=app.querySelector('[data-screen="'+id+'"]');if(el)el.classList.add('active');
+ current=id;
+ document.querySelectorAll('#mgrid button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
+ if(id==='recording'){elapsed=0;timer=setInterval(()=>{elapsed++;const m=String(Math.floor(elapsed/60)).padStart(2,'0'),s=String(elapsed%60).padStart(2,'0');app.querySelectorAll('.rec-timer-el').forEach(e=>e.textContent=m+':'+s);},1000);}
+ if(id==='splash'){setTimeout(()=>{if(current==='splash')go('onboarding');},1500);}
+}
+
+const tpl=document.getElementById('screen-template');
+Array.from(tpl.children).forEach(c=>app.appendChild(c.cloneNode(true)));
+bind(app);
+go('splash');
+
+// 화면 이동 메뉴
+document.getElementById('mbtn').addEventListener('click',()=>document.getElementById('moverlay').classList.add('on'));
+document.getElementById('moverlay').addEventListener('click',e=>{if(e.target.id==='moverlay')e.currentTarget.classList.remove('on');});
+document.querySelectorAll('#mgrid button').forEach(b=>b.addEventListener('click',()=>{go(b.dataset.go);document.getElementById('moverlay').classList.remove('on');}));
+
+// 스와이프
+let sx=0;
+app.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+app.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)<60)return;const i=SCREENS.indexOf(current);if(dx<0&&i<SCREENS.length-1)go(SCREENS[i+1]);if(dx>0&&i>0)go(SCREENS[i-1]);});
+// 데스크탑 화살표
+document.addEventListener('keydown',e=>{const i=SCREENS.indexOf(current);if(e.key==='ArrowRight'&&i<SCREENS.length-1)go(SCREENS[i+1]);if(e.key==='ArrowLeft'&&i>0)go(SCREENS[i-1]);});
+// 힌트 자동 숨김
+setTimeout(()=>{const h=document.querySelector('.swipe-hint');if(h)h.style.opacity='0';},3500);
+</script>
+</body></html>

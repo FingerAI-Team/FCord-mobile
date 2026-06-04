@@ -3,7 +3,7 @@ export type RecordingState = 'draft' | 'recording' | 'paused' | 'saved_local' | 
 export type UploadState = 'not_started' | 'queued' | 'uploading' | 'uploaded' | 'failed' | 'retrying';
 export type TranscriptionState = 'not_requested' | 'queued' | 'processing' | 'completed' | 'failed' | 'cancelled';
 export type UploadQueueStatus = 'pending' | 'uploading' | 'completing' | 'done' | 'failed' | 'cancelled';
-export type FilterType = 'all' | 'uploading' | 'done' | 'failed';
+export type FilterType = 'all' | 'processing' | 'done' | 'starred';
 export type SortType = 'recent' | 'duration';
 
 export interface LocalRecording {

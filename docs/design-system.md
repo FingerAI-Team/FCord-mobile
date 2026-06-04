@@ -5,8 +5,14 @@
 
 ## Mood
 
-Calm, professional, focused. Linear-meets-Apple, Korean enterprise context.
+Calm, professional, focused — **IBK 시그니처 블루를 프라이머리로 한 금융 사내앱 톤**. 화이트 기반 미니멀 + 신뢰감. Linear-meets-Apple 골격은 유지하되 브랜드 컬러로 정체성 부여.
 워드마크는 **IBK STT** 사용 (Stitch 일부 결과의 "VocalLog"는 무시 — CLAUDE.md 정책).
+
+## Brand (IBK)
+
+- **IBK Blue (#00457C)** = primary. SSO/CTA, 활성 탭, FAB, 강조 헤드라인에 사용.
+- 공식 CI hex는 비공개 → 통용 IBK 딥블루 기준. **브랜드 가이드 수령 시 `primary` 한 토큰만 교체**하면 파생 토큰(`primaryDark`/`primaryTint`)이 따라가도록 설계.
+- 톤: 절제·신뢰. 블루는 면적을 넓게 쓰지 않고 액션·강조에 집중, 본문은 화이트/그레이 유지.
 
 ## Colors
 
@@ -21,12 +27,14 @@ Calm, professional, focused. Linear-meets-Apple, Korean enterprise context.
 | `borderLight` | `#E5E7EB` | 카드/divider 보더 |
 | `textPrimary` | `#111827` | 본문 (또는 `#1b1b1d` on-surface) |
 | `textSecondary` | `#585f6c` | 보조 텍스트, placeholder |
-| `textOnSecondaryContainer` | `#5e6572` | 보조 버튼 텍스트 |
-| `primary` | `#000000` | SSO/CTA 버튼 (검은 pill) |
+| `textOnSecondaryContainer` | `#34526b` | 보조 버튼 텍스트 |
+| `primary` | `#00457C` | **IBK Blue** — SSO/CTA 버튼, FAB, 활성 강조 |
+| `primaryDark` | `#003258` | primary pressed/gradient 하단 |
+| `primaryTint` | `#E6F0F8` | 선택/활성 surface, primary 연한 배경 |
 | `onPrimary` | `#FFFFFF` | primary 위 텍스트 |
-| `secondaryContainer` | `#dce2f3` | 보조 버튼 배경 (라벤더 그레이) |
-| `accentBlue` | `#2563EB` | 링크/포커스 ring/진행 강조 |
-| `recordingRed` | `#EF4444` | 녹음 점/FAB |
+| `secondaryContainer` | `#dce6f3` | 보조 버튼 배경 (블루 그레이) |
+| `accentBlue` | `#2E8BD6` | 링크/포커스 ring/진행 강조/waveform (IBK sky) |
+| `recordingRed` | `#EF4444` | 녹음 활성 점 (record 라이브 인디케이터 한정) |
 | `dangerRed` | `#DC2626` | 파괴적 액션 |
 | `successGreen` | `#10B981` | 완료 상태 |
 | `warningAmber` | `#F59E0B` | 주의 |
@@ -41,8 +49,9 @@ Calm, professional, focused. Linear-meets-Apple, Korean enterprise context.
 | `borderDark` | `#1F2937` |
 | `textPrimary` | `#F9FAFB` |
 | `textSecondary` | `#9CA3AF` |
-| `primary` | `#FFFFFF` (반전) |
-| `accentBlue` | `#60A5FA` |
+| `primary` | `#3B9AE1` (다크에서 IBK 블루 밝게 보정) |
+| `primaryTint` | `#102A3E` (블루 틴트 surface) |
+| `accentBlue` | `#5EB0E8` |
 | `recordingRed` | `#F87171` |
 
 ## Typography (Hanken Grotesk + Pretendard fallback)
@@ -81,14 +90,14 @@ iOS는 SF Pro / Pretendard, Android는 Pretendard. 코드 fontFamily는 시스�
 ## 컴포넌트 규칙
 
 ### Primary CTA (SSO/주요 액션)
-- bg: `primary` (#000)
+- bg: `primary` (#00457C, IBK Blue) — pressed 시 `primaryDark`(#003258) 또는 두 색 세로 그라데이션
 - text: `onPrimary` (#fff), heading 토큰
 - height 52, radius `full` (pill)
-- 자물쇠/문서 아이콘은 leading 위치, gap `sm`(8)
+- 방패/자물쇠 아이콘은 leading 위치, gap `sm`(8)
 
 ### Secondary button (사번 로그인 등)
-- bg: `secondaryContainer` (#dce2f3)
-- text: `textOnSecondaryContainer` (#5e6572)
+- bg: `secondaryContainer` (#dce6f3, 블루 그레이)
+- text: `textOnSecondaryContainer` (#34526b)
 - height 52, radius `lg` (12)
 
 ### Input field
@@ -104,16 +113,17 @@ iOS는 SF Pro / Pretendard, Android는 Pretendard. 코드 fontFamily는 시스�
 - 미묘한 shadow (0 1px 2px rgba(0,0,0,0.04))
 
 ### Status badge (3-track)
-- 녹음 완료 / 업로드 완료: bg #ECFDF5, text #10B981, 체크 아이콘
-- 진행 중: bg #EFF6FF, text #2563EB, 회전/업로드 아이콘
+- 녹음 완료 / 업로드 완료: bg #ECFDF5, text #1E8E5A, 체크 아이콘
+- 진행 중: bg #E6F0F8, text #00457C, 회전/업로드 아이콘
 - 대기: bg #F3F4F6, text #585f6c, 모래시계 아이콘
-- 실패: bg #FEF2F2, text #DC2626, 경고 아이콘
+- 실패: bg #FEF2F2, text #D14343, 경고 아이콘
 - **항상 아이콘 + 텍스트 라벨 병기** (가드레일)
 
 ### Bottom Tab
 - 5 슬롯: Home / Search / [center FAB] / Library / Profile
-- 활성: 검은 아이콘 + 라벨, 비활성: gray
-- 중앙 FAB: 60px circle, `recordingRed` bg, white mic icon, lifted
+- 활성: `primary`(IBK Blue) 아이콘 + 라벨, 비활성: gray
+- 중앙 FAB: 60px circle, `primary`(#00457C) bg, white mic icon, lifted
+- 녹음 **진행 중**일 때만 FAB에 `recordingRed` 라이브 점 오버레이 (record 의미 보존)
 
 ## Motion
 

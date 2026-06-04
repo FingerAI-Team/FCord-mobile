@@ -8,13 +8,33 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* IbkSttTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* IbkSttTests.m */; };
+		0A324F629A0A41D3814BA8BA /* HankenGrotesk-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92EADCCE5DC34386B29AB093 /* HankenGrotesk-ExtraBold.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-IbkStt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-IbkStt.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1C9D04000CAD4A7D9861F5A7 /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2CEE307DA0584990BC4A75C5 /* Pretendard-Bold.ttf */; };
+		1E51ED30C950429A8871C11E /* HankenGrotesk-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7B884640C594B07ACC5180C /* HankenGrotesk-SemiBold.ttf */; };
 		277CF1D77DA72C3DA0AAA8FC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7C6BE7037CAC83DEDF7D6AA1 /* PrivacyInfo.xcprivacy */; };
+		2985ADB3AFF547B79475FB46 /* HankenGrotesk-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B81EA7A173104DD49FDAAA5B /* HankenGrotesk-Medium.ttf */; };
+		32CB0823B2254EBEB8F5AD73 /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5DCC413D608495890168307 /* Pretendard-SemiBold.ttf */; };
+		353C3F776BDD47F8A2FE0197 /* HankenGrotesk-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C033A1EB1CD94546BFB6ADF1 /* HankenGrotesk-Bold.ttf */; };
+		403B3D238B544663AD055FCD /* HankenGrotesk-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3FCD5AA8ED914C3FA03F0DD2 /* HankenGrotesk-Regular.ttf */; };
+		41C61491E4784216ABF8ED3E /* HankenGrotesk-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C033A1EB1CD94546BFB6ADF1 /* HankenGrotesk-Bold.ttf */; };
+		5C10330234664D168B9D0CDB /* HankenGrotesk-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B81EA7A173104DD49FDAAA5B /* HankenGrotesk-Medium.ttf */; };
+		646B7097EF9B48A2B44BC3A9 /* HankenGrotesk-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7B884640C594B07ACC5180C /* HankenGrotesk-SemiBold.ttf */; };
+		6B632E89501B4919A2B4BF1C /* HankenGrotesk-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3FCD5AA8ED914C3FA03F0DD2 /* HankenGrotesk-Regular.ttf */; };
+		73E3FDC89F864F258818F52B /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 882B1A7854074DBB85D74C83 /* Pretendard-Regular.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-IbkStt-IbkSttTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-IbkStt-IbkSttTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9197749CCAAC49BE92E4AC2E /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2CEE307DA0584990BC4A75C5 /* Pretendard-Bold.ttf */; };
+		A8F5B58FFFEF43528CA3425C /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5DCC413D608495890168307 /* Pretendard-SemiBold.ttf */; };
+		B708284F55AD460DB7FF8A44 /* Pretendard-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D732BC8026C4C7482959688 /* Pretendard-ExtraBold.ttf */; };
+		B865F7C8804343B19EC753C3 /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 882B1A7854074DBB85D74C83 /* Pretendard-Regular.ttf */; };
+		C5581A836FF3482DAEBED6F8 /* Pretendard-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C57711CBA3F94B4A8725003F /* Pretendard-Medium.ttf */; };
+		D3061713BDE04C93AD24B303 /* HankenGrotesk-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92EADCCE5DC34386B29AB093 /* HankenGrotesk-ExtraBold.ttf */; };
+		F94A2AF4ACD54D27B04CC4B9 /* Pretendard-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C57711CBA3F94B4A8725003F /* Pretendard-Medium.ttf */; };
+		FF1385B1EBBB415B8A2146AE /* Pretendard-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D732BC8026C4C7482959688 /* Pretendard-ExtraBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +51,7 @@
 		00E356EE1AD99517003FC87E /* IbkSttTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IbkSttTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* IbkSttTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IbkSttTests.m; sourceTree = "<group>"; };
+		0D732BC8026C4C7482959688 /* Pretendard-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-ExtraBold.ttf"; path = "../assets/fonts/Pretendard-ExtraBold.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* IbkStt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IbkStt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = IbkStt/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = IbkStt/AppDelegate.mm; sourceTree = "<group>"; };
@@ -39,13 +60,22 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = IbkStt/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = IbkStt/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-IbkStt-IbkSttTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IbkStt-IbkSttTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CEE307DA0584990BC4A75C5 /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Bold.ttf"; path = "../assets/fonts/Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-IbkStt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IbkStt.debug.xcconfig"; path = "Target Support Files/Pods-IbkStt/Pods-IbkStt.debug.xcconfig"; sourceTree = "<group>"; };
+		3FCD5AA8ED914C3FA03F0DD2 /* HankenGrotesk-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-Regular.ttf"; path = "../assets/fonts/HankenGrotesk-Regular.ttf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-IbkStt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IbkStt.release.xcconfig"; path = "Target Support Files/Pods-IbkStt/Pods-IbkStt.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-IbkStt-IbkSttTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IbkStt-IbkSttTests.debug.xcconfig"; path = "Target Support Files/Pods-IbkStt-IbkSttTests/Pods-IbkStt-IbkSttTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-IbkStt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IbkStt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C6BE7037CAC83DEDF7D6AA1 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = IbkStt/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = IbkStt/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		882B1A7854074DBB85D74C83 /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Regular.ttf"; path = "../assets/fonts/Pretendard-Regular.ttf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-IbkStt-IbkSttTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IbkStt-IbkSttTests.release.xcconfig"; path = "Target Support Files/Pods-IbkStt-IbkSttTests/Pods-IbkStt-IbkSttTests.release.xcconfig"; sourceTree = "<group>"; };
+		92EADCCE5DC34386B29AB093 /* HankenGrotesk-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-ExtraBold.ttf"; path = "../assets/fonts/HankenGrotesk-ExtraBold.ttf"; sourceTree = "<group>"; };
+		B7B884640C594B07ACC5180C /* HankenGrotesk-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-SemiBold.ttf"; path = "../assets/fonts/HankenGrotesk-SemiBold.ttf"; sourceTree = "<group>"; };
+		B81EA7A173104DD49FDAAA5B /* HankenGrotesk-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-Medium.ttf"; path = "../assets/fonts/HankenGrotesk-Medium.ttf"; sourceTree = "<group>"; };
+		C033A1EB1CD94546BFB6ADF1 /* HankenGrotesk-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-Bold.ttf"; path = "../assets/fonts/HankenGrotesk-Bold.ttf"; sourceTree = "<group>"; };
+		C57711CBA3F94B4A8725003F /* Pretendard-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Medium.ttf"; path = "../assets/fonts/Pretendard-Medium.ttf"; sourceTree = "<group>"; };
+		D5DCC413D608495890168307 /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-SemiBold.ttf"; path = "../assets/fonts/Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -101,6 +131,24 @@
 			name = IbkStt;
 			sourceTree = "<group>";
 		};
+		2B275C275B814EC1B77A0E5F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C57711CBA3F94B4A8725003F /* Pretendard-Medium.ttf */,
+				B81EA7A173104DD49FDAAA5B /* HankenGrotesk-Medium.ttf */,
+				C033A1EB1CD94546BFB6ADF1 /* HankenGrotesk-Bold.ttf */,
+				882B1A7854074DBB85D74C83 /* Pretendard-Regular.ttf */,
+				92EADCCE5DC34386B29AB093 /* HankenGrotesk-ExtraBold.ttf */,
+				D5DCC413D608495890168307 /* Pretendard-SemiBold.ttf */,
+				0D732BC8026C4C7482959688 /* Pretendard-ExtraBold.ttf */,
+				2CEE307DA0584990BC4A75C5 /* Pretendard-Bold.ttf */,
+				B7B884640C594B07ACC5180C /* HankenGrotesk-SemiBold.ttf */,
+				3FCD5AA8ED914C3FA03F0DD2 /* HankenGrotesk-Regular.ttf */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +175,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				2B275C275B814EC1B77A0E5F /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -239,6 +288,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F94A2AF4ACD54D27B04CC4B9 /* Pretendard-Medium.ttf in Resources */,
+				5C10330234664D168B9D0CDB /* HankenGrotesk-Medium.ttf in Resources */,
+				41C61491E4784216ABF8ED3E /* HankenGrotesk-Bold.ttf in Resources */,
+				B865F7C8804343B19EC753C3 /* Pretendard-Regular.ttf in Resources */,
+				D3061713BDE04C93AD24B303 /* HankenGrotesk-ExtraBold.ttf in Resources */,
+				A8F5B58FFFEF43528CA3425C /* Pretendard-SemiBold.ttf in Resources */,
+				B708284F55AD460DB7FF8A44 /* Pretendard-ExtraBold.ttf in Resources */,
+				9197749CCAAC49BE92E4AC2E /* Pretendard-Bold.ttf in Resources */,
+				646B7097EF9B48A2B44BC3A9 /* HankenGrotesk-SemiBold.ttf in Resources */,
+				6B632E89501B4919A2B4BF1C /* HankenGrotesk-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +308,16 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				277CF1D77DA72C3DA0AAA8FC /* PrivacyInfo.xcprivacy in Resources */,
+				C5581A836FF3482DAEBED6F8 /* Pretendard-Medium.ttf in Resources */,
+				2985ADB3AFF547B79475FB46 /* HankenGrotesk-Medium.ttf in Resources */,
+				353C3F776BDD47F8A2FE0197 /* HankenGrotesk-Bold.ttf in Resources */,
+				73E3FDC89F864F258818F52B /* Pretendard-Regular.ttf in Resources */,
+				0A324F629A0A41D3814BA8BA /* HankenGrotesk-ExtraBold.ttf in Resources */,
+				32CB0823B2254EBEB8F5AD73 /* Pretendard-SemiBold.ttf in Resources */,
+				FF1385B1EBBB415B8A2146AE /* Pretendard-ExtraBold.ttf in Resources */,
+				1C9D04000CAD4A7D9861F5A7 /* Pretendard-Bold.ttf in Resources */,
+				1E51ED30C950429A8871C11E /* HankenGrotesk-SemiBold.ttf in Resources */,
+				403B3D238B544663AD055FCD /* HankenGrotesk-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,13 +348,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IbkStt/Pods-IbkStt-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IbkStt/Pods-IbkStt-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -344,13 +409,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IbkStt-IbkSttTests/Pods-IbkStt-IbkSttTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IbkStt-IbkSttTests/Pods-IbkStt-IbkSttTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -365,13 +426,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IbkStt/Pods-IbkStt-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IbkStt/Pods-IbkStt-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -386,13 +443,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IbkStt-IbkSttTests/Pods-IbkStt-IbkSttTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IbkStt-IbkSttTests/Pods-IbkStt-IbkSttTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -608,7 +661,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -681,7 +737,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

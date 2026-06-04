@@ -60,7 +60,7 @@ function UploadProgressSection({ recordingId }: { recordingId: string }): React.
 
 export function RecordingDetailScreen({ navigation, route }: Props): React.ReactElement {
   const { id, queueId: paramQueueId } = route.params;
-  const { items, removeItem, restoreItem, updateItem } = useRecordingListStore();
+  const { items, removeItem, restoreItem, updateItem, toggleStar } = useRecordingListStore();
   const recording = items.find((r) => r.id === id);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -170,7 +170,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-    <AppTopBar title="회의 상세" showBack />
+    <AppTopBar title="회의 상세" showBack starActive={recording.isStarred} onStar={() => toggleStar(id)} />
     <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
 
       {/* ── 제목 섹션 ── */}
@@ -242,7 +242,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
               accessibilityRole="button"
               accessibilityHint="업로드에 실패한 파일을 다시 전송합니다"
             >
-              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-SemiBold', color: '#DC2626' }}>↑ 재전송</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Pretendard-SemiBold', color: '#DC2626' }}>↑ 재전송</Text>
             </TouchableOpacity>
           )}
 
@@ -255,7 +255,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
               accessibilityRole="button"
               accessibilityHint="음성 인식 처리를 다시 요청합니다"
             >
-              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-SemiBold', color: '#ffffff' }}>↻ 재처리</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Pretendard-SemiBold', color: '#ffffff' }}>↻ 재처리</Text>
             </TouchableOpacity>
           )}
 
@@ -268,7 +268,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
               accessibilityRole="button"
               accessibilityHint="음성 인식 처리를 요청합니다"
             >
-              <Text style={{ fontSize: 15, fontFamily: 'HankenGrotesk-SemiBold', color: '#ffffff' }}>변환 시작</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Pretendard-SemiBold', color: '#ffffff' }}>변환 시작</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -342,13 +342,13 @@ const styles = StyleSheet.create({
   // ── 제목 섹션 ──
   titleSection: { marginBottom: 24, paddingHorizontal: 16 },
   titleRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
-  titleText: { fontSize: 24, fontFamily: 'HankenGrotesk-ExtraBold', color: '#111827', flex: 1, lineHeight: 30 },
-  titleInput: { fontSize: 20, fontFamily: 'HankenGrotesk-Bold', color: '#111827', borderBottomWidth: 2, borderBottomColor: '#2563EB', paddingBottom: 4, flex: 1 },
-  editIcon: { fontSize: 16, color: '#585f6c', marginLeft: 8 },
-  metaText: { fontSize: 15, fontFamily: 'HankenGrotesk-Regular', color: '#585f6c', lineHeight: 22 },
+  titleText: { fontSize: 24, fontFamily: 'Pretendard-ExtraBold', color: '#111827', flex: 1, lineHeight: 30 },
+  titleInput: { fontSize: 20, fontFamily: 'Pretendard-Bold', color: '#111827', borderBottomWidth: 2, borderBottomColor: '#0a1628', paddingBottom: 4, flex: 1 },
+  editIcon: { fontSize: 16, color: '#94a3b8', marginLeft: 8 },
+  metaText: { fontSize: 15, fontFamily: 'Pretendard-Regular', color: '#94a3b8', lineHeight: 22 },
   editRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
-  saveBtn: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#2563EB', borderRadius: 6 },
-  saveBtnText: { color: '#FFFFFF', fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold' },
+  saveBtn: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#0a1628', borderRadius: 6 },
+  saveBtnText: { color: '#FFFFFF', fontSize: 13, fontFamily: 'Pretendard-SemiBold' },
 
   // ── 3-track 상태 카드 ──
   statusCard: {
@@ -367,15 +367,15 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   statusRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  statusLabel: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#111827' },
+  statusLabel: { fontSize: 13, fontFamily: 'Pretendard-SemiBold', color: '#111827' },
 
   // ── 업로드 진행률 ──
   progressSection: { marginHorizontal: 16, marginBottom: 16 },
   progressRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
   progressLabel: { fontSize: 13, color: '#374151' },
-  progressPct: { fontSize: 13, color: '#2563EB', fontWeight: '600' },
+  progressPct: { fontSize: 13, color: '#0a1628', fontWeight: '600' },
   progressTrack: { height: 6, backgroundColor: '#E5E7EB', borderRadius: 3, overflow: 'hidden' },
-  progressFill: { height: 6, backgroundColor: '#2563EB', borderRadius: 3 },
+  progressFill: { height: 6, backgroundColor: '#0a1628', borderRadius: 3 },
 
   // ── 액션 버튼 행 ──
   actionRow: {
@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
   actionBtnFilled: {
     flex: 1,
     height: 52,
-    backgroundColor: '#000000',
+    backgroundColor: '#0a1628',
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
@@ -411,25 +411,25 @@ const styles = StyleSheet.create({
   transcriptBtn: {
     marginHorizontal: 16,
     height: 52,
-    backgroundColor: '#000000',
+    backgroundColor: '#0a1628',
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
   },
-  transcriptBtnText: { fontSize: 20, fontFamily: 'HankenGrotesk-Bold', color: '#ffffff', lineHeight: 26 },
+  transcriptBtnText: { fontSize: 20, fontFamily: 'Pretendard-Bold', color: '#ffffff', lineHeight: 26 },
 
   // ── 메모 / 태그 ──
   metaBlock: { marginHorizontal: 16, marginBottom: 28 },
   sectionLabel: { fontSize: 11, color: '#9CA3AF', fontWeight: '700', letterSpacing: 0.5, marginBottom: 8 },
   note: { fontSize: 14, color: '#6B7280', lineHeight: 22 },
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  tag: { backgroundColor: '#EFF6FF', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  tagText: { fontSize: 12, color: '#2563EB', fontWeight: '500' },
+  tag: { backgroundColor: '#eef1f6', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+  tagText: { fontSize: 12, color: '#0a1628', fontWeight: '500' },
 
   // ── 삭제 버튼 ──
   deleteBtn: { alignSelf: 'center', paddingVertical: 16, paddingHorizontal: 24 },
-  deleteBtnText: { fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#DC2626', opacity: 0.7 },
+  deleteBtnText: { fontSize: 13, fontFamily: 'Pretendard-SemiBold', color: '#DC2626', opacity: 0.7 },
 
   // ── 내부망 안내 배너 ──
   noticeBanner: {
