@@ -154,7 +154,7 @@ export function SearchScreen(): React.ReactElement {
           {/* 최근 검색어 */}
           {recentQueries && recentQueries.length > 0 && (
             <View style={{ marginTop: 32 }}>
-              <Text style={{ fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#000000', marginBottom: 12 }}>최근 검색</Text>
+              <Text style={{ fontSize: 13, fontFamily: 'Pretendard-SemiBold', color: '#000000', marginBottom: 12 }}>최근 검색</Text>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
                 {recentQueries.map((q: string) => (
                   <TouchableOpacity
@@ -164,7 +164,7 @@ export function SearchScreen(): React.ReactElement {
                     accessibilityRole="button"
                     accessibilityLabel={`최근 검색어: ${q}`}
                   >
-                    <Text style={{ fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#000000' }}>{q}</Text>
+                    <Text style={{ fontSize: 12, fontFamily: 'Pretendard-Medium', color: '#000000' }}>{q}</Text>
                     <TouchableOpacity onPress={() => removeRecentQuery(q)} accessibilityLabel={`${q} 삭제`}>
                       <Text style={{ fontSize: 11, color: '#585f6c', marginLeft: 2 }}>✕</Text>
                     </TouchableOpacity>
@@ -175,7 +175,7 @@ export function SearchScreen(): React.ReactElement {
           )}
           {/* 추천 검색 */}
           <View style={{ marginTop: 32 }}>
-            <Text style={{ fontSize: 13, fontFamily: 'HankenGrotesk-SemiBold', color: '#000000', marginBottom: 12 }}>추천</Text>
+            <Text style={{ fontSize: 13, fontFamily: 'Pretendard-SemiBold', color: '#000000', marginBottom: 12 }}>추천</Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {RECOMMENDED.map((rec) => (
                 <TouchableOpacity
@@ -184,7 +184,7 @@ export function SearchScreen(): React.ReactElement {
                   onPress={() => onChipPress(rec)}
                   accessibilityRole="button"
                 >
-                  <Text style={{ fontSize: 12, fontFamily: 'HankenGrotesk-Medium', color: '#585f6c' }}>{rec}</Text>
+                  <Text style={{ fontSize: 12, fontFamily: 'Pretendard-Medium', color: '#585f6c' }}>{rec}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -281,19 +281,19 @@ const styles = StyleSheet.create({
   },
   resultTitle: {
     fontSize: 15,
-    fontFamily: 'HankenGrotesk-Bold',
+    fontFamily: 'Pretendard-Bold',
     color: '#000000',
     flex: 1,
     marginRight: 16,
   },
   resultDate: {
     fontSize: 12,
-    fontFamily: 'HankenGrotesk-Medium',
+    fontFamily: 'Pretendard-Medium',
     color: '#585f6c',
   },
   resultPreview: {
     fontSize: 15,
-    fontFamily: 'HankenGrotesk-Regular',
+    fontFamily: 'Pretendard-Regular',
     color: '#585f6c',
     lineHeight: 22,
   },

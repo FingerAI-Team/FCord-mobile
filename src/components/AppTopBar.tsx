@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     alignItems: 'center', justifyContent: 'center',
   },
-  iconBtnActive: { backgroundColor: '#111' },
+  iconBtnActive: { backgroundColor: '#111111' },
   icon: { fontSize: 13 },
   iconActive: { color: '#fff' },
 });

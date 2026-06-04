@@ -9,7 +9,7 @@ import { useTranscriptStore } from '../../stores/transcriptStore';
 import { colors, spacing, radius, typography } from '../../theme/tokens';
 
 const SPEAKER_COLORS = [
-  { bg: '#EFF6FF', text: '#2563EB', border: '#BFDBFE' },
+  { bg: '#f0f0f0', text: '#111111', border: '#e0e0e0' },
   { bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' },
   { bg: '#F0FDF4', text: '#16A34A', border: '#BBF7D0' },
   { bg: '#FDF4FF', text: '#9333EA', border: '#E9D5FF' },

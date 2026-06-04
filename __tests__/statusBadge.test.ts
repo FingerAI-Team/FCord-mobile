@@ -12,26 +12,26 @@ interface BadgeConfig {
 // statusBadge.tsx의 BADGE_MAP과 동일 (UI 없이 순수 매핑 테스트)
 const BADGE_MAP: Record<Track, Record<string, BadgeConfig>> = {
   recording: {
-    saved_local: { label: '생성 완료', backgroundColor: '#ECFDF5', textColor: '#059669' },
-    recording:   { label: '생성 중',   backgroundColor: '#FEE2E2', textColor: '#DC2626' },
-    paused:      { label: '일시정지',  backgroundColor: '#FEF3C7', textColor: '#D97706' },
-    draft:       { label: '초안',      backgroundColor: '#F3F4F6', textColor: '#6B7280' },
+    saved_local: { label: '생성 완료', backgroundColor: '#e8f5e9', textColor: '#2e7d32' },
+    recording:   { label: '생성 중',   backgroundColor: '#fce4ec', textColor: '#c62828' },
+    paused:      { label: '일시정지',  backgroundColor: '#fff3e0', textColor: '#e65100' },
+    draft:       { label: '초안',      backgroundColor: '#f0f0f0', textColor: '#888888' },
   },
   upload: {
-    not_started: { label: '업로드 대기', backgroundColor: '#F3F4F6', textColor: '#6B7280' },
-    queued:      { label: '업로드 예정', backgroundColor: '#EFF6FF', textColor: '#2563EB' },
-    uploading:   { label: '업로드 중',   backgroundColor: '#DBEAFE', textColor: '#1D4ED8' },
-    uploaded:    { label: '업로드 완료', backgroundColor: '#ECFDF5', textColor: '#059669' },
-    failed:      { label: '업로드 실패', backgroundColor: '#FEE2E2', textColor: '#DC2626' },
-    retrying:    { label: '재시도 중',   backgroundColor: '#FEF3C7', textColor: '#D97706' },
+    not_started: { label: '업로드 대기', backgroundColor: '#f0f0f0', textColor: '#888888' },
+    queued:      { label: '업로드 예정', backgroundColor: '#f0f0f0', textColor: '#111111' },
+    uploading:   { label: '업로드 중',   backgroundColor: '#fff3e0', textColor: '#e65100' },
+    uploaded:    { label: '업로드 완료', backgroundColor: '#e8f5e9', textColor: '#2e7d32' },
+    failed:      { label: '업로드 실패', backgroundColor: '#fce4ec', textColor: '#c62828' },
+    retrying:    { label: '재시도 중',   backgroundColor: '#fff3e0', textColor: '#e65100' },
   },
   transcription: {
-    not_requested: { label: '변환 대기',      backgroundColor: '#F3F4F6', textColor: '#6B7280' },
-    queued:        { label: '변환 예정',      backgroundColor: '#EDE9FE', textColor: '#7C3AED' },
-    processing:    { label: '음성파일 변환중', backgroundColor: '#EDE9FE', textColor: '#7C3AED' },
-    completed:     { label: '변환 완료',      backgroundColor: '#ECFDF5', textColor: '#059669' },
-    failed:        { label: '변환 실패',      backgroundColor: '#FEE2E2', textColor: '#DC2626' },
-    cancelled:     { label: '취소됨',         backgroundColor: '#F3F4F6', textColor: '#6B7280' },
+    not_requested: { label: '변환 대기',      backgroundColor: '#f0f0f0', textColor: '#888888' },
+    queued:        { label: '변환 예정',      backgroundColor: '#fff3e0', textColor: '#e65100' },
+    processing:    { label: '음성파일 변환중', backgroundColor: '#fff3e0', textColor: '#e65100' },
+    completed:     { label: '변환 완료',      backgroundColor: '#e8f5e9', textColor: '#2e7d32' },
+    failed:        { label: '변환 실패',      backgroundColor: '#fce4ec', textColor: '#c62828' },
+    cancelled:     { label: '취소됨',         backgroundColor: '#f0f0f0', textColor: '#888888' },
   },
 };
 
@@ -56,36 +56,36 @@ describe('3-track 배지 렌더 — 스펙 §배지 명세 검증', () => {
   });
 
   describe('upload track 배지', () => {
-    it('uploading → "업로드 중" 파란 배경', () => {
+    it('uploading → "업로드 중" 주황 배경', () => {
       expect(BADGE_MAP.upload.uploading.label).toBe('업로드 중');
-      expect(BADGE_MAP.upload.uploading.backgroundColor).toBe('#DBEAFE');
+      expect(BADGE_MAP.upload.uploading.backgroundColor).toBe('#fff3e0');
     });
     it('uploaded → "업로드 완료" 초록 배경', () => {
       expect(BADGE_MAP.upload.uploaded.label).toBe('업로드 완료');
-      expect(BADGE_MAP.upload.uploaded.backgroundColor).toBe('#ECFDF5');
+      expect(BADGE_MAP.upload.uploaded.backgroundColor).toBe('#e8f5e9');
     });
     it('failed → "업로드 실패" 빨간 배경', () => {
       expect(BADGE_MAP.upload.failed.label).toBe('업로드 실패');
-      expect(BADGE_MAP.upload.failed.backgroundColor).toBe('#FEE2E2');
+      expect(BADGE_MAP.upload.failed.backgroundColor).toBe('#fce4ec');
     });
     it('retrying → "재시도 중" 주황 배경', () => {
       expect(BADGE_MAP.upload.retrying.label).toBe('재시도 중');
-      expect(BADGE_MAP.upload.retrying.backgroundColor).toBe('#FEF3C7');
+      expect(BADGE_MAP.upload.retrying.backgroundColor).toBe('#fff3e0');
     });
   });
 
   describe('transcription track 배지', () => {
-    it('processing → "음성파일 변환중" 보라 배경', () => {
+    it('processing → "음성파일 변환중" 주황 배경', () => {
       expect(BADGE_MAP.transcription.processing.label).toBe('음성파일 변환중');
-      expect(BADGE_MAP.transcription.processing.backgroundColor).toBe('#EDE9FE');
+      expect(BADGE_MAP.transcription.processing.backgroundColor).toBe('#fff3e0');
     });
     it('completed → "변환 완료" 초록 배경', () => {
       expect(BADGE_MAP.transcription.completed.label).toBe('변환 완료');
-      expect(BADGE_MAP.transcription.completed.backgroundColor).toBe('#ECFDF5');
+      expect(BADGE_MAP.transcription.completed.backgroundColor).toBe('#e8f5e9');
     });
     it('failed → "변환 실패" 빨간 배경', () => {
       expect(BADGE_MAP.transcription.failed.label).toBe('변환 실패');
-      expect(BADGE_MAP.transcription.failed.backgroundColor).toBe('#FEE2E2');
+      expect(BADGE_MAP.transcription.failed.backgroundColor).toBe('#fce4ec');
     });
   });
 
