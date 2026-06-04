@@ -7,10 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 interface Props {
   title?: string;
   showBack?: boolean;
-  active?: 'home' | 'settings';
+  active?: 'home' | 'library' | 'settings';
+  starActive?: boolean;
+  onStar?: () => void;
 }
 
-export function AppTopBar({ title, showBack, active }: Props): React.ReactElement {
+export function AppTopBar({ title, showBack, active, starActive, onStar }: Props): React.ReactElement {
   const nav = useNavigation<any>();
   return (
     <View style={styles.bar}>
@@ -23,6 +25,18 @@ export function AppTopBar({ title, showBack, active }: Props): React.ReactElemen
       )}
       <Text style={styles.title} numberOfLines={1}>{title ?? ''}</Text>
       <View style={styles.icons}>
+        {onStar != null && (
+          <TouchableOpacity
+            style={styles.iconBtn}
+            onPress={onStar}
+            accessibilityLabel={starActive ? '즐겨찾기 해제' : '즐겨찾기'}
+            accessibilityRole="button"
+          >
+            <Text style={[styles.icon, starActive && styles.starActive]}>
+              {starActive ? '★' : '☆'}
+            </Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={[styles.iconBtn, active === 'home' && styles.iconBtnActive]}
           onPress={() => nav.navigate('Home')}
@@ -30,6 +44,14 @@ export function AppTopBar({ title, showBack, active }: Props): React.ReactElemen
           accessibilityRole="button"
         >
           <Text style={[styles.icon, active === 'home' && styles.iconActive]}>🏠</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.iconBtn, active === 'library' && styles.iconBtnActive]}
+          onPress={() => nav.navigate('Library')}
+          accessibilityLabel="보관함"
+          accessibilityRole="button"
+        >
+          <Text style={[styles.icon, active === 'library' && styles.iconActive]}>📚</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.iconBtn, active === 'settings' && styles.iconBtnActive]}
@@ -69,4 +91,5 @@ const styles = StyleSheet.create({
   iconBtnActive: { backgroundColor: '#111111' },
   icon: { fontSize: 13 },
   iconActive: { color: '#fff' },
+  starActive: { color: '#e65100' },
 });

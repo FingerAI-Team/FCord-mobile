@@ -5,9 +5,9 @@ import { colors, radius, spacing } from '../../theme/tokens';
 
 const TABS: { key: FilterType; label: string }[] = [
   { key: 'all', label: '전체' },
-  { key: 'uploading', label: '업로드 중' },
+  { key: 'processing', label: '변환중' },
   { key: 'done', label: '완료' },
-  { key: 'failed', label: '실패' },
+  { key: 'starred', label: '즐겨찾기' },
 ];
 
 interface Props {

@@ -60,7 +60,7 @@ function UploadProgressSection({ recordingId }: { recordingId: string }): React.
 
 export function RecordingDetailScreen({ navigation, route }: Props): React.ReactElement {
   const { id, queueId: paramQueueId } = route.params;
-  const { items, removeItem, restoreItem, updateItem } = useRecordingListStore();
+  const { items, removeItem, restoreItem, updateItem, toggleStar } = useRecordingListStore();
   const recording = items.find((r) => r.id === id);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -170,7 +170,7 @@ export function RecordingDetailScreen({ navigation, route }: Props): React.React
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-    <AppTopBar title="회의 상세" showBack />
+    <AppTopBar title="회의 상세" showBack starActive={recording.isStarred} onStar={() => toggleStar(id)} />
     <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
 
       {/* ── 제목 섹션 ── */}

@@ -11,6 +11,7 @@ interface Props {
   item: ServerRecordingCache;
   onPress: () => void;
   onDelete: () => void;
+  onToggleStar?: () => void;
 }
 
 function formatDuration(ms?: number): string {
@@ -35,17 +36,24 @@ function UploadProgressBar({ recordingId }: { recordingId: string }): React.Reac
   );
 }
 
-export function RecordingCard({ item, onPress, onDelete }: Props): React.ReactElement {
+export function RecordingCard({ item, onPress, onDelete, onToggleStar }: Props): React.ReactElement {
+  const starLabel = item.isStarred ? '즐겨찾기 해제' : '즐겨찾기';
+
   const openMenu = () => {
-    const opts = ['취소', '즐겨찾기', '폴더 이동', '삭제'];
+    const opts = ['취소', starLabel, '폴더 이동', '삭제'];
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
         { options: opts, destructiveButtonIndex: 3, cancelButtonIndex: 0 },
-        (idx) => { if (idx === 3) onDelete(); },
+        (idx) => {
+          if (idx === 1) onToggleStar?.();
+          else if (idx === 2) Alert.alert('폴더 이동', '폴더 기능은 준비 중입니다.');
+          else if (idx === 3) onDelete();
+        },
       );
     } else {
       Alert.alert('회의 옵션', '', [
         { text: '취소', style: 'cancel' },
+        { text: starLabel, onPress: () => onToggleStar?.() },
         { text: '삭제', style: 'destructive', onPress: onDelete },
       ]);
     }
@@ -73,7 +81,10 @@ export function RecordingCard({ item, onPress, onDelete }: Props): React.ReactEl
       >
         <View style={styles.header}>
           <View style={styles.titleBlock}>
-            <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+            <View style={styles.titleRow}>
+              <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+              {item.isStarred && <Text style={styles.starIcon}>★</Text>}
+            </View>
             <Text style={styles.meta}>{formatDate(item.createdAt)} | {formatDuration(item.durationMs)}</Text>
           </View>
           <TouchableOpacity
@@ -114,7 +125,9 @@ const styles = StyleSheet.create({
   },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   titleBlock: { flex: 1, marginRight: spacing.sm },
-  title: { ...typography.heading, color: colors.primary, marginBottom: spacing.xs },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.xs },
+  title: { ...typography.heading, color: colors.primary, flex: 1 },
+  starIcon: { fontSize: 14, color: '#e65100' },
   meta: { ...typography.body, color: colors.secondary, opacity: 0.7 },
   moreIcon: { fontSize: 20, color: colors.secondary },
   badges: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' },

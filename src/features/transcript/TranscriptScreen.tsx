@@ -39,6 +39,9 @@ export function TranscriptScreen({ navigation, route }: Props): React.ReactEleme
     loadTranscript, toggleEditMode, editSegment, saveEdits, reset,
   } = useTranscriptStore();
 
+  // 원문 / 편집본 탭
+  const [activeTab, setActiveTab] = React.useState<'original' | 'edited'>('original');
+
   useEffect(() => {
     void loadTranscript(id);
     return () => reset();
@@ -79,6 +82,26 @@ export function TranscriptScreen({ navigation, route }: Props): React.ReactEleme
         <View style={styles.editBtnPlaceholder} />
       </View>
 
+      {/* 원문 / 편집본 탭 */}
+      <View style={styles.tabRow}>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'original' && styles.tabActive]}
+          onPress={() => setActiveTab('original')}
+          accessibilityRole="tab"
+          accessibilityState={{ selected: activeTab === 'original' }}
+        >
+          <Text style={[styles.tabText, activeTab === 'original' && styles.tabTextActive]}>원문</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'edited' && styles.tabActive]}
+          onPress={() => { setActiveTab('edited'); if (!editMode) toggleEditMode(); }}
+          accessibilityRole="tab"
+          accessibilityState={{ selected: activeTab === 'edited' }}
+        >
+          <Text style={[styles.tabText, activeTab === 'edited' && styles.tabTextActive]}>편집본</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.noticeBanner}>
         <Text style={styles.noticeIcon}>🔒</Text>
         <Text style={styles.noticeText}>
@@ -88,26 +111,26 @@ export function TranscriptScreen({ navigation, route }: Props): React.ReactEleme
       </View>
 
       <View style={styles.toolbar}>
-        <TouchableOpacity style={styles.toolBtn} accessibilityLabel="검색" accessibilityRole="button">
-          <Text style={styles.toolBtnText}>🔍 검색</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.toolBtn}
-          onPress={editMode ? onSave : toggleEditMode}
-          accessibilityLabel={editMode ? '편집 저장' : '편집'}
-          accessibilityRole="button"
-        >
-          <Text style={styles.toolBtnText}>{editMode ? '💾 저장' : '✏️ 편집'}</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.toolBtn} accessibilityLabel="내보내기" accessibilityRole="button">
           <Text style={styles.toolBtnText}>📤 내보내기</Text>
         </TouchableOpacity>
+        {activeTab === 'edited' && (
+          <TouchableOpacity
+            style={[styles.toolBtn, styles.toolBtnPrimary]}
+            onPress={onSave}
+            accessibilityLabel="편집 저장"
+            accessibilityRole="button"
+          >
+            <Text style={styles.toolBtnTextPrimary}>💾 저장</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <ScrollView contentContainerStyle={styles.list}>
         {segments.map((seg) => {
           const sc = speakerColor(seg.speakerLabel);
-          const text = pendingEdits[seg.id] ?? seg.text;
+          const editedText = pendingEdits[seg.id] ?? seg.text;
+          const isEditTab = activeTab === 'edited';
           return (
             <View key={seg.id} style={styles.segment}>
               <View style={styles.segMeta}>
@@ -116,16 +139,16 @@ export function TranscriptScreen({ navigation, route }: Props): React.ReactEleme
                 </View>
                 <Text style={styles.timestamp}>{formatMs(seg.startMs)}</Text>
               </View>
-              {editMode ? (
+              {isEditTab ? (
                 <TextInput
                   style={styles.editInput}
-                  value={text}
+                  value={editedText}
                   onChangeText={(t: string) => editSegment(seg.id, t)}
                   multiline
                   accessibilityLabel={`${seg.speakerLabel} 발화 편집`}
                 />
               ) : (
-                <Text style={styles.segText}>{text}</Text>
+                <Text style={styles.segText}>{seg.text}</Text>
               )}
             </View>
           );
@@ -226,6 +249,26 @@ const styles = StyleSheet.create({
   },
   toolBtnText: { fontSize: 10, fontWeight: '700', color: colors.secondary },
   editBtnPlaceholder: { width: 40 },
+  tabRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1.5,
+    borderBottomColor: colors.borderLight,
+    backgroundColor: '#fff',
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  tabActive: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#111111',
+    marginBottom: -1.5,
+  },
+  tabText: { fontSize: 14, fontFamily: 'Pretendard-SemiBold', color: '#888' },
+  tabTextActive: { color: '#111111' },
+  toolBtnPrimary: { backgroundColor: '#111111', borderRadius: 8 },
+  toolBtnTextPrimary: { ...typography.label, color: '#fff' },
   noticeBanner: {
     flexDirection: 'row',
     alignItems: 'flex-start',

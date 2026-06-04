@@ -12,6 +12,7 @@ import { colors } from '../../theme/tokens';
 import { ServerRecordingCache } from '../../types';
 import { useRecordingListStore } from '../../stores/recordingListStore';
 import { filterStarred, filterArchived, collectAllTags } from './libraryUtils';
+import { AppTopBar } from '../../components/AppTopBar';
 
 const TABS = [
   { key: 'starred' as const, label: '즐겨찾기' },
@@ -29,11 +30,8 @@ export function LibraryScreen(): React.ReactElement {
   const allTags = collectAllTags(items);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* 헤더 */}
-      <View style={{ paddingHorizontal: 16, paddingTop: 24, paddingBottom: 16 }}>
-        <Text style={{ fontSize: 32, fontFamily: 'Pretendard-ExtraBold', color: '#111827', lineHeight: 38, letterSpacing: -0.5 }}>라이브러리</Text>
-      </View>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      <AppTopBar title="보관함" showBack active="library" />
 
       {/* 세그먼트 탭 */}
       <View style={{ paddingHorizontal: 16, marginBottom: 32 }}>

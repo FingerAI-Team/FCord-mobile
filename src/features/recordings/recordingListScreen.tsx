@@ -6,13 +6,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
+  TextInput,
   Alert,
   Platform,
   PermissionsAndroid,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { useRecordingListStore } from '../../stores/recordingListStore';
+import { useRecordingListStore, toApiFilter } from '../../stores/recordingListStore';
 import { useAuthStore } from '../../stores/authStore';
 import { getRecordingList, getMeetingDetail, softDeleteRecording } from '../../api/recordings';
 import { ServerRecordingCache, SortType, FilterType } from '../../types';
@@ -24,10 +25,29 @@ import { resolveFabNavRoute } from '../../navigation/tabBarConfig';
 
 export { EMPTY_MESSAGES };
 
-// 필터 탭 레이블 맵
-const FILTER_LABELS: Record<string, string> = {
-  all: '전체', uploading: '업로드중', done: '완료', failed: '실패',
+const FILTER_LABELS: Record<FilterType, string> = {
+  all: '전체', processing: '변환중', done: '완료', starred: '즐겨찾기',
 };
+
+// 클라이언트 사이드 필터 적용
+function applyFilter(items: ServerRecordingCache[], filter: FilterType): ServerRecordingCache[] {
+  switch (filter) {
+    case 'processing':
+      return items.filter(
+        (i) =>
+          i.transcriptionState === 'processing' ||
+          i.transcriptionState === 'queued' ||
+          i.uploadState === 'uploading' ||
+          i.uploadState === 'queued',
+      );
+    case 'done':
+      return items.filter((i) => i.transcriptionState === 'completed');
+    case 'starred':
+      return items.filter((i) => i.isStarred);
+    default:
+      return items;
+  }
+}
 
 interface Props {
   navigation: any;
@@ -35,18 +55,25 @@ interface Props {
 
 export function RecordingListScreen({ navigation }: Props): React.ReactElement {
   const {
-    items, filter, sort, nextCursor, hasMore, isLoading, isRefreshing,
-    setItems, appendItems, updateItem, removeItem, restoreItem,
-    setFilter, setSort, setLoading, setRefreshing,
+    items, filter, sort, searchQuery, nextCursor, hasMore, isLoading, isRefreshing,
+    setItems, appendItems, updateItem, removeItem, restoreItem, toggleStar,
+    setFilter, setSort, setSearchQuery, setLoading, setRefreshing,
   } = useRecordingListStore();
 
-  // 인사말 헤더에 표시할 사용자 이름
   const session = useAuthStore((s) => s.session);
 
   const SORT_LABELS: Record<SortType, string> = { recent: '최신순', duration: '길이순' };
   const onToggleSort = () => setSort(sort === 'recent' ? 'duration' : 'recent');
 
   const [deleteTarget, setDeleteTarget] = useState<ServerRecordingCache | null>(null);
+
+  // 클라이언트 필터 + 검색어 적용
+  const displayedItems = useMemo(() => {
+    const filtered = applyFilter(items, filter);
+    if (!searchQuery.trim()) return filtered;
+    const q = searchQuery.toLowerCase();
+    return filtered.filter((i) => i.title.toLowerCase().includes(q));
+  }, [items, filter, searchQuery]);
 
   const onFabPress = async () => {
     let granted = false;
@@ -77,11 +104,10 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 
   const loadList = useCallback(
     async (cursor?: string) => {
-      if (cursor) {
-        setLoading(true);
-      }
+      if (cursor) setLoading(true);
       try {
-        const res = await getRecordingList({ filter, sort, cursor, limit: 20 });
+        // starred/processing은 클라이언트 필터 → API에는 'all' 전달
+        const res = await getRecordingList({ filter: toApiFilter(filter), sort, cursor, limit: 20 });
         if (cursor) {
           appendItems(res.items, res.next_cursor);
         } else {
@@ -171,6 +197,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
       item={item}
       onPress={() => navigation.navigate('RecordingDetail', { id: item.id })}
       onDelete={() => setDeleteTarget(item)}
+      onToggleStar={() => toggleStar(item.id)}
     />
   );
 
@@ -190,10 +217,29 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
         <Text style={styles.greetingName}>{session?.user?.name ?? '안녕하세요'} 님</Text>
       </View>
 
+      {/* 검색바 */}
+      <View style={styles.searchBarWrap}>
+        <Text style={styles.searchIcon}>🔍</Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="회의 제목으로 검색"
+          placeholderTextColor="#aaa"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          returnKeyType="search"
+          accessibilityLabel="회의 검색"
+        />
+        {searchQuery.length > 0 && (
+          <TouchableOpacity onPress={() => setSearchQuery('')} accessibilityLabel="검색어 지우기">
+            <Text style={styles.searchClear}>✕</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
       {/* 필터 row */}
       <View style={styles.filterRow}>
         <View style={styles.filterPills}>
-          {(['all', 'uploading', 'done', 'failed'] as FilterType[]).map((f) => (
+          {(['all', 'processing', 'done', 'starred'] as FilterType[]).map((f) => (
             <TouchableOpacity
               key={f}
               style={[styles.pill, filter === f && styles.pillActive]}
@@ -218,7 +264,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
       </View>
 
       <FlatList
-        data={items}
+        data={displayedItems}
         keyExtractor={(item: ServerRecordingCache) => item.id}
         renderItem={renderItem}
         onRefresh={onRefresh}
@@ -226,7 +272,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
         onEndReached={onEndReached}
         onEndReachedThreshold={0.3}
         ListEmptyComponent={!isLoading ? renderEmpty : null}
-        contentContainerStyle={items.length === 0 ? styles.emptyList : undefined}
+        contentContainerStyle={displayedItems.length === 0 ? styles.emptyList : undefined}
       />
 
       <DeleteConfirmModal
@@ -254,6 +300,28 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
+  searchBarWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginBottom: 8,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: '#e0e0e0',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 8,
+  },
+  searchIcon: { fontSize: 14, color: '#888' },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+    fontFamily: 'Pretendard-Regular',
+    color: '#111',
+    padding: 0,
+  },
+  searchClear: { fontSize: 13, color: '#aaa', paddingHorizontal: 4 },
   homeHeader: {
     paddingHorizontal: 16,
     paddingTop: 24,
