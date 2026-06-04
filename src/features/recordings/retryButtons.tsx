@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
   },
-  uploadBtn: { backgroundColor: '#111111' },
+  uploadBtn: { backgroundColor: '#0a1628' },
   transcriptionBtn: { backgroundColor: '#7C3AED' },
   disabled: { opacity: 0.4 },
   uploadText: { color: '#FFFFFF', fontSize: 14, fontWeight: '600' },

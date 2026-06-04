@@ -35,13 +35,13 @@ export function LibraryScreen(): React.ReactElement {
 
       {/* 세그먼트 탭 */}
       <View style={{ paddingHorizontal: 16, marginBottom: 32 }}>
-        <View style={{ flexDirection: 'row', backgroundColor: '#f0f0f0', borderRadius: 9999, padding: 4 }}>
+        <View style={{ flexDirection: 'row', backgroundColor: '#eef1f6', borderRadius: 9999, padding: 4 }}>
           {TABS.map((tab) => (
             <TouchableOpacity
               key={tab.key}
               style={[
                 { flex: 1, paddingVertical: 10, borderRadius: 9999, alignItems: 'center' },
-                activeTab === tab.key && { backgroundColor: '#111111' },
+                activeTab === tab.key && { backgroundColor: '#0a1628' },
               ]}
               onPress={() => setActiveTab(tab.key)}
               accessibilityRole="tab"
@@ -68,7 +68,7 @@ export function LibraryScreen(): React.ReactElement {
           ) : allTags.map((tag) => (
             <View key={tag} style={{ marginBottom: 48 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 12, marginBottom: 16 }}>
-                <View style={{ width: 8, height: 8, borderRadius: 9999, backgroundColor: '#111111' }} />
+                <View style={{ width: 8, height: 8, borderRadius: 9999, backgroundColor: '#0a1628' }} />
                 <Text style={{ fontSize: 20, fontFamily: 'Pretendard-Bold', color: '#1b1b1d', lineHeight: 26 }}>{tag}</Text>
               </View>
               {items.filter((r) => r.tags?.includes(tag)).map((r) => (
@@ -112,5 +112,5 @@ export function LibraryScreen(): React.ReactElement {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#f4f6f9' },
 });

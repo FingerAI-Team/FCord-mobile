@@ -1,0 +1,733 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBKS 음성회의록 · 디자인 시스템 v1.0</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --border: rgba(255,255,255,.08);
+  --text-primary: #f1f5f9;
+  --text-muted: #64748b;
+  --font: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif;
+  /* 앱 디자인 토큰 */
+  --r: 6px;
+  --r-sm: 4px;
+  --c-primary: #111;
+  --c-secondary: #f0f0f0;
+  --c-bg: #f5f5f5;
+  --c-surface: #fff;
+  --c-border: #e0e0e0;
+  --c-text: #111;
+  --c-muted: #888;
+  --c-done: #2e7d32;
+  --c-proc: #e65100;
+  --c-fail: #c62828;
+}
+
+body { font-family: var(--font); background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
+
+/* ── 헤더 ── */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,10,.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.logo { display: flex; align-items: center; gap: 10px; margin-right: 6px; }
+.logo-badge { width: 28px; height: 28px; border-radius: var(--r); background: #111; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #fff; }
+.logo-text { font-size: 13px; font-weight: 700; color: #fff; }
+.logo-sub { font-size: 10px; color: var(--text-muted); }
+.sep { width: 1px; height: 22px; background: var(--border); }
+.screen-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.snav-btn { padding: 4px 10px; border-radius: var(--r); border: 1px solid transparent; background: rgba(255,255,255,.05); color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.snav-btn:hover { background: rgba(255,255,255,.1); color: #94a3b8; }
+.snav-btn.active { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.2); }
+
+/* ── 스테이지 ── */
+.stage { display: flex; align-items: flex-start; justify-content: center; padding: 32px 24px; gap: 28px; min-height: calc(100vh - 56px); }
+.phones-wrap { display: flex; gap: 20px; flex-shrink: 0; }
+
+/* ── 디바이스 공통 ── */
+.device-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.device-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+.screen-counter { font-size: 10px; color: var(--text-muted); text-align: center; }
+
+/* ── iPhone 껍데기 ── */
+.iphone-shell { width: 276px; background: linear-gradient(160deg, #2a2a2e, #1c1c1f); border-radius: 46px; padding: 10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), 0 36px 72px rgba(0,0,0,.8); }
+.iphone-screen-wrap { width: 100%; height: 590px; background: var(--c-bg); border-radius: 37px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.dynamic-island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 88px; height: 26px; background: #000; border-radius: 14px; z-index: 100; }
+.ios-status { height: 48px; padding: 14px 18px 0; flex-shrink: 0; position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; background: var(--c-surface); }
+.ios-home-bar { height: 20px; display: flex; align-items: center; justify-content: center; background: var(--c-surface); flex-shrink: 0; }
+.ios-home-indicator { width: 100px; height: 4px; border-radius: 2px; background: #ddd; }
+
+/* ── Android 껍데기 ── */
+.android-shell { width: 276px; background: linear-gradient(160deg, #1e2228, #14171c); border-radius: 28px; padding: 10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.10), 0 36px 72px rgba(0,0,0,.8); }
+.android-screen-wrap { width: 100%; height: 590px; background: var(--c-bg); border-radius: 19px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.punch-hole { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 11px; height: 11px; background: #000; border-radius: 50%; z-index: 100; }
+.aos-status { height: 38px; padding: 8px 16px 0; flex-shrink: 0; position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; background: var(--c-surface); }
+.aos-nav-bar { height: 22px; display: flex; align-items: center; justify-content: center; gap: 20px; background: var(--c-surface); flex-shrink: 0; padding-bottom: 4px; }
+.aos-nav-pill { width: 28px; height: 4px; border-radius: 2px; background: #ccc; }
+.aos-nav-circle { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #ccc; }
+.aos-nav-square { width: 11px; height: 11px; border-radius: 2px; border: 1.5px solid #ccc; }
+
+.st-time { font-size: 12px; font-weight: 700; color: #111; }
+.st-icons { font-size: 10px; color: #111; display: flex; gap: 4px; align-items: center; }
+
+/* ── 전화 공통 ── */
+.phone-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.screen { display: none; flex-direction: column; flex: 1; overflow: hidden; min-height: 0; }
+.screen.active { display: flex; animation: fadein .18s ease; }
+@keyframes fadein { from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══════════════════════════════════════ 공통 앱 컴포넌트 */
+.card { background: var(--c-surface); border-radius: var(--r); padding: 10px 12px; border: 1.5px solid var(--c-border); margin-bottom: 6px; }
+.card-title { font-weight: 700; color: var(--c-text); font-size: 12px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.card-meta { font-size: 10px; color: var(--c-muted); margin-top: 3px; }
+.card-hint { font-size: 9px; color: #ccc; margin-top: 4px; font-style: italic; }
+
+.bdg { display: inline-block; padding: 2px 6px; border-radius: var(--r-sm); font-size: 10px; font-weight: 700; }
+.bdg-done { background: #e8f5e9; color: var(--c-done); }
+.bdg-proc { background: #fff3e0; color: var(--c-proc); }
+.bdg-fail { background: #fce4ec; color: var(--c-fail); }
+
+.seg-filter { display: flex; border: 1.5px solid var(--c-border); border-radius: var(--r); overflow: hidden; }
+.seg-tab { flex: 1; text-align: center; padding: 6px 0; font-size: 10px; font-weight: 700; color: var(--c-muted); background: var(--c-surface); border-right: 1px solid var(--c-border); cursor: pointer; transition: all .12s; }
+.seg-tab:last-child { border-right: none; }
+.seg-tab.on { background: var(--c-text); color: #fff; }
+
+.search-bar { display: flex; align-items: center; background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 8px 10px; gap: 6px; }
+.search-ph { font-size: 11px; color: #bbb; }
+
+.btn-primary { height: 44px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; }
+.btn-secondary { height: 40px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #333; font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; }
+.btn-danger-outline { height: 38px; border-radius: var(--r); background: var(--c-surface); border: 1.5px solid var(--c-border); color: var(--c-fail); font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; }
+
+.tabbar { background: var(--c-surface); border-top: 1.5px solid var(--c-border); flex-shrink: 0; }
+.start-btn { margin: 8px 12px 6px; height: 44px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.start-btn-text { font-size: 13px; font-weight: 700; color: #fff; }
+.tab-row { display: flex; }
+.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 6px 0 8px; font-size: 10px; gap: 2px; color: #bbb; cursor: pointer; }
+.tab-item.on { color: var(--c-text); font-weight: 700; }
+.tab-ic { font-size: 16px; }
+
+.toggle-track { width: 34px; height: 20px; border-radius: 10px; background: var(--c-text); position: relative; flex-shrink: 0; }
+.toggle-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; position: absolute; top: 2px; right: 2px; }
+.toggle-track.off { background: #ddd; }
+.toggle-track.off .toggle-thumb { right: auto; left: 2px; }
+
+/* ═══════════════════════════════════════ 스플래시 */
+.s-splash { background: var(--c-surface); align-items: center; justify-content: center; gap: 14px; }
+.splash-logo { width: 140px; height: 54px; object-fit: contain; }
+.splash-title { font-size: 22px; font-weight: 900; color: #111; letter-spacing: -1px; }
+.splash-sub { font-size: 11px; color: var(--c-muted); }
+.splash-spinner { width: 16px; height: 16px; border: 2px solid #e0e0e0; border-top-color: #aaa; border-radius: 50%; animation: spin .8s linear infinite; margin-top: 8px; }
+@keyframes spin { to{ transform:rotate(360deg); } }
+
+/* ═══════════════════════════════════════ 로그인 */
+.s-login { background: var(--c-surface); overflow-y: auto; }
+.login-topbar { height: 46px; padding: 0 16px; display: flex; align-items: center; border-bottom: 1.5px solid var(--c-border); flex-shrink: 0; }
+.login-wordmark img { height: 28px; object-fit: contain; }
+.login-body { padding: 24px 18px 20px; display: flex; flex-direction: column; }
+.login-eyebrow { font-size: 10px; font-weight: 700; color: var(--c-muted); letter-spacing: 1px; margin-bottom: 5px; }
+.login-title { font-size: 20px; font-weight: 900; color: #111; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 4px; }
+.login-sub { font-size: 11px; color: var(--c-muted); margin-bottom: 20px; }
+.sso-btn { height: 46px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin-bottom: 10px; width: 100%; }
+.divider { display: flex; align-items: center; gap: 8px; margin: 12px 0; }
+.div-line { flex: 1; height: 1px; background: var(--c-border); }
+.div-text { font-size: 10px; color: var(--c-muted); }
+.input-wrap { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); height: 44px; display: flex; align-items: center; padding: 0 12px; margin-bottom: 8px; }
+.input-wrap span { font-size: 11px; color: #bbb; }
+.login-cta { height: 44px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #555; font-size: 12px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; }
+.login-terms { font-size: 10px; color: #bbb; text-align: center; margin-top: 12px; line-height: 1.6; }
+
+/* ═══════════════════════════════════════ 홈 */
+.s-home { background: var(--c-bg); }
+.home-topbar { background: var(--c-surface); padding: 10px 14px 12px; flex-shrink: 0; border-bottom: 1.5px solid var(--c-border); }
+.home-greeting { font-size: 15px; font-weight: 900; color: #111; letter-spacing: -0.3px; margin-bottom: 2px; }
+.home-sub { font-size: 10px; color: var(--c-muted); margin-bottom: 10px; }
+.home-list { flex: 1; overflow-y: auto; padding: 10px 12px 0; }
+
+/* ═══════════════════════════════════════ 회의 생성 */
+.s-recording { background: var(--c-surface); }
+.rec-topbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 6px; flex-shrink: 0; }
+.rec-close { width: 28px; height: 28px; border-radius: var(--r); background: var(--c-bg); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #555; cursor: pointer; }
+.rec-badge { background: var(--c-text); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-sm); }
+.rec-badge-paused { background: #888; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: var(--r-sm); }
+.rec-timer { font-size: 48px; font-weight: 900; color: #111; text-align: center; letter-spacing: -3px; padding: 6px 0 4px; }
+.rec-timer.paused { color: #bbb; }
+.wave-row { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 40px; margin: 0 auto 14px; width: 110px; }
+.wb { width: 4px; border-radius: 2px; background: #111; }
+.wb.on { animation: wv .7s ease-in-out infinite alternate; }
+.wb.off { background: #ddd; height: 8px !important; }
+@keyframes wv { from{transform:scaleY(.3)} to{transform:scaleY(1)} }
+.rec-body { flex: 1; padding: 0 14px; display: flex; flex-direction: column; }
+.memo-lbl { font-size: 10px; color: var(--c-muted); font-weight: 700; margin-bottom: 5px; }
+.memo-box { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 10px 12px; font-size: 11px; color: #bbb; margin-bottom: 14px; }
+.ctrl-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.btn-pause { flex: 1; height: 52px; border-radius: var(--r); background: var(--c-secondary); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #333; line-height: 1.5; border: none; cursor: pointer; }
+.btn-end { flex: 2; height: 52px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; gap: 6px; border: none; cursor: pointer; }
+.ctrl-hint { text-align: center; font-size: 10px; color: #bbb; padding-bottom: 10px; }
+
+/* ═══════════════════════════════════════ 회의종료 시트 */
+.s-sheet { background: var(--c-bg); position: relative; }
+.sheet-dim { flex: 1; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 10px; background: rgba(0,0,0,0.06); }
+.sheet-body { background: var(--c-surface); border-top: 1.5px solid var(--c-border); padding: 14px 14px 12px; flex-shrink: 0; }
+.sheet-drag { width: 32px; height: 3px; background: #ddd; border-radius: 2px; margin: 0 auto 12px; }
+.sheet-title { font-size: 14px; font-weight: 900; color: #111; margin-bottom: 3px; }
+.sheet-sub { font-size: 10px; color: var(--c-muted); margin-bottom: 10px; }
+.sheet-input { background: var(--c-bg); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 10px 12px; font-size: 12px; color: #111; font-weight: 600; margin-bottom: 10px; }
+.sheet-btn-row { display: flex; gap: 8px; }
+.sheet-cancel { flex: 1; height: 44px; border-radius: var(--r); background: var(--c-secondary); border: none; color: #555; font-size: 12px; font-weight: 700; cursor: pointer; }
+.sheet-save { flex: 2; height: 44px; border-radius: var(--r); background: var(--c-text); border: none; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+/* ═══════════════════════════════════════ 상세 */
+.s-detail { background: var(--c-bg); }
+.detail-topbar { background: var(--c-surface); padding: 10px 14px; border-bottom: 1.5px solid var(--c-border); flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+.detail-back { font-size: 14px; color: #555; cursor: pointer; }
+.detail-topbar-title { font-size: 14px; font-weight: 700; color: #111; flex: 1; }
+.detail-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; }
+.detail-header-card { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 12px; }
+.detail-title { font-size: 14px; font-weight: 900; color: #111; margin-bottom: 4px; }
+.detail-meta { font-size: 10px; color: var(--c-muted); }
+.status-row { display: flex; gap: 6px; }
+.status-box { flex: 1; background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 8px 4px; text-align: center; }
+.status-ic { font-size: 15px; }
+.status-lbl { font-size: 9px; font-weight: 700; color: var(--c-muted); margin-top: 2px; }
+.status-val { font-size: 10px; font-weight: 700; margin-top: 2px; }
+.retry-banner { background: #fce4ec; border-radius: var(--r); padding: 10px 12px; display: flex; align-items: center; gap: 6px; }
+.retry-banner-text { font-size: 11px; font-weight: 700; color: var(--c-fail); }
+.retry-link { font-size: 11px; font-weight: 700; color: var(--c-fail); text-decoration: underline; margin-left: auto; cursor: pointer; }
+
+/* ═══════════════════════════════════════ 설정 */
+.s-settings { background: var(--c-bg); overflow-y: auto; }
+.settings-body { padding: 12px; }
+.user-card { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 36px; height: 36px; border-radius: var(--r); background: var(--c-text); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; font-weight: 900; flex-shrink: 0; }
+.user-name { font-size: 13px; font-weight: 800; color: #111; }
+.user-dept { font-size: 10px; color: var(--c-muted); margin-top: 2px; }
+.settings-section { margin-bottom: 10px; }
+.settings-header { font-size: 10px; font-weight: 700; color: var(--c-muted); margin-bottom: 5px; padding-left: 2px; letter-spacing: 0.5px; }
+.settings-group { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); overflow: hidden; }
+.settings-row { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; gap: 10px; }
+.settings-row:last-child { border-bottom: none; }
+.settings-ic { font-size: 13px; width: 18px; text-align: center; }
+.settings-lbl { font-size: 12px; color: #111; flex: 1; font-weight: 500; }
+.settings-val { font-size: 11px; color: var(--c-muted); }
+.settings-arrow { font-size: 12px; color: #ccc; }
+.logout-btn { width: 100%; height: 40px; border-radius: var(--r); background: var(--c-surface); border: 1.5px solid var(--c-border); color: var(--c-fail); font-size: 12px; font-weight: 700; cursor: pointer; margin-top: 4px; }
+
+/* ═══════════════════════════════════════ 설명 패널 */
+.desc-panel { width: 260px; flex-shrink: 0; position: sticky; top: 72px; display: flex; flex-direction: column; gap: 14px; }
+.desc-card { background: #161616; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.desc-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 3px 8px; border-radius: var(--r); background: rgba(255,255,255,.08); color: #94a3b8; margin-bottom: 10px; }
+.desc-title { font-size: 16px; font-weight: 800; color: #f1f5f9; margin-bottom: 6px; letter-spacing: -.3px; }
+.desc-text { font-size: 12px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+.desc-list { display: flex; flex-direction: column; gap: 6px; }
+.desc-item { display: flex; gap: 8px; align-items: flex-start; }
+.desc-dot { width: 4px; height: 4px; border-radius: 2px; background: #fff; margin-top: 6px; flex-shrink: 0; }
+.desc-item-text { font-size: 11px; color: #64748b; line-height: 1.5; }
+.desc-screen { display: none; flex-direction: column; gap: 14px; }
+.desc-screen.active { display: flex; }
+
+/* ── 버튼 눌림 피드백 ── */
+button:active, .nav-btn:active, .sso-btn:active, .login-cta:active { transform: scale(.97); opacity: .85; }
+.btn-primary:active { filter: brightness(.9); }
+.btn-secondary:active { filter: brightness(.93); }
+.btn-danger-outline:active { background: #fce4ec; }
+.start-btn:active { filter: brightness(.85); }
+
+/* ── 토글 트랜지션 ── */
+.toggle-track { transition: background .2s; cursor: pointer; }
+.toggle-thumb { transition: left .2s, right .2s; }
+
+/* ── 세그먼트 탭 ── */
+.seg-tab { cursor: pointer; transition: all .12s; }
+
+/* ── 화살표 네비게이션 ── */
+.nav-arrow { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--border); background: rgba(255,255,255,.06); color: #94a3b8; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; flex-shrink: 0; align-self: center; }
+.nav-arrow:hover { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.3); }
+.nav-arrow:disabled { opacity: 0.25; cursor: default; }
+
+/* 플랫폼 차이 배지 */
+.platform-diff { background: #1a1f2e; border: 1px solid rgba(99,179,237,.2); border-radius: 8px; padding: 10px 12px; }
+.platform-diff-title { font-size: 10px; font-weight: 700; color: #63b3ed; margin-bottom: 6px; letter-spacing: .5px; }
+.platform-diff-item { font-size: 11px; color: #64748b; line-height: 1.6; }
+
+@media (max-width: 1100px) { .desc-panel { display: none; } }
+@media (max-width: 680px) { .phones-wrap { gap: 12px; } .iphone-shell, .android-shell { width: 240px; } }
+@media (max-width: 560px) { .phones-wrap { flex-direction: column; } }
+
+/* ═══════════════════════════════════════ v4 추가: 우상단 헤더 아이콘 */
+.app-topbar {
+  background: var(--c-surface);
+  padding: 8px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1.5px solid var(--c-border);
+  flex-shrink: 0;
+}
+.app-topbar-title { font-size: 13px; font-weight: 800; color: #111; letter-spacing: -0.2px; flex: 1; }
+.topbar-icons { display: flex; gap: 4px; }
+.topbar-ic-btn {
+  width: 28px; height: 28px; border-radius: var(--r);
+  background: var(--c-bg); border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; cursor: pointer;
+}
+.topbar-ic-btn.on { background: var(--c-text); color: #fff; }
+.topbar-ic-btn:active { transform: scale(.92); }
+
+/* 홈 topbar 재배치 */
+.home-topbar-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 8px; margin-bottom: 8px;
+}
+
+/* ═══════════════════════════════════════ v4: 카드 ⋮ 메뉴 */
+.card { position: relative; }
+.card-row { display: flex; align-items: flex-start; gap: 6px; }
+.card-row-main { flex: 1; min-width: 0; cursor: pointer; }
+.card-more {
+  width: 26px; height: 26px; border-radius: var(--r);
+  background: transparent; border: none;
+  font-size: 14px; color: #999; cursor: pointer;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.card-more:hover { background: #f5f5f5; color: #555; }
+.card-menu {
+  position: absolute; top: 32px; right: 8px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  z-index: 30;
+  min-width: 120px;
+  overflow: hidden;
+}
+.card-menu.hidden { display: none; }
+.card-menu-item {
+  padding: 9px 12px;
+  font-size: 11px; font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+.card-menu-item:hover { background: var(--c-bg); }
+.card-menu-item.danger { color: var(--c-fail); font-weight: 700; border-top: 1px solid #f0f0f0; }
+
+/* ═══════════════════════════════════════ v4: 내부망 안내 배너 */
+.notice-banner {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: var(--r);
+  padding: 9px 11px;
+  display: flex; align-items: flex-start; gap: 7px;
+}
+.notice-banner .nbic { font-size: 12px; line-height: 1.4; }
+.notice-banner .nbtx { font-size: 10px; color: #9a3412; line-height: 1.5; flex: 1; }
+.notice-banner .nbtx b { font-weight: 800; }
+
+/* ═══════════════════════════════════════ v4: 취소 재확인 알럿 */
+.alert-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  z-index: 200;
+}
+.alert-overlay.hidden { display: none; }
+.alert-box {
+  background: #fff;
+  border-radius: 10px;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+.alert-pad { padding: 16px 14px 14px; }
+.alert-title { font-size: 13px; font-weight: 800; color: #111; margin-bottom: 6px; }
+.alert-body { font-size: 10.5px; color: var(--c-muted); line-height: 1.5; }
+.alert-buttons { display: flex; border-top: 1px solid var(--c-border); }
+.alert-btn {
+  flex: 1; padding: 11px;
+  font-size: 11px; font-weight: 700;
+  background: transparent; border: none; cursor: pointer;
+}
+.alert-btn.cancel { color: #555; border-right: 1px solid var(--c-border); }
+.alert-btn.confirm { color: var(--c-fail); }
+.alert-btn:active { background: var(--c-bg); }
+
+/* ═══════════════════════════════════════ v4: 음성 변환 내용 화면 */
+.s-transcript { background: var(--c-bg); }
+.transcript-body { padding: 10px 12px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.tx-headcard { background: var(--c-surface); border-radius: var(--r); border: 1.5px solid var(--c-border); padding: 10px 12px; }
+.tx-headtitle { font-size: 13px; font-weight: 800; color: #111; }
+.tx-headmeta { font-size: 10px; color: var(--c-muted); margin-top: 2px; }
+.tx-toolbar { display: flex; gap: 6px; }
+.tx-tool {
+  flex: 1;
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r);
+  font-size: 10px; font-weight: 700; color: #555;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.tx-tool:active { background: var(--c-bg); }
+.tx-block {
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r);
+  padding: 9px 11px;
+}
+.tx-speaker { font-size: 10px; font-weight: 700; color: #111; margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
+.tx-ts { font-size: 9px; color: #aaa; font-weight: 500; }
+.tx-text { font-size: 11px; color: #333; line-height: 1.55; }
+
+
+/* ═══════════════════════ v2 머지 CSS ═══════════════════════ */
+/* 온보딩 */
+.s-onboarding { background:#fff; align-items:center; justify-content:space-between; padding:32px 24px 28px; }
+.ob-slide { display:flex; flex-direction:column; align-items:center; flex:1; justify-content:center; gap:16px; }
+.ob-illust { width:120px; height:120px; border-radius:32px; display:flex; align-items:center; justify-content:center; font-size:52px; }
+.ob-illust.c1 { background:linear-gradient(135deg,#fef3c7,#fde68a); }
+.ob-title { font-size:20px; font-weight:800; color:#111; text-align:center; letter-spacing:-.3px; }
+.ob-desc { font-size:13px; color:#6b7280; text-align:center; line-height:1.6; }
+.ob-dots { display:flex; gap:6px; }
+.ob-dot { width:6px; height:6px; border-radius:3px; background:#e5e7eb; transition:all .3s; }
+.ob-dot.on { width:18px; background:#ef4444; }
+.ob-next { width:100%; height:48px; border-radius:9999px; background:#111; border:none; color:#fff; font-size:15px; font-weight:700; cursor:pointer; }
+/* 권한 */
+.s-permission { background:#fff; padding:28px 20px; justify-content:space-between; }
+.perm-header { font-size:11px; font-weight:700; color:#9ca3af; letter-spacing:.5px; text-align:center; }
+.perm-title { font-size:22px; font-weight:800; color:#111; text-align:center; margin-top:6px; letter-spacing:-.3px; }
+.perm-cards { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+.perm-card { border:1px solid #e5e7eb; border-radius:14px; padding:14px; }
+.perm-card-row { display:flex; align-items:center; gap:12px; }
+.perm-icon-box { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.perm-icon-box.mic { background:#fef3c7; }
+.perm-icon-box.notif { background:#eff6ff; }
+.perm-card-title { font-size:14px; font-weight:700; color:#111; }
+.perm-card-desc { font-size:11px; color:#6b7280; margin-top:2px; line-height:1.4; }
+.perm-actions { display:flex; flex-direction:column; gap:8px; }
+.perm-allow { height:48px; border-radius:9999px; background:#111; border:none; color:#fff; font-size:14px; font-weight:700; cursor:pointer; }
+.perm-skip { height:40px; border-radius:9999px; background:none; border:none; color:#9ca3af; font-size:13px; cursor:pointer; }
+/* 생체인증 */
+.s-biometric { background:#fff; align-items:center; justify-content:space-between; padding:36px 24px 28px; }
+.bio-icon { font-size:64px; }
+.bio-title { font-size:22px; font-weight:800; color:#111; text-align:center; letter-spacing:-.3px; }
+.bio-desc { font-size:13px; color:#6b7280; text-align:center; line-height:1.6; }
+.bio-actions { width:100%; display:flex; flex-direction:column; gap:8px; }
+.bio-enable { height:48px; border-radius:9999px; background:#111; border:none; color:#fff; font-size:14px; font-weight:700; cursor:pointer; }
+.bio-skip { height:40px; border-radius:9999px; background:none; border:none; color:#9ca3af; font-size:13px; cursor:pointer; }
+/* v2 상세 */
+.detail-card { background:var(--c-surface); border-radius:var(--r); padding:14px; border:1.5px solid var(--c-border); }
+.detail-card .detail-meta { display:flex; gap:10px; }
+.status-card { background:var(--c-surface); border-radius:var(--r); padding:12px 14px; border:1.5px solid var(--c-border); }
+.status-card .status-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.status-card .status-row:last-child { margin-bottom:0; }
+.status-label { font-size:12px; color:#374151; font-weight:600; }
+.action-row { display:flex; gap:8px; }
+.action-btn { flex:1; height:44px; border-radius:var(--r); border:none; font-size:13px; font-weight:700; cursor:pointer; }
+.action-transcript { background:#111; color:#fff; }
+.action-retry { background:var(--c-secondary); color:#374151; }
+.action-delete { background:#fef2f2; color:#ef4444; }
+/* v2 전사 */
+.transcript-tabs { display:flex; background:var(--c-surface); border-bottom:1.5px solid var(--c-border); flex-shrink:0; }
+.ttab { flex:1; text-align:center; padding:10px 0; font-size:12px; font-weight:700; color:var(--c-muted); border-bottom:2px solid transparent; cursor:pointer; }
+.ttab.on { color:#111; border-bottom-color:#111; }
+.seg-item { background:var(--c-surface); border-radius:var(--r); padding:10px 12px; border:1.5px solid var(--c-border); }
+.seg-header { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+.seg-speaker { font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px; }
+.sp-a { background:#dbeafe; color:#1d4ed8; }
+.sp-b { background:#d1fae5; color:#065f46; }
+.sp-c { background:#fef3c7; color:#92400e; }
+.seg-time { font-size:10px; color:#9ca3af; }
+.seg-text { font-size:12px; color:#374151; line-height:1.6; }
+.edit-btn { font-size:12px; color:#2563eb; font-weight:700; cursor:pointer; }
+/* 보관함 */
+.s-library { background:var(--c-bg); }
+.library-topbar { background:var(--c-surface); padding:10px 14px 12px; border-bottom:1.5px solid var(--c-border); flex-shrink:0; }
+.library-topbar-title { font-size:15px; font-weight:900; color:#111; }
+.lib-tabs { display:flex; gap:6px; margin-top:10px; }
+.lib-tab { padding:5px 12px; border-radius:9999px; font-size:11px; font-weight:700; color:var(--c-muted); background:var(--c-surface); border:1.5px solid var(--c-border); cursor:pointer; }
+.lib-tab.on { background:#111; color:#fff; border-color:#111; }
+.library-body { flex:1; overflow-y:auto; padding:12px; }
+.lib-section { margin-bottom:16px; }
+.lib-section-header { display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+.lib-section-icon { font-size:14px; }
+.lib-section-title { font-size:12px; font-weight:700; color:#374151; }
+.lib-item { background:var(--c-surface); border-radius:var(--r); padding:10px 12px; margin-bottom:6px; border:1.5px solid var(--c-border); display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+.lib-item-left { display:flex; flex-direction:column; gap:2px; }
+.lib-item-title { font-size:12px; font-weight:700; color:#111; }
+.lib-item-meta { font-size:10px; color:#9ca3af; }
+.lib-item-arrow { color:#d1d5db; font-size:14px; }
+.tag-chip-row { display:flex; gap:5px; flex-wrap:wrap; }
+.tag-chip { padding:4px 10px; border-radius:9999px; font-size:10px; font-weight:700; background:#dce2f3; color:#3b4a7a; cursor:pointer; }
+.bdg-uploading { background:#eff6ff; color:#2563eb; }
+.bdg-stt { background:#f5f3ff; color:#7c3aed; }
+.bdg-queued { background:#f3f4f6; color:#6b7280; }
+
+
+/* ═══════ 단색 라인 아이콘 시스템 ═══════ */
+svg.ic{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+svg.ic.fill{fill:currentColor;stroke:none;}
+/* 아이콘 컨테이너 기본 색 보정(라인아이콘은 currentColor 상속) */
+.topbar-ic-btn{color:#111;}
+.topbar-ic-btn.on{color:#fff;}
+.settings-ic{color:#111;}
+.lib-section-icon{color:#374151;}
+.perm-icon-box{color:#111;}
+.bio-icon{color:#111;}
+.ob-illust{color:#111;}
+.nbic{color:#9a3412;}
+/* 포인트 컬러 중성화 */
+.ob-illust.c1{background:var(--c-secondary);}
+.ob-dot.on{background:#111;}
+.perm-icon-box.mic,.perm-icon-box.notif{background:var(--c-secondary);}
+.seg-speaker.sp-a{background:#111;color:#fff;}
+.seg-speaker.sp-b{background:#e4e4e4;color:#111;}
+.seg-speaker.sp-c{background:#fff;color:#555;border:1px solid #d4d4d4;}
+.tag-chip{background:var(--c-secondary);color:#111;}
+.bdg-uploading{background:#ececec;color:#555;}
+.bdg-stt{background:#ececec;color:#555;}
+.bdg-queued{background:#f3f3f3;color:#888;}
+
+
+
+/* ===== 문서 크롬 ===== */
+body{background:#fafafa!important;color:#111!important;font-family:var(--font);}
+.ds-wrap{display:flex;max-width:1180px;margin:0 auto;}
+.ds-side{position:sticky;top:0;align-self:flex-start;width:200px;height:100vh;overflow-y:auto;padding:22px 16px;border-right:1px solid #eaeaea;flex-shrink:0;}
+.ds-side .brand{font-size:14px;font-weight:900;letter-spacing:-.3px;}
+.ds-side .ver{font-size:10px;color:#999;margin-bottom:16px;}
+.ds-side a{display:block;font-size:12px;color:#555;text-decoration:none;padding:5px 8px;border-radius:6px;}
+.ds-side a:hover{background:#f0f0f0;color:#111;}
+.nav-div{font-size:9px;font-weight:800;color:#aaa;letter-spacing:1px;text-transform:uppercase;margin:14px 8px 4px;}
+.ds-main{flex:1;min-width:0;padding:28px 34px 80px;}
+.ds-hero{margin-bottom:8px;}
+.ds-hero h1{font-size:24px;font-weight:900;letter-spacing:-.5px;}
+.ds-hero p{font-size:13px;color:#666;margin-top:6px;line-height:1.6;max-width:640px;}
+.ds-hero .pill{display:inline-block;font-size:10px;font-weight:700;background:#111;color:#fff;padding:3px 9px;border-radius:999px;margin-right:6px;}
+h2.sec{font-size:16px;font-weight:800;margin:38px 0 4px;padding-top:10px;border-top:1px solid #eee;}
+h2.sec:first-of-type{border-top:none;}
+.sec-desc{font-size:12px;color:#777;margin-bottom:14px;line-height:1.6;}
+/* swatches */
+.sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.sw{border:1px solid #eee;border-radius:8px;overflow:hidden;background:#fff;}
+.sw-chip{height:54px;display:flex;align-items:flex-end;padding:6px 8px;font-size:10px;font-weight:700;font-family:ui-monospace,monospace;}
+.sw-name{font-size:11px;font-weight:700;padding:6px 8px 0;font-family:ui-monospace,monospace;}
+.sw-use{font-size:10px;color:#888;padding:2px 8px 8px;}
+/* type */
+.type-row{display:flex;align-items:baseline;gap:16px;padding:9px 0;border-bottom:1px dashed #eee;}
+.type-demo{flex-shrink:0;width:240px;color:#111;}
+.type-meta{font-size:11px;color:#888;}
+.type-meta b{color:#111;}
+/* spacing */
+.sp-row{display:flex;align-items:center;gap:10px;margin-bottom:5px;}
+.sp-bar{height:14px;background:#111;border-radius:2px;}
+.sp-row span{font-size:11px;color:#666;font-family:ui-monospace,monospace;}
+/* radius */
+.rad-grid{display:flex;gap:18px;flex-wrap:wrap;}
+.rad{display:flex;align-items:center;gap:10px;}
+.rad-box{width:46px;height:46px;background:#111;}
+.rad-meta{font-size:11px;color:#777;}.rad-meta b{color:#111;font-family:ui-monospace,monospace;}
+/* icons */
+.ico-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:10px;}
+.ico{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border:1px solid #eee;border-radius:8px;background:#fff;}
+.ico-box{font-size:22px;color:#111;}
+.ico span{font-size:10px;color:#888;}
+/* components */
+.comp{margin-bottom:8px;}
+.comp h3{font-size:13px;font-weight:800;margin-top:20px;}
+.comp .desc{font-size:11px;color:#888;margin:3px 0 8px;line-height:1.5;}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+.render{background:var(--c-bg);border:1px solid #eaeaea;border-radius:10px;padding:16px;}
+.code-wrap{position:relative;}
+.code{background:#0f0f0f;color:#e6e6e6;border-radius:10px;padding:14px 14px;font-size:10.5px;line-height:1.6;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,monospace;}
+.copy{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;background:#2a2a2a;color:#ccc;border:none;border-radius:5px;padding:4px 8px;cursor:pointer;z-index:2;}
+.copy:hover{background:#3a3a3a;}
+.copy.done{background:#2e7d32;color:#fff;}
+.prin{background:#fff;border:1px solid #eee;border-left:3px solid #111;border-radius:8px;padding:11px 14px;margin-bottom:8px;font-size:12px;line-height:1.7;}
+.handoff{font-size:12px;color:#555;line-height:1.9;background:#fff;border:1px solid #eee;border-radius:10px;padding:16px 18px;}
+.handoff b{color:#111;}
+.handoff code{background:#f0f0f0;padding:1px 6px;border-radius:4px;font-size:11px;}
+@media(max-width:860px){.ds-side{display:none}.comp-grid{grid-template-columns:1fr}}
+
+/* 상태 매트릭스 */
+.mx{width:100%;border-collapse:collapse;font-size:11px;background:#fff;border:1px solid #eee;border-radius:10px;overflow:hidden;}
+.mx th,.mx td{padding:9px 10px;text-align:left;border-bottom:1px solid #f0f0f0;vertical-align:middle;}
+.mx th{background:#fafafa;font-size:10px;font-weight:800;color:#666;letter-spacing:.3px;}
+.mx tr:last-child td{border-bottom:none;}
+.mx .step{font-weight:800;color:#111;white-space:nowrap;}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+.d-done{background:#2e7d32;}.d-proc{background:#e65100;}.d-fail{background:#c62828;}.d-idle{background:#ccc;}
+.st{white-space:nowrap;font-size:10.5px;}
+.act{font-weight:700;}
+.act.re{color:#c62828;}
+.mx-note{background:#fff;border:1px solid #eee;border-left:3px solid #c62828;border-radius:8px;padding:11px 14px;margin-top:12px;font-size:12px;line-height:1.7;}
+.mx-note b{color:#c62828;}
+
+</style></head><body>
+<div class="ds-wrap">
+ <nav class="ds-side">
+  <div class="brand">IBKS 음성회의록</div><div class="ver">Design System v1.0 · 2026.06</div>
+  
+<a href="#colors">컬러</a><a href="#type">타이포</a><a href="#spacing">스페이싱</a><a href="#radius">래디우스</a><a href="#icons">아이콘</a>
+<div class="nav-div">컴포넌트</div>
+<a href="#buttons">버튼</a><a href="#status">배지·상태 ★</a><a href="#card">카드</a><a href="#toggle">토글</a><a href="#tabs">탭·필터</a><a href="#input">입력·검색</a><a href="#chips">화자·태그</a><a href="#banner">배너</a>
+<div class="nav-div">가이드</div>
+<a href="#matrix">상태 매트릭스 ★</a><a href="#principles">설계 원칙</a><a href="#handoff">핸드오프</a>
+
+ </nav>
+ <main class="ds-main">
+  <div class="ds-hero">
+   <h1>디자인 시스템 정의서</h1>
+   <p><span class="pill">Source of Truth</span><span class="pill">HTML 핸드오프</span><br>
+   모든 화면 시안과 구현이 이 토큰·컴포넌트에서 파생됩니다. 개발자는 아래 토큰 CSS와 컴포넌트 마크업을 그대로 복사해 사용하세요. 데모 화면은 <code>demo-merged.html</code> 참조.</p>
+  </div>
+
+  <h2 class="sec" id="colors">컬러 Colors</h2>
+  <p class="sec-desc">무채색 베이스 + 의미색(상태 전용). 장식용 포인트 컬러는 사용하지 않습니다. 브랜드 액센트 1색은 추후 지정(TBD).</p>
+  <h3 style="font-size:12px;color:#888;margin:8px 0 8px">Base</h3>
+  <div class="sw-grid"><div class="sw"><div class="sw-chip" style="background:#111111;color:#fff">#111111</div><div class="sw-name">--c-text / --c-primary</div><div class="sw-use">주요 텍스트 · CTA · 아이콘</div></div><div class="sw"><div class="sw-chip" style="background:#888888;color:#111">#888888</div><div class="sw-name">--c-muted</div><div class="sw-use">보조 텍스트 · 메타</div></div><div class="sw"><div class="sw-chip" style="background:#e0e0e0;color:#111">#e0e0e0</div><div class="sw-name">--c-border</div><div class="sw-use">보더 (실사용 1.5px)</div></div><div class="sw"><div class="sw-chip" style="background:#f5f5f5;color:#111">#f5f5f5</div><div class="sw-name">--c-bg</div><div class="sw-use">앱 배경</div></div><div class="sw"><div class="sw-chip" style="background:#ffffff;color:#111">#ffffff</div><div class="sw-name">--c-surface</div><div class="sw-use">카드 · 바 · 시트</div></div><div class="sw"><div class="sw-chip" style="background:#f0f0f0;color:#111">#f0f0f0</div><div class="sw-name">--c-secondary</div><div class="sw-use">보조 버튼 · 칩 배경</div></div></div>
+  <h3 style="font-size:12px;color:#888;margin:16px 0 8px">Semantic · 상태 전용</h3>
+  <div class="sw-grid"><div class="sw"><div class="sw-chip" style="background:#2e7d32;color:#fff">#2e7d32</div><div class="sw-name">--c-done</div><div class="sw-use">완료 텍스트/아이콘</div></div><div class="sw"><div class="sw-chip" style="background:#e8f5e9;color:#111">#e8f5e9</div><div class="sw-name">--bg-done</div><div class="sw-use">완료 배지 배경</div></div><div class="sw"><div class="sw-chip" style="background:#e65100;color:#fff">#e65100</div><div class="sw-name">--c-proc</div><div class="sw-use">처리중 텍스트/아이콘</div></div><div class="sw"><div class="sw-chip" style="background:#fff3e0;color:#111">#fff3e0</div><div class="sw-name">--bg-proc</div><div class="sw-use">처리중 배지 배경</div></div><div class="sw"><div class="sw-chip" style="background:#c62828;color:#fff">#c62828</div><div class="sw-name">--c-fail</div><div class="sw-use">실패 텍스트/아이콘</div></div><div class="sw"><div class="sw-chip" style="background:#fce4ec;color:#111">#fce4ec</div><div class="sw-name">--bg-fail</div><div class="sw-use">실패 배지 배경</div></div></div>
+
+  <h2 class="sec" id="type">타이포그래피 Typography</h2>
+  <p class="sec-desc">시스템 폰트 스택 + Noto Sans KR. 7단계 스케일.</p>
+  <div class="type-row"><div class="type-demo" style="font-size:22px;font-weight:900;letter-spacing:-1px">회의를 텍스트로 Aa</div><div class="type-meta"><b>Display</b> · 22px · w900 · 스플래시 · 대제목</div></div><div class="type-row"><div class="type-demo" style="font-size:16px;font-weight:800;letter-spacing:-0.3px">회의를 텍스트로 Aa</div><div class="type-meta"><b>Title</b> · 16px · w800–900 · 화면 제목 · 상세 제목</div></div><div class="type-row"><div class="type-demo" style="font-size:14px;font-weight:700;letter-spacing:-0.2px">회의를 텍스트로 Aa</div><div class="type-meta"><b>Subtitle</b> · 14px · w700–800 · 카드/섹션 제목</div></div><div class="type-row"><div class="type-demo" style="font-size:12px;font-weight:500;letter-spacing:0">회의를 텍스트로 Aa</div><div class="type-meta"><b>Body</b> · 12px · w500–600 · 본문 · 세그먼트 텍스트</div></div><div class="type-row"><div class="type-demo" style="font-size:11px;font-weight:500;letter-spacing:0">회의를 텍스트로 Aa</div><div class="type-meta"><b>Caption</b> · 11px · w500 · 보조 설명 · 메타</div></div><div class="type-row"><div class="type-demo" style="font-size:10px;font-weight:700;letter-spacing:0.5px">회의를 텍스트로 Aa</div><div class="type-meta"><b>Label</b> · 10px · w700 · 섹션 헤더 · 배지 · 라벨</div></div><div class="type-row"><div class="type-demo" style="font-size:9px;font-weight:500;letter-spacing:0">회의를 텍스트로 Aa</div><div class="type-meta"><b>Micro</b> · 9px · w500 · 타임스탬프</div></div>
+  <div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>:root{
+  /* color · base */
+  --c-text:#111; --c-primary:#111;
+  --c-muted:#888;
+  --c-border:#e0e0e0;
+  --c-bg:#f5f5f5;
+  --c-surface:#fff;
+  --c-secondary:#f0f0f0;
+  /* color · semantic (status only) */
+  --c-done:#2e7d32;  --bg-done:#e8f5e9;
+  --c-proc:#e65100;  --bg-proc:#fff3e0;
+  --c-fail:#c62828;  --bg-fail:#fce4ec;
+  /* radius */
+  --r-sm:4px; --r:6px; --r-lg:12px; --r-pill:9999px;
+  /* typography */
+  --font:-apple-system,BlinkMacSystemFont,&#x27;Noto Sans KR&#x27;,sans-serif;
+}</code></pre></div>
+
+  <h2 class="sec" id="spacing">스페이싱 Spacing</h2>
+  <p class="sec-desc">기본 단위 2px. 8px 그리드 변형.</p>
+  <div class="sp-row"><div class="sp-bar" style="width:2px"></div><span>2px</span></div><div class="sp-row"><div class="sp-bar" style="width:4px"></div><span>4px</span></div><div class="sp-row"><div class="sp-bar" style="width:6px"></div><span>6px</span></div><div class="sp-row"><div class="sp-bar" style="width:8px"></div><span>8px</span></div><div class="sp-row"><div class="sp-bar" style="width:10px"></div><span>10px</span></div><div class="sp-row"><div class="sp-bar" style="width:12px"></div><span>12px</span></div><div class="sp-row"><div class="sp-bar" style="width:14px"></div><span>14px</span></div><div class="sp-row"><div class="sp-bar" style="width:16px"></div><span>16px</span></div><div class="sp-row"><div class="sp-bar" style="width:20px"></div><span>20px</span></div><div class="sp-row"><div class="sp-bar" style="width:24px"></div><span>24px</span></div>
+
+  <h2 class="sec" id="radius">래디우스 Radius</h2>
+  <div class="rad-grid"><div class="rad"><div class="rad-box" style="border-radius:4px"></div><div class="rad-meta"><b>--r-sm</b> 4px<br><span>배지·작은 칩</span></div></div><div class="rad"><div class="rad-box" style="border-radius:6px"></div><div class="rad-meta"><b>--r</b> 6px<br><span>카드·버튼·인풋</span></div></div><div class="rad"><div class="rad-box" style="border-radius:12px"></div><div class="rad-meta"><b>--r-lg</b> 12px<br><span>대형 카드·시트</span></div></div><div class="rad"><div class="rad-box" style="border-radius:999px"></div><div class="rad-meta"><b>--r-pill</b> 9999px<br><span>칩·탭·액션 버튼</span></div></div></div>
+
+  <h2 class="sec" id="icons">아이콘 Iconography</h2>
+  <p class="sec-desc">단색 라인 아이콘. <code>viewBox 0 0 24 24</code> · <code>stroke 1.7</code> · <code>currentColor</code> · round cap/join. 컨테이너 텍스트 색을 상속합니다.</p>
+  <div class="ico-grid"><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg></div><span>홈</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h4.5l2 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg></div><span>보관함</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div><span>설정</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div><span>검색</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg></div><span>녹음</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M7 18.5a4 4 0 0 1-.3-8A5.5 5.5 0 0 1 17 8.6a3.6 3.6 0 0 1 .6 9.9z"/></svg></div><span>업로드</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M6 2.5h7l5 5v14H6z"/><path d="M13 2.5v5h5M9 13h6M9 17h6"/></svg></div><span>문서</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></div><span>보안/내부망</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M6 9.5a6 6 0 0 1 12 0c0 4.5 1.8 5.5 1.8 5.5H4.2S6 14 6 9.5"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div><span>알림</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c0-3.8 3.5-6 7.5-6s7.5 2.2 7.5 6"/></svg></div><span>사용자</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.7 6.8 19.2l1-5.8-4.3-4.1 5.9-.9z"/></svg></div><span>즐겨찾기</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M20.6 13.4 12 22l-9-9V4a1 1 0 0 1 1-1h8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg></div><span>태그</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M7 5v14l11-7z"/></svg></div><span>재생</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7"/></svg></div><span>삭제</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div><span>재전송</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19.5 7"/></svg></div><span>완료</span></div><div class="ico"><div class="ico-box"><svg class="ic" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></div><span>닫기/실패</span></div></div>
+
+  <h2 class="sec">컴포넌트 Components</h2>
+  <section class="comp" id="buttons">
+  <h3>버튼 Buttons</h3><p class="desc">액션 위계 3단계. 최소 터치 타깃 44px(primary).</p>
+  <div class="comp-grid"><div class="render"><button class="btn-primary" style="margin-bottom:8px">Primary · 회의 시작</button>
+<button class="btn-secondary" style="margin-bottom:8px">Secondary · 파일 재생</button>
+<button class="btn-danger-outline">Danger · 회의 삭제</button></div><div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>&lt;button class=&quot;btn-primary&quot;&gt;…&lt;/button&gt;     &lt;!-- 44px, #111, 주요 액션 --&gt;
+&lt;button class=&quot;btn-secondary&quot;&gt;…&lt;/button&gt;   &lt;!-- 40px, #f0f0f0, 보조 --&gt;
+&lt;button class=&quot;btn-danger-outline&quot;&gt;…&lt;/button&gt; &lt;!-- 38px, 아웃라인, 파괴적 --&gt;</code></pre></div></div>
+</section><section class="comp" id="status">
+  <h3>배지 · 상태 Status ★</h3><p class="desc">앱의 핵심. 녹음·업로드·전사 <b>3-track</b>을 분리 표기. 색 단독 금지 → 라벨 병기.</p>
+  <div class="comp-grid"><div class="render"><div style="display:flex;gap:6px;margin-bottom:12px">
+<span class="bdg bdg-done">완료</span><span class="bdg bdg-proc">변환중</span><span class="bdg bdg-fail">실패</span></div>
+<div class="status-row" style="gap:6px">
+  <div class="status-box"><div class="status-ic" style="color:var(--c-done)"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19.5 7"/></svg></div><div class="status-lbl">녹음</div><div class="status-val" style="color:var(--c-done)">완료</div></div>
+  <div class="status-box"><div class="status-ic" style="color:var(--c-done)"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19.5 7"/></svg></div><div class="status-lbl">업로드</div><div class="status-val" style="color:var(--c-done)">완료</div></div>
+  <div class="status-box"><div class="status-ic" style="color:var(--c-proc)"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div><div class="status-lbl">전사</div><div class="status-val" style="color:var(--c-proc)">처리중</div></div>
+</div></div><div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>&lt;!-- 핵심: 3-track 상태는 절대 1개로 합치지 않는다 --&gt;
+&lt;span class=&quot;bdg bdg-done|bdg-proc|bdg-fail&quot;&gt;라벨&lt;/span&gt;
+&lt;!-- 색 + 라벨 항상 병기 (색만으로 상태표시 금지) --&gt;</code></pre></div></div>
+</section><section class="comp" id="card">
+  <h3>카드 Card</h3><p class="desc">회의 목록 단위. 케밥(⋮) 메뉴로 즐겨찾기/이동/삭제.</p>
+  <div class="comp-grid"><div class="render"><div class="card" style="max-width:300px">
+  <div class="card-row"><div class="card-row-main">
+    <div class="card-title">팀장 주간 미팅 <span class="bdg bdg-done">완료</span></div>
+    <div class="card-meta">오늘 14:00 · 32분</div>
+  </div><button class="card-more">⋮</button></div>
+</div></div><div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;card-row&quot;&gt;
+  &lt;div class=&quot;card-row-main&quot;&gt;…제목 + bdg + meta…&lt;/div&gt;
+  &lt;button class=&quot;card-more&quot;&gt;⋮&lt;/button&gt;   &lt;!-- 케밥 메뉴 --&gt;
+&lt;/div&gt;&lt;/div&gt;</code></pre></div></div>
+</section><section class="comp" id="toggle">
+  <h3>토글 Toggle</h3><p class="desc">On/Off 즉시 반영. 색 + 위치(좌/우)로 이중 표기.</p>
+  <div class="comp-grid"><div class="render"><div style="display:flex;gap:24px;align-items:center">
+  <span>On <span class="toggle-track" style="display:inline-block;vertical-align:middle"><span class="toggle-thumb"></span></span></span>
+  <span>Off <span class="toggle-track off" style="display:inline-block;vertical-align:middle"><span class="toggle-thumb"></span></span></span>
+</div></div><div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>&lt;div class=&quot;toggle-track&quot;&gt;&lt;div class=&quot;toggle-thumb&quot;&gt;&lt;/div&gt;&lt;/div&gt;       &lt;!-- on --&gt;
+&lt;div class=&quot;toggle-track off&quot;&gt;&lt;div class=&quot;toggle-thumb&quot;&gt;&lt;/div&gt;&lt;/div&gt;   &lt;!-- off --&gt;</code></pre></div></div>
+</section><section class="comp" id="tabs">
+  <h3>탭 · 필터 Tabs</h3><p class="desc">분절 필터(seg) + pill 탭(lib) 2종.</p>
+  <div class="comp-grid"><div class="render"><div class="seg-filter" style="max-width:280px;margin-bottom:10px">
+  <div class="seg-tab on">전체</div><div class="seg-tab">변환중</div><div class="seg-tab">완료</div><div class="seg-tab">즐겨찾기</div></div>
+<div class="lib-tabs"><div class="lib-tab on">즐겨찾기</div><div class="lib-tab">보관됨</div><div class="lib-tab">태그</div></div></div><div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>&lt;div class=&quot;seg-filter&quot;&gt;…seg-tab.on…&lt;/div&gt;   &lt;!-- 분절 필터 --&gt;
+&lt;div class=&quot;lib-tabs&quot;&gt;…lib-tab.on…&lt;/div&gt;      &lt;!-- pill 탭 --&gt;</code></pre></div></div>
+</section><section class="comp" id="input">
+  <h3>입력 · 검색 Input</h3><p class="desc">입력 필드 44px, 검색바.</p>
+  <div class="comp-grid"><div class="render"><div class="search-bar" style="max-width:280px;margin-bottom:8px"><span style="color:#bbb"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><span class="search-ph">회의 내용 검색...</span></div>
+<div class="input-wrap" style="max-width:280px"><span>사번 또는 이메일</span></div></div><div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>&lt;div class=&quot;search-bar&quot;&gt;…&lt;/div&gt;   &lt;!-- 검색 --&gt;
+&lt;div class=&quot;input-wrap&quot;&gt;…&lt;/div&gt;   &lt;!-- 입력 필드 44px --&gt;</code></pre></div></div>
+</section><section class="comp" id="chips">
+  <h3>화자 · 태그 칩 Chips</h3><p class="desc">화자는 명도 3단계로 구분, 태그는 무채색.</p>
+  <div class="comp-grid"><div class="render"><div style="display:flex;gap:6px;margin-bottom:12px">
+<span class="seg-speaker sp-a">화자 A</span><span class="seg-speaker sp-b">화자 B</span><span class="seg-speaker sp-c">화자 C</span></div>
+<div class="tag-chip-row"><span class="tag-chip">투자전략</span><span class="tag-chip">고객미팅</span><span class="tag-chip">리스크</span></div></div><div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>&lt;!-- 화자: 색 대신 명도 3단계로 구분 (색맹 안전) --&gt;
+&lt;span class=&quot;seg-speaker sp-a|sp-b|sp-c&quot;&gt;화자 A&lt;/span&gt;
+&lt;span class=&quot;tag-chip&quot;&gt;태그&lt;/span&gt;</code></pre></div></div>
+</section><section class="comp" id="banner">
+  <h3>배너 Banner</h3><p class="desc">내부망 안내 / 실패+재전송 안내.</p>
+  <div class="comp-grid"><div class="render"><div class="notice-banner" style="max-width:300px;margin-bottom:10px"><span class="nbic"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span><span class="nbtx">회의록은 <b>내부망 PC</b>에서만 조회 가능합니다.</span></div>
+<div class="retry-banner" style="max-width:300px"><span class="retry-banner-text">업로드에 실패했습니다.</span><span class="retry-link">재전송하기</span></div></div><div class="code-wrap"><button class="copy">복사</button><pre class="code"><code>&lt;div class=&quot;notice-banner&quot;&gt;…안내…&lt;/div&gt;
+&lt;div class=&quot;retry-banner&quot;&gt;…실패 + 재전송 링크…&lt;/div&gt;</code></pre></div></div>
+</section>
+
+    <h2 class="sec" id="matrix">상태 매트릭스 State Matrix ★</h2>
+  <p class="sec-desc">녹음·업로드·전사 <b>3-track</b>은 순차 파이프라인이며 절대 합치지 않습니다. 아래가 유효한 상태 조합 전체입니다. 각 단계마다 카드 배지와 가능한 액션이 달라집니다.</p>
+  <table class="mx">
+   <thead><tr><th>단계</th><th>녹음</th><th>업로드</th><th>전사</th><th>카드 배지</th><th>액션</th></tr></thead>
+   <tbody><tr><td class="step">1 · 녹음 중</td><td class="st"><span class="dot d-proc"></span>진행</td><td class="st"><span class="dot d-idle"></span>–</td><td class="st"><span class="dot d-idle"></span>–</td><td>● 진행 중</td><td class="act ">일시정지 · 종료</td></tr><tr><td class="step">2 · 업로드 대기</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-idle"></span>대기</td><td class="st"><span class="dot d-idle"></span>–</td><td>업로드 대기</td><td class="act ">자동 업로드 대기(오프라인)</td></tr><tr><td class="step">3 · 업로드 중</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-proc"></span>진행</td><td class="st"><span class="dot d-idle"></span>–</td><td>업로드 중</td><td class="act ">진행률 표시</td></tr><tr><td class="step">4 · 업로드 실패</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-fail"></span>실패</td><td class="st"><span class="dot d-idle"></span>–</td><td>실패</td><td class="act re">재전송</td></tr><tr><td class="step">5 · 전사 대기</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-idle"></span>대기</td><td>전사 대기</td><td class="act ">대기</td></tr><tr><td class="step">6 · 전사 처리중</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-proc"></span>처리</td><td>변환중</td><td class="act ">대기 · 스켈레톤</td></tr><tr><td class="step">7 · 전사 완료</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-done"></span>완료</td><td>완료</td><td class="act ">결과 보기 · 재생</td></tr><tr><td class="step">8 · 전사 실패</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-done"></span>완료</td><td class="st"><span class="dot d-fail"></span>실패</td><td>실패</td><td class="act re">재처리</td></tr></tbody>
+  </table>
+  <div class="mx-note"><b>재전송 ≠ 재처리</b> — 업로드 실패(4단계)는 <b>재전송</b>, 전사 실패(8단계)는 <b>재처리</b>. 다른 버튼·다른 의미로 분리합니다. 한 버튼으로 묶지 않습니다.</div>
+
+  <h2 class="sec" id="principles">설계 원칙 Principles</h2>
+  <p class="sec-desc">시안·구현 시 반드시 지켜야 하는 가드레일 (CLAUDE.md 동기화).</p>
+  
+<div class="prin"><b>1. 3-track 상태 분리</b><br>recording / upload / transcription 을 한 컬럼·한 배지로 합치지 않는다.</div>
+<div class="prin"><b>2. 재전송 ≠ 재처리</b><br>다른 버튼, 다른 의미. 한 버튼으로 묶지 않는다.</div>
+<div class="prin"><b>3. 색만으로 상태표시 금지</b><br>배지·상태는 항상 텍스트 라벨 병기 (접근성·색맹).</div>
+<div class="prin"><b>4. 터치 타깃 ≥ 44px</b><br>주요 버튼·입력은 44px 이상.</div>
+<div class="prin"><b>5. iOS / Android 분기</b><br>Dynamic Island vs 펀치홀, Keychain vs Keystore — 동일 RN API, 표기만 분기.</div>
+<div class="prin"><b>6. 사용자 명시 액션 없이 녹음 자동시작 금지 · pre-checked 동의 금지</b></div>
+
+
+  <h2 class="sec" id="handoff">핸드오프 노트 Handoff</h2>
+  <div class="handoff">
+   <b>이 문서로 가능한 것</b><br>
+   · 토큰 CSS / 컴포넌트 마크업 직접 복사 → 구현<br>
+   · 컬러·간격·래디우스 값 확정 (단일 진실)<br><br>
+   <b>다음에 채울 것 (산출물 완성까지)</b><br>
+   · 빠진 상태 화면: 로딩 / 빈 화면 / 권한 거부 / 오프라인<br>
+   · 녹음·업로드·전사 <b>3-track 상태 조합 매트릭스</b><br>
+   · 컴포넌트별 redline(간격·크기) 주석<br>
+   · 아이콘 SVG 에셋 export 세트<br><br>
+   <b>연계 파일</b><br>
+   · <code>demo-merged.html</code> — 동작 흐름 데모 (iOS/Android)<br>
+   · <code>docs/menu-tree.md</code> — 화면 트리
+  </div>
+ </main>
+</div>
+<script>
+document.querySelectorAll('.toggle-track').forEach(t=>t.addEventListener('click',()=>{const on=!t.classList.contains('off');t.classList.toggle('off',on)}));
+document.querySelectorAll('.seg-filter,.lib-tabs').forEach(g=>{const s=g.classList.contains('lib-tabs')?'.lib-tab':'.seg-tab';g.querySelectorAll(s).forEach(t=>t.addEventListener('click',()=>{g.querySelectorAll(s).forEach(x=>x.classList.remove('on'));t.classList.add('on')}))});
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{const c=b.parentElement.querySelector('code').innerText;navigator.clipboard.writeText(c);b.textContent='복사됨';b.classList.add('done');setTimeout(()=>{b.textContent='복사';b.classList.remove('done')},1200)}));
+</script>
+</body></html>

@@ -20,7 +20,6 @@ import { ServerRecordingCache, SortType, FilterType } from '../../types';
 import { RecordingCard } from './recordingCard';
 import { DeleteConfirmModal } from './deleteConfirmModal';
 import { EMPTY_MESSAGES } from './recordingListConfig';
-import { AppTopBar } from '../../components/AppTopBar';
 import { resolveFabNavRoute } from '../../navigation/tabBarConfig';
 
 export { EMPTY_MESSAGES };
@@ -209,40 +208,72 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <AppTopBar title="IBKS 음성회의록" active="home" />
 
-      {/* 인사말 헤더 */}
-      <View style={styles.homeHeader}>
-        <Text style={styles.greetingMeta}>오늘 회의 {items.length}건</Text>
-        <Text style={styles.greetingName}>{session?.user?.name ?? '안녕하세요'} 님</Text>
-      </View>
+      {/* home-topbar: 인사말+아이콘+검색+필터 한 블록 (HTML .home-topbar 구조) */}
+      <View style={styles.homeTopbar}>
 
-      {/* 검색바 */}
-      <View style={styles.searchBarWrap}>
-        <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="회의 제목으로 검색"
-          placeholderTextColor="#aaa"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          returnKeyType="search"
-          accessibilityLabel="회의 검색"
-        />
-        {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery('')} accessibilityLabel="검색어 지우기">
-            <Text style={styles.searchClear}>✕</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+        {/* home-topbar-row: 인사말(좌) + 아이콘(우) */}
+        <View style={styles.homeTopbarRow}>
+          <View>
+            <Text style={styles.greetingName}>
+              안녕하세요, {session?.user?.name ?? ''}님
+            </Text>
+            <Text style={styles.greetingMeta}>이번 주 회의 {items.length}건</Text>
+          </View>
+          <View style={styles.topbarIcons}>
+            <TouchableOpacity
+              style={[styles.topbarIconBtn, styles.topbarIconBtnActive]}
+              onPress={() => navigation.navigate('Home' as never)}
+              accessibilityLabel="홈" accessibilityRole="button"
+            >
+              <Text style={styles.topbarIconActive}>🏠</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.topbarIconBtn}
+              onPress={() => navigation.navigate('Library' as never)}
+              accessibilityLabel="보관함" accessibilityRole="button"
+            >
+              <Text style={styles.topbarIcon}>📂</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.topbarIconBtn}
+              onPress={() => navigation.navigate('Settings' as never)}
+              accessibilityLabel="설정" accessibilityRole="button"
+            >
+              <Text style={styles.topbarIcon}>⚙</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      {/* 필터 row */}
-      <View style={styles.filterRow}>
+        {/* 검색바 */}
+        <View style={styles.searchBarWrap}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="회의 내용 검색..."
+            placeholderTextColor="#bbb"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            returnKeyType="search"
+            accessibilityLabel="회의 검색"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')} accessibilityLabel="검색어 지우기">
+              <Text style={styles.searchClear}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* 필터 탭 (seg-filter) */}
         <View style={styles.filterPills}>
-          {(['all', 'processing', 'done', 'starred'] as FilterType[]).map((f) => (
+          {(['all', 'processing', 'done', 'starred'] as FilterType[]).map((f, idx, arr) => (
             <TouchableOpacity
               key={f}
-              style={[styles.pill, filter === f && styles.pillActive]}
+              style={[
+                styles.pill,
+                filter === f && styles.pillActive,
+                idx === arr.length - 1 && styles.pillLast,
+              ]}
               onPress={() => setFilter(f)}
               accessibilityRole="button"
               accessibilityState={{ selected: filter === f }}
@@ -253,14 +284,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
             </TouchableOpacity>
           ))}
         </View>
-        <TouchableOpacity
-          style={styles.sortBtn}
-          onPress={onToggleSort}
-          accessibilityLabel={`정렬 기준: ${SORT_LABELS[sort]}. 탭하여 변경`}
-          accessibilityRole="button"
-        >
-          <Text style={styles.sortBtnText}>{SORT_LABELS[sort]} ↕</Text>
-        </TouchableOpacity>
+
       </View>
 
       <FlatList
@@ -299,111 +323,120 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#f4f6f9' },
+
+  /* home-topbar: 인사말+아이콘+검색+필터 */
+  homeTopbar: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 14,
+    paddingTop: 10,
+    paddingBottom: 12,
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#dde2eb',
+  },
+  homeTopbarRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  greetingName: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-ExtraBold',
+    color: '#0a1628',
+    letterSpacing: -0.3,
+    marginBottom: 2,
+  },
+  greetingMeta: {
+    fontSize: 10,
+    fontFamily: 'Pretendard-Regular',
+    color: '#94a3b8',
+  },
+  topbarIcons: { flexDirection: 'row', gap: 4 },
+  topbarIconBtn: {
+    width: 28, height: 28, borderRadius: 14,
+    backgroundColor: '#eef1f6',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  topbarIconBtnActive: { backgroundColor: '#0a1628' },
+  topbarIcon: { fontSize: 13 },
+  topbarIconActive: { fontSize: 13, color: '#fff' },
+
+  /* search-bar */
   searchBarWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 16,
-    marginBottom: 8,
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#e0e0e0',
-    paddingHorizontal: 12,
+    borderColor: '#dde2eb',
+    paddingHorizontal: 10,
     paddingVertical: 8,
-    gap: 8,
+    gap: 6,
+    marginBottom: 10,
   },
-  searchIcon: { fontSize: 14, color: '#888' },
+  searchIcon: { fontSize: 11, color: '#bbb' },
   searchInput: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 11,
     fontFamily: 'Pretendard-Regular',
-    color: '#111',
+    color: '#0a1628',
     padding: 0,
   },
-  searchClear: { fontSize: 13, color: '#aaa', paddingHorizontal: 4 },
-  homeHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    paddingBottom: 16,
-    backgroundColor: '#f5f5f5',
-  },
-  greetingMeta: {
-    fontSize: 13,
-    fontFamily: 'Pretendard-SemiBold',
-    color: '#585f6c',
-    marginBottom: 4,
-  },
-  greetingName: {
-    fontSize: 32,
-    fontFamily: 'Pretendard-ExtraBold',
-    color: '#000000',
-    lineHeight: 38,
-    letterSpacing: -0.5,
-  },
-  filterRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#f5f5f5',
-  },
+  searchClear: { fontSize: 11, color: '#aaa' },
+
+  /* seg-filter */
   filterPills: {
-    flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#f0f0f0',
-    borderRadius: 9999,
-    padding: 4,
-    gap: 4,
+    borderWidth: 1.5,
+    borderColor: '#dde2eb',
+    borderRadius: 12,
+    overflow: 'hidden',
   },
   pill: {
     flex: 1,
-    paddingVertical: 9,
-    borderRadius: 9999,
+    paddingVertical: 6,
     alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRightWidth: 1,
+    borderRightColor: '#dde2eb',
   },
-  pillActive: { backgroundColor: '#111111' },
-  pillText: { fontSize: 13, fontFamily: 'Pretendard-SemiBold', color: '#585f6c' },
-  pillTextActive: { color: '#ffffff' },
-  sortBtn: { paddingHorizontal: 12, paddingVertical: 8 },
-  sortBtnText: { fontSize: 13, fontFamily: 'Pretendard-SemiBold', color: '#585f6c' },
-  emptyContainer: { alignItems: 'center', paddingTop: 100 },
-  emptyText: { fontSize: 15, color: '#9CA3AF' },
+  pillActive: { backgroundColor: '#0a1628' },
+  pillLast: { borderRightWidth: 0 },
+  pillText: { fontSize: 10, fontFamily: 'Pretendard-Bold', color: '#94a3b8' },
+  pillTextActive: { color: '#fff' },
+  emptyContainer: { alignItems: 'center', paddingTop: 80 },
+  emptyText: { fontSize: 12, color: '#bbb', fontFamily: 'Pretendard-Regular' },
   emptyList: { flexGrow: 1 },
   bottomBar: {
     backgroundColor: '#fff',
     borderTopWidth: 1.5,
-    borderTopColor: '#e0e0e0',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 12,
+    borderTopColor: '#dde2eb',
   },
   startBtn: {
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: '#111111',
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: '#005BAC',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
+    gap: 8,
+    marginHorizontal: 12,
+    marginVertical: 8,
   },
-  startBtnIcon: { fontSize: 22 },
-  startBtnText: { fontSize: 16, fontWeight: '700', color: '#fff', letterSpacing: -0.3 },
+  startBtnIcon: { fontSize: 16 },
+  startBtnText: { fontSize: 13, fontFamily: 'Pretendard-Bold', color: '#fff' },
   fab: {
     position: 'absolute',
     bottom: 32,
     alignSelf: 'center',
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: '#111111',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#0a1628',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#111111',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
     elevation: 8,
   },
-  fabIcon: { fontSize: 26 },
+  fabIcon: { fontSize: 22 },
 });

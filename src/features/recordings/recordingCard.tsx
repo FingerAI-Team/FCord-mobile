@@ -14,6 +14,28 @@ interface Props {
   onToggleStar?: () => void;
 }
 
+// 카드 제목 옆에 표시할 단일 대표 배지 (HTML .bdg 인라인 구조)
+function PrimaryBadge({ item }: { item: ServerRecordingCache }): React.ReactElement | null {
+  if (item.transcriptionState === 'completed') {
+    return <Text style={[badgeBase, { backgroundColor: '#e8f5e9', color: '#16a34a' }]}>완료</Text>;
+  }
+  if (item.transcriptionState === 'failed' || item.uploadState === 'failed') {
+    return <Text style={[badgeBase, { backgroundColor: '#fce4ec', color: '#dc2626' }]}>실패</Text>;
+  }
+  if (item.transcriptionState === 'processing' || item.transcriptionState === 'queued') {
+    return <Text style={[badgeBase, { backgroundColor: '#fff3e0', color: '#d97706' }]}>변환중</Text>;
+  }
+  if (item.uploadState === 'uploading' || item.uploadState === 'queued') {
+    return <Text style={[badgeBase, { backgroundColor: '#eef1f6', color: '#005BAC' }]}>업로드중</Text>;
+  }
+  return null;
+}
+const badgeBase = {
+  fontSize: 10, fontFamily: 'Pretendard-Bold',
+  paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4,
+  overflow: 'hidden' as const,
+};
+
 function formatDuration(ms?: number): string {
   if (!ms) return '--:--';
   const s = Math.floor(ms / 1000);
@@ -81,11 +103,15 @@ export function RecordingCard({ item, onPress, onDelete, onToggleStar }: Props):
       >
         <View style={styles.header}>
           <View style={styles.titleBlock}>
+            {/* 제목 + 주요 배지 인라인 (HTML .card-title 구조) */}
             <View style={styles.titleRow}>
               <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+              <PrimaryBadge item={item} />
               {item.isStarred && <Text style={styles.starIcon}>★</Text>}
             </View>
-            <Text style={styles.meta}>{formatDate(item.createdAt)} | {formatDuration(item.durationMs)}</Text>
+            <Text style={styles.meta}>
+              {formatDate(item.createdAt)} · {formatDuration(item.durationMs)}
+            </Text>
           </View>
           <TouchableOpacity
             onPress={openMenu}
@@ -96,11 +122,6 @@ export function RecordingCard({ item, onPress, onDelete, onToggleStar }: Props):
             <Text style={styles.moreIcon}>⋮</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.badges}>
-          <StatusBadge track="recording" state={item.recordingState} />
-          <StatusBadge track="upload" state={item.uploadState} />
-          <StatusBadge track="transcription" state={item.transcriptionState} />
-        </View>
         {item.uploadState === 'uploading' && <UploadProgressBar recordingId={item.id} />}
       </TouchableOpacity>
     </Swipeable>
@@ -109,43 +130,43 @@ export function RecordingCard({ item, onPress, onDelete, onToggleStar }: Props):
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surfaceLight,
-    marginHorizontal: spacing.lg,
-    marginBottom: spacing.md,
-    borderRadius: radius.lg,
+    backgroundColor: '#fff',
+    marginHorizontal: 12,
+    marginBottom: 8,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.borderLight,
-    padding: spacing.lg,
-    gap: spacing.md,
+    borderColor: '#dde2eb',
+    padding: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
-    shadowRadius: 2,
+    shadowRadius: 3,
     elevation: 1,
   },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  titleBlock: { flex: 1, marginRight: spacing.sm },
-  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.xs },
-  title: { ...typography.heading, color: colors.primary, flex: 1 },
-  starIcon: { fontSize: 14, color: '#e65100' },
-  meta: { ...typography.body, color: colors.secondary, opacity: 0.7 },
-  moreIcon: { fontSize: 20, color: colors.secondary },
-  badges: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' },
+  titleBlock: { flex: 1, marginRight: 6 },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 3, flexWrap: 'wrap' },
+  title: { fontSize: 12, fontFamily: 'Pretendard-Bold', color: '#0a1628', flex: 1 },
+  starIcon: { fontSize: 11, color: '#e65100' },
+  meta: { fontSize: 10, fontFamily: 'Pretendard-Regular', color: '#94a3b8', marginTop: 3 },
+  moreIcon: { fontSize: 16, color: '#94a3b8' },
+  badges: { flexDirection: 'row', gap: 4, flexWrap: 'wrap', marginTop: 6 },
   deleteAction: {
-    backgroundColor: colors.dangerRed,
+    backgroundColor: '#c62828',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 80,
-    borderRadius: radius.lg,
-    marginBottom: spacing.md,
-    marginRight: spacing.lg,
+    width: 70,
+    borderRadius: 6,
+    marginBottom: 6,
+    marginRight: 12,
   },
-  deleteText: { ...typography.label, color: '#FFFFFF' },
+  deleteText: { fontSize: 11, fontFamily: 'Pretendard-Bold', color: '#fff' },
   progressTrack: {
     height: 3,
-    backgroundColor: colors.borderLight,
+    backgroundColor: '#dde2eb',
     borderRadius: 2,
     overflow: 'hidden',
+    marginTop: 6,
   },
-  progressFill: { height: 3, backgroundColor: colors.accentBlue, borderRadius: 2 },
+  progressFill: { height: 3, backgroundColor: '#94a3b8', borderRadius: 2 },
 });

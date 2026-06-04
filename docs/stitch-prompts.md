@@ -8,10 +8,12 @@
 | 항목 | 값 |
 | --- | --- |
 | 플랫폼 | Mobile (iOS/Android) |
-| 스타일 | Calm, professional, focused (Linear × Apple) |
-| 컬러 테마 | Light + Dark mode 동급 지원 |
+| 스타일 | Calm, professional, trustworthy — IBK 시그니처 블루 정제 |
+| 컬러 테마 | Light + Dark mode 동급 지원, **Primary = IBK Blue #00457C** |
 | 대상 사용자 | IBK 사내 직원 (B2B internal) |
 | 주요 사용 맥락 | 회의·인터뷰 음성 녹음 → 전사·검색 |
+
+> **2026-06-01 리프레시**: 프레임워크(BottomTabs+FAB / Bottom Sheet / Swipe / 3-track)는 유지하고 brand 컬러만 IBK 블루로 정제. Stitch 프롬프트의 `near-black` primary → IBK Blue, `red FAB` → IBK Blue(녹음 중에만 red 라이브 점). 정확한 토큰은 `docs/design-system.md` 참조.
 
 ## 화면 맵 (12 screens)
 
@@ -46,9 +48,9 @@ P2 (확장)
 [Screen]: Splash screen — shown for 1 second on app launch while session is restored.
 [Layout]:
 - Top: status bar only
-- Center: large bold wordmark "IBK STT" in near-black, with a small tagline below "회의를 텍스트로" in muted gray
+- Center: large bold wordmark "IBK STT" in IBK blue (#00457C), with a small tagline below "회의를 텍스트로" in muted gray
 - Bottom-center: subtle activity indicator (small spinner)
-[Style]: white background, black text, very minimal, lots of whitespace, no decoration. Linear-meets-Apple aesthetic.
+[Style]: white background, the "IBK STT" wordmark in IBK blue (#00457C), tagline in muted gray, very minimal, lots of whitespace, no decoration. Trustworthy Korean-enterprise aesthetic.
 [Constraints]: Must look identical in light and dark mode (invert colors). Brand-forward but not flashy. WCAG AA contrast.
 Device type: Mobile
 ```
@@ -68,13 +70,13 @@ Device type: Mobile
 [Screen]: Login screen — primary entry for unauthenticated users. Two paths: enterprise SSO (primary) and employee-ID/password (fallback).
 [Layout]:
 - Top (40% from top): brand label "IBK STT" small uppercase, then a large bold heading "로그인" (Login) below it, then a muted subtitle "사내 SSO 계정으로 시작하세요"
-- Primary CTA: a large full-width near-black pill button labeled "IBK SSO로 로그인" (52px height, bold white text)
+- Primary CTA: a large full-width IBK-blue (#00457C) pill button labeled "IBK SSO로 로그인" (52px height, bold white text, optional subtle gradient to #003258)
 - Below the button: tiny gray helper text "현재 가상 SSO로 동작합니다. IBK투자증권 SSO 사양 수령 후 자동 전환됩니다."
 - Divider with center text "또는 사번으로 로그인"
 - Toggle link "사번 로그인 열기" (blue, centered)
 - When expanded: two stacked input fields — "사번" (employee ID, numeric) and "비밀번호" (password, masked) — both with #F9FAFB background and floating labels, then a secondary gray button "로그인"
 - Bottom: nothing (clean)
-[Style]: white background, generous vertical spacing (24-32px between blocks), 14px corner radius on inputs, 12px on the secondary button, near-black primary button. Korean text, Pretendard or SF Pro.
+[Style]: white background, generous vertical spacing (24-32px between blocks), 14px corner radius on inputs, 12px on the secondary button, IBK-blue (#00457C) primary button. Korean text, Pretendard or SF Pro.
 [Constraints]: Keyboard-avoiding layout. Error state shows a red-tinted card below the form with an icon + message. Must work in dark mode.
 Device type: Mobile
 ```
@@ -97,7 +99,7 @@ Device type: Mobile
 - Below header: a horizontal segmented filter "전체 | 업로드중 | 완료 | 실패" with active state pill. Right of it: a small sort chip "최신순 ↕"
 - Main: vertical scroll list of recording cards. Each card shows — title (bold, single line ellipsized), date & duration in muted text, and a row of 3 small status badges labeled "녹음" "업로드" "전사" each with an icon AND a text status (e.g. "완료" "진행 70%" "대기"). Cards are white with subtle 1px border, 14px radius, 16px padding, swipeable left for archive, right for delete (reveal action under card with colored background).
 - Empty state: centered illustration of a microphone with text "첫 녹음을 시작해보세요" and a subtle prompt to tap the FAB
-- Bottom: a fixed bottom tab bar with 5 slots — Home (filled), Search, [center large red record FAB], Library, Profile. The center FAB is circular, 60px, red #EF4444, white microphone icon, lifted above the bar with a shadow.
+- Bottom: a fixed bottom tab bar with 5 slots — Home (filled, IBK blue), Search, [center large record FAB], Library, Profile. The center FAB is circular, 60px, IBK blue #00457C, white microphone icon, lifted above the bar with a shadow. The active tab uses IBK blue, inactive tabs are gray.
 [Style]: warm minimal, lots of whitespace, status badges always pair icon + label (never color-only), light shadows. 8pt spacing grid.
 [Constraints]: Pull-to-refresh on the list. Dark mode supported. One-handed reach for the FAB.
 Device type: Mobile
@@ -119,7 +121,7 @@ Device type: Mobile
 [Screen]: Active recording screen — entered via the center FAB. User can pause, resume, stop, and add a quick note while recording. This is a focused, distraction-free screen.
 [Layout]:
 - Top: minimal header with a small "X" close icon (asks confirmation) on the left and a "00:12:34" timer in a large monospaced font centered
-- Upper-middle: large animated waveform visualization, full width, soft amplitude bars in a calm color (muted blue or near-black), animating in real time
+- Upper-middle: large animated waveform visualization, full width, soft amplitude bars in IBK sky blue (#2E8BD6), animating in real time
 - Middle: a small dB level meter underneath the waveform with a numeric value and a label "입력 레벨"
 - Lower-middle: a single-line "빠른 메모" text input with placeholder "녹음 중 메모하기..." and a subtle border
 - Bottom (fixed): two big circular buttons centered — left is a pause button (gray circle, white pause icon), right is a large stop button (red circle, white square icon, 80px diameter, dominant). Below them, small text "탭하여 정지"
@@ -144,10 +146,10 @@ Device type: Mobile
 [Layout]:
 - Top: a back chevron, the recording title (large, bold, inline-editable on tap), date and duration in muted text below
 - Status section: three horizontal "track rows" stacked vertically — "녹음 상태" / "업로드 상태" / "전사 상태", each with an icon, a label, current status text, and (when in progress) a thin progress bar to the right
-- Action group (only the relevant ones visible): "업로드 재시도" (red outline button, only shown if upload failed), "전사 재시도" (red outline, only if transcription failed), "전사 요청" (primary black button, only if uploaded but not yet requested)
+- Action group (only the relevant ones visible): "업로드 재시도" (red outline button, only shown if upload failed), "전사 재시도" (amber outline button, only if transcription failed), "전사 요청" (primary IBK-blue #00457C filled button, only if uploaded but not yet requested) — these three are visually DISTINCT and never merged
 - Player: a slim audio player bar with play/pause, a scrub bar showing current/total time
 - Memo: a multiline expandable text area with placeholder "메모 추가..." that auto-saves
-- Primary CTA: a full-width black button "전사 결과 보기" (only enabled when transcription completed)
+- Primary CTA: a full-width IBK-blue (#00457C) button "전사 결과 보기" (only enabled when transcription completed)
 - Bottom: a horizontal share/export icon row (share, export TXT, more — opens bottom sheet)
 - Danger zone: small at the very bottom — "삭제" link in muted red, opens a bottom sheet with confirm
 [Style]: card-like sections separated by 16-20px gaps, clear hierarchy, status icons always paired with text labels. Avoid using color alone for status.
@@ -197,7 +199,7 @@ Device type: Mobile
 - Center: a large minimal illustration (slide 1: microphone with sound waves; slide 2: a document with highlighted text; slide 3: a search bar with results), 60% of viewport vertically
 - Below illustration: a bold short title (e.g. "오프라인에서도 녹음", "자동으로 텍스트로", "한 번에 검색") and a single sentence of body copy below it
 - Page indicators: 3 dots, centered, active dot wider
-- Bottom: a full-width black "다음" button on slides 1-2, "시작하기" on slide 3
+- Bottom: a full-width IBK-blue (#00457C) "다음" button on slides 1-2, "시작하기" on slide 3
 [Style]: airy, lots of whitespace, friendly but professional illustrations in monochrome line style. No emojis. Korean copy.
 [Constraints]: Swipe left/right to navigate. Skip dismisses to permission primer. Must look identical in dark mode (invert background and illustration strokes).
 Device type: Mobile
@@ -222,7 +224,7 @@ Device type: Mobile
 - Below icon: a bold heading "녹음을 시작하려면 마이크 권한이 필요해요" (left-aligned)
 - Below heading: a paragraph of body text explaining what the app does with the audio (stays on device until you upload, never shared without your action)
 - Two informational rows below the paragraph, each with a small icon and a one-line bullet — "회의 음성을 정확하게 캡처합니다" and "오프라인에서도 녹음 가능합니다"
-- Bottom: a full-width black primary button "권한 요청하기" and a tertiary text button below it "나중에" in muted gray
+- Bottom: a full-width IBK-blue (#00457C) primary button "권한 요청하기" and a tertiary text button below it "나중에" in muted gray
 [Style]: warm, reassuring, transparent. No alarmism. Generous spacing. Korean copy.
 [Constraints]: Tapping "나중에" returns to the previous screen without triggering OS prompt. Must NOT auto-dismiss. WCAG AA.
 Device type: Mobile
@@ -247,7 +249,7 @@ Device type: Mobile
 - Below icon: a bold heading "Face ID로 빠르게 로그인" (or "지문으로 빠르게 로그인")
 - Below heading: short body text explaining that biometric data never leaves the device and is only used to unlock the app session
 - One reassurance row with a small lock icon and text "사내 보안 정책 준수"
-- Bottom: a full-width black button "사용하기" and a smaller tertiary "지금은 안 함" below it
+- Bottom: a full-width IBK-blue (#00457C) button "사용하기" and a smaller tertiary "지금은 안 함" below it
 [Style]: clean, trust-building, minimal. Korean copy.
 [Constraints]: Skipping is allowed and does not block access. The OS biometric prompt is triggered by tapping "사용하기". Dark mode supported.
 Device type: Mobile

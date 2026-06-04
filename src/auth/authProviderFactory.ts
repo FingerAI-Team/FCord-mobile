@@ -13,7 +13,9 @@ let cached: AuthProvider | null = null;
 export function getAuthProvider(): AuthProvider {
   if (cached) return cached;
 
-  const choice = (process.env.AUTH_PROVIDER ?? 'faicord').toLowerCase();
+  // __DEV__ 환경에서는 mock을 기본값으로 사용 (실서버 없이 UI 검증 가능)
+  const defaultProvider = typeof __DEV__ !== 'undefined' && __DEV__ ? 'mock' : 'faicord';
+  const choice = (process.env.AUTH_PROVIDER ?? defaultProvider).toLowerCase();
 
   if (choice === 'ibk') {
     cached = buildIBK();

@@ -343,11 +343,11 @@ const styles = StyleSheet.create({
   titleSection: { marginBottom: 24, paddingHorizontal: 16 },
   titleRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
   titleText: { fontSize: 24, fontFamily: 'Pretendard-ExtraBold', color: '#111827', flex: 1, lineHeight: 30 },
-  titleInput: { fontSize: 20, fontFamily: 'Pretendard-Bold', color: '#111827', borderBottomWidth: 2, borderBottomColor: '#111111', paddingBottom: 4, flex: 1 },
-  editIcon: { fontSize: 16, color: '#585f6c', marginLeft: 8 },
-  metaText: { fontSize: 15, fontFamily: 'Pretendard-Regular', color: '#585f6c', lineHeight: 22 },
+  titleInput: { fontSize: 20, fontFamily: 'Pretendard-Bold', color: '#111827', borderBottomWidth: 2, borderBottomColor: '#0a1628', paddingBottom: 4, flex: 1 },
+  editIcon: { fontSize: 16, color: '#94a3b8', marginLeft: 8 },
+  metaText: { fontSize: 15, fontFamily: 'Pretendard-Regular', color: '#94a3b8', lineHeight: 22 },
   editRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
-  saveBtn: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#111111', borderRadius: 6 },
+  saveBtn: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#0a1628', borderRadius: 6 },
   saveBtnText: { color: '#FFFFFF', fontSize: 13, fontFamily: 'Pretendard-SemiBold' },
 
   // ── 3-track 상태 카드 ──
@@ -373,9 +373,9 @@ const styles = StyleSheet.create({
   progressSection: { marginHorizontal: 16, marginBottom: 16 },
   progressRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
   progressLabel: { fontSize: 13, color: '#374151' },
-  progressPct: { fontSize: 13, color: '#111111', fontWeight: '600' },
+  progressPct: { fontSize: 13, color: '#0a1628', fontWeight: '600' },
   progressTrack: { height: 6, backgroundColor: '#E5E7EB', borderRadius: 3, overflow: 'hidden' },
-  progressFill: { height: 6, backgroundColor: '#111111', borderRadius: 3 },
+  progressFill: { height: 6, backgroundColor: '#0a1628', borderRadius: 3 },
 
   // ── 액션 버튼 행 ──
   actionRow: {
@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
   actionBtnFilled: {
     flex: 1,
     height: 52,
-    backgroundColor: '#111111',
+    backgroundColor: '#0a1628',
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
   transcriptBtn: {
     marginHorizontal: 16,
     height: 52,
-    backgroundColor: '#111111',
+    backgroundColor: '#0a1628',
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
@@ -424,8 +424,8 @@ const styles = StyleSheet.create({
   sectionLabel: { fontSize: 11, color: '#9CA3AF', fontWeight: '700', letterSpacing: 0.5, marginBottom: 8 },
   note: { fontSize: 14, color: '#6B7280', lineHeight: 22 },
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  tag: { backgroundColor: '#f0f0f0', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  tagText: { fontSize: 12, color: '#111111', fontWeight: '500' },
+  tag: { backgroundColor: '#eef1f6', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+  tagText: { fontSize: 12, color: '#0a1628', fontWeight: '500' },
 
   // ── 삭제 버튼 ──
   deleteBtn: { alignSelf: 'center', paddingVertical: 16, paddingHorizontal: 24 },

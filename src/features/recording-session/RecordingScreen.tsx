@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
   timer: {
     fontSize: 40,
     fontFamily: 'Pretendard-ExtraBold',
-    color: '#000000',
+    color: '#0a1628',
     letterSpacing: -2,
     lineHeight: 46,
   },
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
   memoLabel: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
-    color: '#585f6c',
+    color: '#94a3b8',
     marginBottom: 8,
     paddingLeft: 4,
   },
@@ -417,8 +417,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
     gap: 2,
   },
-  pauseIcon: { fontSize: 18, color: '#000000' },
-  pauseLabel: { fontSize: 10, color: '#585f6c' },
+  pauseIcon: { fontSize: 18, color: '#0a1628' },
+  pauseLabel: { fontSize: 10, color: '#94a3b8' },
   stopBtn: {
     width: 80, height: 80, borderRadius: 9999,
     backgroundColor: '#EF4444',
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   stopIcon: { fontSize: 28, color: '#FFFFFF' },
-  controlHint: { fontSize: 12, fontFamily: 'Pretendard-Medium', color: '#585f6c' },
+  controlHint: { fontSize: 12, fontFamily: 'Pretendard-Medium', color: '#94a3b8' },
 
   modalOverlay: {
     flex: 1,

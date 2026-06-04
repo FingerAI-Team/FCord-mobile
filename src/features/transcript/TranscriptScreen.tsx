@@ -9,7 +9,7 @@ import { useTranscriptStore } from '../../stores/transcriptStore';
 import { colors, spacing, radius, typography } from '../../theme/tokens';
 
 const SPEAKER_COLORS = [
-  { bg: '#f0f0f0', text: '#111111', border: '#e0e0e0' },
+  { bg: '#eef1f6', text: '#0a1628', border: '#dde2eb' },
   { bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' },
   { bg: '#F0FDF4', text: '#16A34A', border: '#BBF7D0' },
   { bg: '#FDF4FF', text: '#9333EA', border: '#E9D5FF' },
@@ -262,12 +262,12 @@ const styles = StyleSheet.create({
   },
   tabActive: {
     borderBottomWidth: 2,
-    borderBottomColor: '#111111',
+    borderBottomColor: '#0a1628',
     marginBottom: -1.5,
   },
-  tabText: { fontSize: 14, fontFamily: 'Pretendard-SemiBold', color: '#888' },
-  tabTextActive: { color: '#111111' },
-  toolBtnPrimary: { backgroundColor: '#111111', borderRadius: 8 },
+  tabText: { fontSize: 14, fontFamily: 'Pretendard-SemiBold', color: '#94a3b8' },
+  tabTextActive: { color: '#0a1628' },
+  toolBtnPrimary: { backgroundColor: '#0a1628', borderRadius: 8 },
   toolBtnTextPrimary: { ...typography.label, color: '#fff' },
   noticeBanner: {
     flexDirection: 'row',

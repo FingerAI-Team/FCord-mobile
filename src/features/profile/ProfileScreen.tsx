@@ -109,7 +109,7 @@ export function ProfileScreen(): React.ReactElement {
         <Text style={{ fontSize: 20, fontFamily: 'Pretendard-Bold', color: '#111827', lineHeight: 26, marginBottom: 4 }}>
           {session?.user?.name ?? '-'}
         </Text>
-        <Text style={{ fontSize: 15, fontFamily: 'Pretendard-Regular', color: '#585f6c', lineHeight: 22 }}>
+        <Text style={{ fontSize: 15, fontFamily: 'Pretendard-Regular', color: '#94a3b8', lineHeight: 22 }}>
           {session?.user?.id ?? '-'}
         </Text>
       </View>
@@ -121,7 +121,7 @@ export function ProfileScreen(): React.ReactElement {
         stickySectionHeadersEnabled={false}
         renderSectionHeader={({ section }: { section: SettingSection }) => (
           <View style={{ paddingHorizontal: 16, paddingTop: 24, paddingBottom: 8 }}>
-            <Text style={{ fontSize: 12, fontFamily: 'Pretendard-Medium', color: '#585f6c', textTransform: 'uppercase', letterSpacing: 0.8, lineHeight: 14 }}>
+            <Text style={{ fontSize: 12, fontFamily: 'Pretendard-Medium', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 0.8, lineHeight: 14 }}>
               {section.title}
             </Text>
           </View>
@@ -138,9 +138,9 @@ export function ProfileScreen(): React.ReactElement {
               {item.label}
             </Text>
             {item.value !== undefined ? (
-              <Text style={{ fontSize: 15, fontFamily: 'Pretendard-Regular', color: '#585f6c' }}>{item.value}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Pretendard-Regular', color: '#94a3b8' }}>{item.value}</Text>
             ) : item.onPress ? (
-              <Text style={{ fontSize: 20, color: '#585f6c' }}>›</Text>
+              <Text style={{ fontSize: 20, color: '#94a3b8' }}>›</Text>
             ) : null}
           </TouchableOpacity>
         )}

@@ -37,6 +37,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const saved = await tokenStorage.loadSession();
       if (!saved) {
+        // __DEV__ + mock provider: 자동 로그인으로 UI 검증 지원
+        if (typeof __DEV__ !== 'undefined' && __DEV__ && getAuthProvider().name === 'mock-sso') {
+          try {
+            const session = await getAuthProvider().login({ kind: 'sso' });
+            await tokenStorage.saveSession(session);
+            set({ status: 'authed', session });
+          } catch {
+            set({ status: 'anonymous', session: null });
+          }
+          return;
+        }
         set({ status: 'anonymous', session: null });
         return;
       }
