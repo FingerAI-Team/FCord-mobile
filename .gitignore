@@ -7,6 +7,14 @@ android/.gradle/
 android/build/
 android/app/build/
 android/app/debug.keystore
+android/local.properties
+android/.idea/
+android/cmake_test/
+android/cmake_test2/
+android/hs_err_pid*.log
+
+# Build logs
+build.log
 
 # iOS build
 ios/build/
