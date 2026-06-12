@@ -176,13 +176,30 @@ export async function createRecordingDraft(body: {
   return { id: `draft-${Date.now()}` };
 }
 
-// ─── 메타 수정, 삭제, 재처리 (FAICORD 엔드포인트 확인 전 stub) ──────────────
+// ─── 메타 수정, 삭제, 재처리 ────────────────────────────────────────────────
 
 export async function updateRecordingMeta(
-  _id: string,
-  _patch: Partial<Pick<ServerRecordingCache, 'title' | 'note' | 'tags'>>,
+  id: string,
+  patch: Partial<Pick<ServerRecordingCache, 'title' | 'note' | 'tags'>>,
 ): Promise<void> {
-  // TODO: FAICORD 엔드포인트 확인 후 구현
+  const calls: Promise<unknown>[] = [];
+
+  if (patch.title !== undefined || patch.note !== undefined) {
+    calls.push(
+      apiRequest('PUT', `/api/meetings/${id}`, {
+        ...(patch.title !== undefined && { title: patch.title }),
+        ...(patch.note  !== undefined && { memo: patch.note }),
+      }),
+    );
+  }
+
+  if (patch.tags !== undefined) {
+    calls.push(
+      apiRequest('PUT', `/api/meetings/${id}/tags`, { tags: patch.tags }),
+    );
+  }
+
+  await Promise.all(calls);
 }
 
 export async function softDeleteRecording(id: string): Promise<void> {
@@ -209,10 +226,28 @@ export async function searchRecordings(params: {
   return { items: (raw ?? []).map(toCache) };
 }
 
-// 전사 편집 저장 (FAICORD 엔드포인트 확인 전 no-op)
+// ms → "HH:MM:SS.cs" (백엔드 형식, centiseconds 2자리)
+function msToTimestamp(ms: number): string {
+  const totalSec = Math.floor(ms / 1000);
+  const cs = Math.round((ms % 1000) / 10);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const pad = (n: number, d = 2) => String(n).padStart(d, '0');
+  return `${pad(h)}:${pad(m)}:${pad(s)}.${pad(cs)}`;
+}
+
 export async function saveTranscriptEdits(
-  _recordingId: string,
-  _segments: (TranscriptSegment & { id: string })[],
+  recordingId: string,
+  segments: (TranscriptSegment & { id: string })[],
 ): Promise<void> {
-  // TODO: FAICORD 편집 저장 엔드포인트 확인 후 구현
+  await apiRequest('PUT', `/api/meetings/transcript/${recordingId}/update`, {
+    transcript: segments.map((seg, i) => ({
+      speaker: seg.speakerLabel,
+      text: seg.text,
+      start: msToTimestamp(seg.startMs),
+      end: msToTimestamp(seg.endMs),
+      sequence_index: i,
+    })),
+  });
 }

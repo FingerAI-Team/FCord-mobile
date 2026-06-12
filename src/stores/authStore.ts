@@ -6,6 +6,7 @@ import {
   getAuthProvider,
   tokenStorage,
 } from '../auth';
+import { setSessionExpiredHandler } from '../api/client';
 
 // 부팅 상태:
 //   booting   — Keychain 조회 중 (Splash 표시)
@@ -103,3 +104,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   clearError: () => set({ error: null }),
 }));
+
+// API 호출 중 401 수신 시 → 로컬 세션 삭제 후 로그인 화면으로 전환
+setSessionExpiredHandler(async () => {
+  await tokenStorage.clear();
+  useAuthStore.setState({ status: 'anonymous', session: null, error: null });
+});

@@ -4,6 +4,28 @@ FCord-mobile 작업 내역을 날짜별로 기록합니다.
 
 ---
 
+## 2026-06-12
+
+- [feat] `updateRecordingMeta()` 스텁 → 실제 백엔드 연동 구현
+  - `src/api/recordings.ts` — title/note 수정: `PUT /api/meetings/{id}` (`{ title, memo }` 바디)
+  - `src/api/recordings.ts` — tags 수정: `PUT /api/meetings/{id}/tags` (`{ tags: [...] }` 바디)
+  - 변경된 필드만 포함해 두 엔드포인트를 `Promise.all`로 병렬 호출
+
+- [feat] `saveTranscriptEdits()` 스텁 → 실제 백엔드 연동 구현
+  - `src/api/recordings.ts` — `PUT /api/meetings/transcript/{id}/update` 호출
+  - `msToTimestamp()` 헬퍼 추가: ms → `"HH:MM:SS.cs"` (백엔드 centiseconds 2자리 형식)
+  - `TranscriptSegment` 필드 매핑: `speakerLabel → speaker`, `startMs/endMs → start/end`, 순서 index → `sequence_index`
+
+- [fix] `client.ts` — fetch 타임아웃 15초 적용 (`apiRequest` / `apiUpload` 공통)
+  - `withTimeout()` 헬퍼 추가: `AbortController` + `setTimeout(15_000)` 조합
+  - 타임아웃 초과 시 `AbortError` → `ApiError(0, 'TIMEOUT')` 변환
+
+- [fix] `client.ts` + `authStore.ts` — API 호출 중 401(세션 만료) 처리
+  - `client.ts`: `setSessionExpiredHandler()` export, 401 수신 시 콜백 호출
+  - `authStore.ts`: 모듈 초기화 시 핸들러 등록 → `tokenStorage.clear()` + `status: 'anonymous'` 전환으로 로그인 화면 복귀
+
+---
+
 ## 2026-06-05
 
 - [fix] 회의록 생성 완료 후 모바일에서 여전히 "생성중"으로 표시되는 상태 동기화 버그 수정 (4건)
