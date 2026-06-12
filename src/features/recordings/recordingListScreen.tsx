@@ -127,6 +127,14 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
     loadList();
   }, [filter, sort, loadList, setLoading]);
 
+  // 화면 포커스 복귀 시 목록 갱신 (RecordingScreen 등에서 돌아올 때)
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadList();
+    });
+    return unsubscribe;
+  }, [navigation, loadList]);
+
   // 포그라운드 복귀 시 목록 자동 갱신
   useEffect(() => {
     const sub = AppState.addEventListener('change', (nextState: string) => {
@@ -160,6 +168,7 @@ export function RecordingListScreen({ navigation }: Props): React.ReactElement {
       }
     };
 
+    poll(); // 즉시 1회 실행 후 30초 간격
     const interval = setInterval(poll, 30_000);
     return () => clearInterval(interval);
   }, [processingKey, updateItem]);

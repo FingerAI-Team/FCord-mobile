@@ -10,6 +10,7 @@ interface FaicordMeetingItem {
   subject: string;
   createDt: string;       // "2026-05-27T14:22:00"
   participant: string;
+  statusCode?: string | null;
 }
 
 interface FaicordMeetingDetail {
@@ -42,7 +43,7 @@ interface FaicordTranscriptSegment {
 function mapStatusCode(code: string | null): TranscriptionState {
   if (code === '000') return 'completed';
   if (!code || code === '') return 'not_requested';
-  if (code.startsWith('9')) return 'failed';
+  if (code.startsWith('9') || code.startsWith('-')) return 'failed';
   return 'processing';
 }
 
@@ -62,7 +63,7 @@ function toCache(item: FaicordMeetingItem): ServerRecordingCache {
     tags: [],
     note: undefined,
     uploadState: 'uploaded',
-    transcriptionState: 'completed',  // 목록에 나온다 = 처리 완료로 가정
+    transcriptionState: mapStatusCode(item.statusCode ?? null),
     recordingState: 'saved_local',
     createdAt: ts,
     updatedAt: ts,
@@ -184,8 +185,8 @@ export async function updateRecordingMeta(
   // TODO: FAICORD 엔드포인트 확인 후 구현
 }
 
-export async function softDeleteRecording(_id: string): Promise<void> {
-  // TODO: FAICORD 삭제 엔드포인트 확인 후 구현
+export async function softDeleteRecording(id: string): Promise<void> {
+  await apiRequest('DELETE', `/api/meetings/${id}`);
 }
 
 export async function requestTranscription(_recordingId: string): Promise<{ transcriptionId: string }> {
